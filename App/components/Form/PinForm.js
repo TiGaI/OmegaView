@@ -5,44 +5,8 @@ import {StyleSheet,
   import { connect } from 'react-redux';
   import { bindActionCreators } from 'redux';
 
-
-  import * as actionCreators from '../actions/initialAction';
-  import * as loginAction from '../actions/loginAction';
+  import * as loginAction from '../../actions/loginAction';
   import Icon from 'react-native-vector-icons/Ionicons';
-
-  //
-  // var t = require('tcomb-form-native');
-  // var Form = t.form.Form;
-  //
-  // var Activity = t.struct({
-  //   activityNote: t.String,
-  //   activityCategory: t.String,
-  //   activityDuration: t.Number,
-  //   activityStatus: t.Boolean
-  // });
-  //
-  // var options = {
-  //   fields: {
-  //    activityCategory: {
-  //       label: 'category',
-  //       error: 'Title Required'
-  //     },
-  //     activityDuration: {
-  //        label: 'Duration',
-  //        placeholder: 'Duration',
-  //        error: 'Duration Required'
-  //      },
-  //     activityNote: {
-  //        label: 'Note',
-  //        placeholder: 'Activity Note',
-  //      }
-  //      activityStatus: {
-  //        label: 'Status',
-  //        placeholder: 'Public'
-  //      }
-  //   }
-  // };
-
 
   var PinForm = React.createClass({
     getInitialState() {
@@ -62,9 +26,10 @@ import {StyleSheet,
 
       render() {
         const { profile } = this.props;
+        console.log(this.props.profile)
         return(
           <View style={styles.container}>
-
+            <Text>asdasdsaasd </Text>
 
           </View>
         )
@@ -89,7 +54,7 @@ import {StyleSheet,
 
     function mapDispatchToProps(dispatch) {
       return {
-        actions: bindActionCreators(actionCreators, dispatch)
+        actions: bindActionCreators(loginAction, dispatch)
       };
     }
 

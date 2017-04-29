@@ -34,9 +34,6 @@ export function getGraphData(userID, myActivity) {
             });
 
         }
-      // ).catch((err) => {
-      //       dispatch(errors(err));
-      // });
     };
 
 
@@ -139,7 +136,6 @@ export function login() {
         dispatch(attempt());
 
         facebookLogin().then((result) => {
-          var mongooseId = '';
           fetch('http://localhost:8080/facebookAuth', {
               method: 'POST',
               headers: {
@@ -152,11 +148,7 @@ export function login() {
             .then((response) => response.json())
             .then((responseJson) => {
 
-                mongooseId = responseJson._id
                 var userObject = Object.assign({}, responseJson);
-                userObject["picture.width"] = result.picture.data.width;
-                userObject["picture.height"] = result.picture.data.height;
-
                 console.log("user information from facebook: ", userObject)
 
                 dispatch(loggedin());
