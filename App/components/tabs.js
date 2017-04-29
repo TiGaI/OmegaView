@@ -2,15 +2,14 @@ import { Tabs, Tab, Icon } from 'react-native-elements'
 import React, { Component, PropTypes } from 'react';
 import styles from './styles';
 import { connect } from 'react-redux';
-import IndexPage from './index';
-import ProfilePage from './myProfilePage';
-import Goals from './goals';
+
+import PinForm from './form/PinForm';
 
 class ApplicationTabs extends Component {
 	constructor() {
 	  super()
 	  this.state = {
-	    selectedTab: 'indexpage',
+	    selectedTab: 'homepage',
 	  }
 	}
 	changeTab (selectedTab) {
@@ -26,36 +25,58 @@ class ApplicationTabs extends Component {
 			  <Tab
 			    titleStyle={{fontWeight: 'bold', fontSize: 10}}
 			    selectedTitleStyle={{marginTop: -1, marginBottom: 6}}
-			    selected={selectedTab === 'indexpage'}
-			    title={selectedTab === 'indexpage' ? 'MyPins' : null}
-			    renderIcon={() => <Icon containerStyle={{justifyContent: 'center', alignItems: 'center', marginTop: 12}} color={'#5e6977'} name='map' size={33} />}
-			    renderSelectedIcon={() => <Icon color={'#6296f9'} name='map' size={30} />}
-			    onPress={() => this.changeTab('indexpage')}>
+			    selected={selectedTab === 'homepage'}
+			    title={selectedTab === 'homepage' ? 'MyPins' : null}
+			    renderIcon={() => <Icon containerStyle={{justifyContent: 'center', alignItems: 'center', marginTop: 12}} color={'#5e6977'} name='home' size={33} />}
+			    renderSelectedIcon={() => <Icon color={'#6296f9'} name='home' size={30} />}
+			    onPress={() => this.changeTab('homepage')}>
 
-			    			<IndexPage />
 			  </Tab>
 				<Tab
 					titleStyle={{fontWeight: 'bold', fontSize: 10}}
 					selectedTitleStyle={{marginTop: -1, marginBottom: 6}}
 					selected={selectedTab === 'goalsPage'}
 					title={selectedTab === 'goalsPage' ? 'Goals' : null}
-					renderIcon={() => <Icon containerStyle={{justifyContent: 'center', alignItems: 'center', marginTop: 12}} color={'#5e6977'} name='query-builder' size={33} />}
-					renderSelectedIcon={() => <Icon color={'#6296f9'} name='query-builder' size={30} />}
+					renderIcon={() => <Icon containerStyle={{justifyContent: 'center', alignItems: 'center', marginTop: 12}} color={'#5e6977'} name='map' size={50} />}
+					renderSelectedIcon={() => <Icon color={'#6296f9'} name='map' size={30} />}
 					onPress={() => this.changeTab('goalsPage')}>
 
-								<Goals />
+
 				</Tab>
+
+				<Tab
+					selectedTitleStyle={{marginTop: -1, marginBottom: 6}}
+					selected={selectedTab === 'goalsPage'}
+					title={selectedTab === 'goalsPage' ? 'Goals' : null}
+					renderIcon={() => <Icon containerStyle={{justifyContent: 'flex-start', alignItems: 'center', marginTop: 12}} color={'#1BB49C'} name='add-circle' size={33} />}
+					renderSelectedIcon={() => <Icon color={'#1BB49C'} name='add-circle' size={50} />}
+					onPress={() => this.changeTab('goalsPage')}>
+						<PinForm />
+				</Tab>
+
+
 			  <Tab
 			    titleStyle={{fontWeight: 'bold', fontSize: 10}}
 			    selectedTitleStyle={{marginTop: -1, marginBottom: 6}}
 			    selected={selectedTab === 'profile'}
 			    title={selectedTab === 'profile' ? 'PROFILE' : null}
-			    renderIcon={() => <Icon containerStyle={{justifyContent: 'center', alignItems: 'center', marginTop: 12}} color={'#5e6977'} name='person' size={33} />}
-			    renderSelectedIcon={() => <Icon color={'#6296f9'} name='person' size={30} />}
+			    renderIcon={() => <Icon containerStyle={{justifyContent: 'center', alignItems: 'center', marginTop: 12}} color={'#5e6977'} name='date-range' size={33} />}
+			    renderSelectedIcon={() => <Icon color={'#6296f9'} name='date-range' size={30} />}
 			    onPress={() => this.changeTab('profile')}>
 
-								<ProfilePage />
+
 			  </Tab>
+				<Tab
+					titleStyle={{fontWeight: 'bold', fontSize: 10}}
+					selectedTitleStyle={{marginTop: -1, marginBottom: 6}}
+					selected={selectedTab === 'profile'}
+					title={selectedTab === 'profile' ? 'PROFILE' : null}
+					renderIcon={() => <Icon containerStyle={{justifyContent: 'center', alignItems: 'center', marginTop: 12}} color={'#5e6977'} name='person-pin' size={33} />}
+					renderSelectedIcon={() => <Icon color={'#6296f9'} name='person-pin' size={30} />}
+					onPress={() => this.changeTab('profile')}>
+
+
+				</Tab>
 			</Tabs>
 		);
 	}
