@@ -4,6 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import PinForm from './Form/PinForm';
+import StatsPage from './Categories/statistics.js';
 
 class ApplicationTabs extends Component {
 	constructor() {
@@ -41,7 +42,7 @@ class ApplicationTabs extends Component {
 					renderIcon={() => <Icon containerStyle={{justifyContent: 'center', alignItems: 'center', marginTop: 12}} color={'#5e6977'} name='map' size={33} />}
 					renderSelectedIcon={() => <Icon color={'#6296f9'} name='map' size={30} />}
 					onPress={() => this.changeTab('mapPage')}>
-						<PinForm />
+						<StatsPage />
 
 				</Tab>
 
