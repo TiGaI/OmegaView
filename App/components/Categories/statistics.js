@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {
-  StyleSheet, View , Text} from 'react-native';
+  StyleSheet, View , Text, Dimensions, TouchableOpacity} from 'react-native';
 //
 // import Modal from 'react-native-modalbox';
 
@@ -14,6 +14,10 @@ import Icons from 'react-native-vector-icons/Ionicons';
 
 import Slider from 'react-native-slider';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
+
+import ModalDropdown from 'react-native-modal-dropdown';
+
+var {height, width} = Dimensions.get('window');
 
 
 
@@ -33,15 +37,28 @@ class StatsPage extends Component{
   submitGoalForm(){
 
   }
+  select(idx, value){
+    console.log('CLICKED', idx, value);
+  }
   render() {
     return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#152D44'}}>
-      <View style={{flex: 1, justifyContent: 'center'}}>
+      <View style={{flex: 1, justifyContent: 'center', backgroundColor: '#152D44'}}>
+        <View style={{flex: 1, justifyContent: 'flex-start', padding: 20}}>
+          <ModalDropdown style={{backgroundColor: 'transparent', padding: 0}}
+            defaultValue="Eating"
+            dropdownStyle={{width: width*0.9, height: 200}}
+            textStyle={{color: 'white',fontSize: 25, fontWeight: '700'}}
+            options={['Eating', 'Hobby', 'Sleeping', 'Studying', 'Training', 'Working']}
+            onSelect={(idx, value) => this.select(idx, value)}
+            >
+            </ModalDropdown>
+        </View>
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <Text style={{fontSize: 15, fontWeight: '700', color: 'white', textAlign: 'center', marginBottom: 5, backgroundColor: 'transparent'}}>
         Total
       </Text>
       <AnimatedCircularProgress
-        size={175}
+        size={150}
         width={10}
         fill={((this.state.totalHours/this.state.goalHours)*100)}
         rotation={0}
@@ -49,21 +66,21 @@ class StatsPage extends Component{
         backgroundColor="#3d5875">
         {
           (fill) => (
-            <View style={{height: 175, width: 175, justifyContent: 'center', alignItems: 'center' ,position: 'absolute', top: 0, left: 0}}>
+            <View style={{height: 150, width: 150, justifyContent: 'center', alignItems: 'center' ,position: 'absolute', top: 0, left: 0}}>
             <Icons style={{fontSize: 75, color: 'white', backgroundColor: 'transparent'}} name="md-time"/>
 
             </View>
           )
         }
 </AnimatedCircularProgress>
-<View style={{flexDirection: 'row', alignItems: 'center', flex: 0, justifyContent: 'center'}}>
-<Text style={{fontSize: 25, fontWeight: '500', color: 'white', textAlign: 'center', marginTop: 15, backgroundColor: 'transparent'}}>
+  </View>
+<View style={{flexDirection: 'row', alignItems: 'center', flex: 1, justifyContent: 'center', marginTop: 15}}>
+<Text style={{fontSize: 25, fontWeight: '500', color: 'white', textAlign: 'center', backgroundColor: 'transparent' ,marginTop: 15,}}>
   {this.state.totalHours}
 </Text>
 <Text style={{fontSize: 15, fontWeight: '500', color: 'white', textAlign: 'center', marginTop: 15, marginLeft: 10, backgroundColor: 'transparent'}}>
   hrs
 </Text>
-</View>
 </View>
       <View style={{flex: 1, flexDirection: 'row', marginTop: 20, justifyContent: 'center'}}>
         <View style={{flex: 1, alignItems: 'center'}}>
@@ -136,8 +153,30 @@ class StatsPage extends Component{
             streak
           </Text>
         </View>
+
       </View>
+      <View style={{flex: 2, flexDirection: 'row'}}>
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 5 }}>
+          <TouchableOpacity>
+          <Icons style={{fontSize: 50, color: 'white', backgroundColor: 'transparent'}} name="md-trending-up"/>
+          <Text style={{fontSize: 15, fontWeight: '400', color: 'white', textAlign: 'center', backgroundColor: 'transparent'}}>
+            graphs
+          </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 5,}}>
+          <TouchableOpacity>
+          <Icons style={{fontSize: 50, color: 'white', backgroundColor: 'transparent'}} name="md-book"/>
+          <Text style={{fontSize: 15, fontWeight: '400', color: 'white', textAlign: 'center', backgroundColor: 'transparent'}}>
+            map
+          </Text>
+        </TouchableOpacity>
+        </View>
+
       </View>
+
+
+    </View>
     )
   }
 }
