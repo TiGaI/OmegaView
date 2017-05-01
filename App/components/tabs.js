@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import PinForm from './Form/PinForm';
 import StatsPage from './Categories/statistics.js';
+import ProfilePage from './Profile/profilePage.js';
 
 class ApplicationTabs extends Component {
 	constructor() {
@@ -77,7 +78,7 @@ class ApplicationTabs extends Component {
 					renderSelectedIcon={() => <Icon color={'#6296f9'} name='person-pin' size={30} />}
 					onPress={() => this.changeTab('profile')}>
 
-					<PinForm />
+					<ProfilePage />
 				</Tab>
 			</Tabs>
 		);
