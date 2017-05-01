@@ -11,6 +11,8 @@ import {
 import { connect } from 'react-redux';
 
 import PinForm from './Form/PinForm';
+import StatsPage from './Categories/statistics.js';
+import ProfilePage from './Profile/profilePage.js';
 
 var NavigationBarRouteMapper = {
    LeftButton(route, navigator, index, navState) {
@@ -90,7 +92,8 @@ class ApplicationTabs extends Component {
 					renderIcon={() => <Icon containerStyle={{justifyContent: 'center', alignItems: 'center', marginTop: 12}} color={'#5e6977'} name='map' size={33} />}
 					renderSelectedIcon={() => <Icon color={'#6296f9'} name='map' size={30} />}
 					onPress={() => this.changeTab('mapPage')}>
-						<PinForm />
+
+						<StatsPage />
 				</Tab>
 
 				<Tab
@@ -134,7 +137,7 @@ class ApplicationTabs extends Component {
 					renderSelectedIcon={() => <Icon color={'#6296f9'} name='person-pin' size={30} />}
 					onPress={() => this.changeTab('profile')}>
 
-					<PinForm />
+					<ProfilePage />
 				</Tab>
 			</Tabs>
 		);
