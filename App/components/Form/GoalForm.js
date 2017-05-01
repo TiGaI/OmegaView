@@ -24,7 +24,7 @@ class GoalForm extends Component{
       eatingGoal: this.props.profile.userObject.dailyGoal.eatingGoal,
       trainingGoal: this.props.profile.userObject.dailyGoal.trainingGoal,
       hobbyGoal: this.props.profile.userObject.dailyGoal.hobbyGoal,
-      workGoal: this.props.profile.userObject.dailyGoal.studyGoal,
+      workingGoal: this.props.profile.userObject.dailyGoal.studyGoal,
       sleepingGoal: this.props.profile.userObject.dailyGoal.studyGoal
     };
   }

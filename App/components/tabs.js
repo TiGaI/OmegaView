@@ -1,11 +1,46 @@
 import { Tabs, Tab, Icon } from 'react-native-elements'
 import React, { Component, PropTypes } from 'react';
+import {
+   StyleSheet,
+   Text,
+   Navigator,
+   TouchableOpacity
+} from 'react-native'
+
 
 import { connect } from 'react-redux';
 
 import PinForm from './Form/PinForm';
 import StatsPage from './Categories/statistics.js';
 import ProfilePage from './Profile/profilePage.js';
+
+var NavigationBarRouteMapper = {
+   LeftButton(route, navigator, index, navState) {
+         return (
+            <TouchableOpacity>
+               <Text style={ styles.leftButton }>
+                  Save
+               </Text>
+            </TouchableOpacity>
+         )
+   },
+   RightButton(route, navigator, index, navState) {
+		 	return (
+         <TouchableOpacity>
+            <Text style = { styles.rightButton }>
+               Done
+            </Text>
+         </TouchableOpacity>
+			 )
+   },
+   Title(route, navigator, index, navState) {
+      return (
+         <Text style = { styles.title }>
+            {route.title}
+         </Text>
+      )
+   }
+};
 
 class ApplicationTabs extends Component {
 	constructor() {
@@ -17,10 +52,15 @@ class ApplicationTabs extends Component {
 	changeTab (selectedTab) {
 		  this.setState({selectedTab})
 	}
+	renderScene( route, nav ) {
+    switch (route.id) {
+      case 'PinForm':
+        return <PinForm navigator={ nav } title={ "Activity" } />
+    }
+  }
 	render() {
 
 		const { selectedTab } = this.state
-
 
 		return (
 			<Tabs>
@@ -32,7 +72,16 @@ class ApplicationTabs extends Component {
 			    renderIcon={() => <Icon containerStyle={{justifyContent: 'center', alignItems: 'center', marginTop: 12}} color={'#5e6977'} name='home' size={33} />}
 			    renderSelectedIcon={() => <Icon color={'#6296f9'} name='home' size={30} />}
 			    onPress={() => this.changeTab('homepage')}>
-						<PinForm />
+						<Navigator
+							initialRoute={{ id: 'PinForm', title: 'Activity' }}
+							renderScene={ this.renderScene }
+
+							navigationBar = {
+								 <Navigator.NavigationBar
+										style = { styles.navigationBar }
+										routeMapper = { NavigationBarRouteMapper } />
+							}
+						/>
 			  </Tab>
 
 				<Tab
@@ -43,8 +92,8 @@ class ApplicationTabs extends Component {
 					renderIcon={() => <Icon containerStyle={{justifyContent: 'center', alignItems: 'center', marginTop: 12}} color={'#5e6977'} name='map' size={33} />}
 					renderSelectedIcon={() => <Icon color={'#6296f9'} name='map' size={30} />}
 					onPress={() => this.changeTab('mapPage')}>
-						<StatsPage />
 
+						<StatsPage />
 				</Tab>
 
 				<Tab
@@ -54,7 +103,17 @@ class ApplicationTabs extends Component {
 					renderIcon={() => <Icon containerStyle={{marginTop: -24}} color={'#1BB49C'} name='add-circle' size={80} />}
 					renderSelectedIcon={() => <Icon color={'#1BB49C'} name='add-circle' size={80} />}
 					onPress={() => this.changeTab('goalsPage')}>
-						<PinForm />
+					<Navigator
+						initialRoute={{ id: 'PinForm', title: 'Activity' }}
+						renderScene={ this.renderScene }
+
+						navigationBar = {
+							 <Navigator.NavigationBar
+									style = { styles.navigationBar }
+									routeMapper = { NavigationBarRouteMapper } />
+						}
+						/>
+
 				</Tab>
 
 
@@ -84,6 +143,42 @@ class ApplicationTabs extends Component {
 		);
 	}
 }
+
+const styles = StyleSheet.create({
+   navigationBar: {
+      backgroundColor: 'white',
+			height: 50,
+			borderBottomWidth: 1,
+			borderColor: '#F6F6F6',
+			padding: 10,
+			shadowColor: '#F3F3F3',
+			shadowOffset: {
+				width: 0,
+				height: 3
+			},
+			shadowOpacity: 0.3
+   },
+	 leftButton: {
+
+		   color: '#A6A6A6',
+			 margin: 10,
+			 marginTop: -1,
+       fontSize: 16
+	 },
+   title: {
+      color: '#222222',
+      justifyContent: 'center',
+			marginTop: -1,
+      fontSize: 18
+   },
+   rightButton: {
+      color: '#222222',
+      margin: 10,
+			marginTop: -1,
+      fontSize: 16
+   }
+})
+
 
 ApplicationTabs.propTypes = {
     onPress: PropTypes.func.isRequired,
