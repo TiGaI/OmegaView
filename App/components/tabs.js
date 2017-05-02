@@ -13,6 +13,8 @@ import { connect } from 'react-redux';
 import PinForm from './Form/PinForm';
 import StatsPage from './Categories/statistics.js';
 import ProfilePage from './Profile/profilePage.js';
+import MapPage from './Map/mapPage.js';
+import MapPageIndex from './Map/mapPageIndex.js';
 
 var NavigationBarRouteMapper = {
    LeftButton(route, navigator, index, navState) {
@@ -93,7 +95,7 @@ class ApplicationTabs extends Component {
 					renderSelectedIcon={() => <Icon color={'#6296f9'} name='map' size={30} />}
 					onPress={() => this.changeTab('mapPage')}>
 
-						<StatsPage />
+						<MapPageIndex />
 				</Tab>
 
 				<Tab
@@ -126,7 +128,7 @@ class ApplicationTabs extends Component {
 			    renderSelectedIcon={() => <Icon color={'#6296f9'} name='date-range' size={30} />}
 			    onPress={() => this.changeTab('Stats')}>
 
-					<PinForm />
+					<StatsPage />
 			  </Tab>
 				<Tab
 					titleStyle={{fontWeight: 'bold', fontSize: 10}}
