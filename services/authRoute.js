@@ -28,16 +28,16 @@ router.post('/facebookAuth', function(req, res) {
                     bio: profile.about,
                     profileImg: profile.picture ? profile.picture.data.url : 'http://shurl.esy.es/y'
                 });
-                newUser.save(function(err) {
-                    if (err) console.log(err);
-                    res.send(user)
-                    return {err, user}
-                });
-            } else {
-              res.send(user)
-              return user
-            }
-        });
+                newUser.save(function(err, user) {
+                         if (err) console.log(err);
+                         res.send(user)
+                         return {err, user}
+                         });
+                     } else {
+                       res.send(user)
+                       return user
+                     }
+                 });
 });
 
 // TODO: Linkedin
@@ -61,16 +61,17 @@ router.post('/googleAuth', function(req, res) {
 
               console.log(newUser)
 
-              newUser.save(function(err) {
-                  if (err) console.log(err);
-                  res.send(user)
-                  return {err, user}
-              });
-          } else {
-            res.send(user)
-            return user
-          }
-      });
+
+              newUser.save(function(err, user) {
+                    if (err) console.log(err);
+                            res.send(user)
+                            return {err, user}
+                      });
+                    }else {
+                      res.send(user)
+                      return user
+                    }
+                });
 
 });
 

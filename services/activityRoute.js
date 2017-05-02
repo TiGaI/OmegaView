@@ -37,12 +37,10 @@ function getRangeofLonLat(lon, lat, kilometer){
 }
 
 router.post('/getSortandGroupActivity', function(req, res){
-  console.log('GET INSIDE SERVER GET GRAPH DATA')
     Activity.find({$and: [
       {'createdAt': {'$gt': new Date(Date.now() - 6*24*60*60*1000)}},
           {'_id' : {'$in': req.body.myActivity}}
         ]}).sort('-createdAt').exec(function(err, activities){
-
           if(err){
             console.log(err);
             res.send(err);
@@ -85,7 +83,6 @@ router.post('/getSortandGroupActivity', function(req, res){
           User.findById(req.body.userID, function(err, user){
 
               user.sortedPing = newObject
-
               user.save(function(err){
 
                 res.send(user)
@@ -95,6 +92,73 @@ router.post('/getSortandGroupActivity', function(req, res){
           })
 
     });
+});
+
+router.post('/createActivity', function(req, res){
+  var activity = req.body.activity;
+  Activity.find({$and: [
+          {'activityCreator': activity.activityCreator},
+          {'activityCategory': activity.activityCategory},
+          {'createdAt': {'$gt': new Date(Date.now() - 2*24*60*60*1000)}}]}).sort('-createdAt').exec(function(err, activities){
+
+        if(err){
+          console.log(err);
+          res.send(err);
+          return err
+        }
+
+        if(activities.length > 0){
+            var streakCount = true;
+        }else{
+            var streakCount = false;
+        }
+        var newActivity = new Activity({
+              activityCreator: activity.activityCreator,
+              activityNote: activity.activityNote,
+              activityCategory: activity.activityCategory,
+              activityLatitude: activity.activityLatitude,
+              activityLongitude: activity.activityLongitude,
+              activityProductivity: 1,
+              activityDuration: activity.activityDuration,
+              activityImage: activity.image ? activity.image : ''
+            })
+            console.log('newActivity: ', newActivity);
+            newActivity.save(function(err, activityNew){
+              if (err) {
+                console.log('error has occur: ',  err)
+              } else {
+                User.findById(activityNew.activityCreator, function(err, user){
+
+                  if(streakCount){
+                    // console.log(moment(activities[0].createdAt).format("DD/MM/YYYY"));
+                    // console.log(moment(activityNew.createdAt).format("DD/MM/YYYY"));
+                    // console.log(moment(activities[0].createdAt).format("DD/MM/YYYY") == moment(activityNew.createdAt).format("DD/MM/YYYY"))
+                     if(moment(activities[0].createdAt).format("DD/MM/YYYY") != moment(activityNew.createdAt).format("DD/MM/YYYY")){
+                          user.activityStreak[newActivity.activityCategory] = user.activityStreak[newActivity.activityCategory] + 1;
+                     }
+                  }else{
+                      user.activityStreak[newActivity.activityCategory] = 1
+                  }
+
+                  user.markModified('activityStreak');
+
+                  console.log(user.activityStreak)
+                  user.myActivity = [...user.myActivity, ...[activityNew._id.toString()]]
+                  user.totalHoursLogged = user.totalHoursLogged + activity.activityDuration
+                  user.save(function(err){
+                    if (err) {
+                      console.log('error has occur: ',  err)
+                      res.send(activityNew)
+                    } else {
+                      console.log('Nice, activity added in the user model')
+                      res.send(activityNew)
+                    }
+                  })
+                })
+              }
+            })
+  });
+
 });
 
 router.post('/editActivity', function(req,res){
@@ -111,7 +175,6 @@ router.post('/editActivity', function(req,res){
       console.log(newActivity);
       return newActivity;
     }
-
   })
 });
 
@@ -132,61 +195,5 @@ router.post('/deleteActivity', function(req,res){
   })
 });
 
-router.post('/createActivity', function(req, res){
-  var activity = req.body.activity;
-  Activity.findOne({$and: [
-          {'activityCreator': activity.activityCreator},
-          {'activityLatitude': activity.activityLatitude},
-          {'activityLongitude': activity.activityLongitude}]}).exec(function(err, activities){
-
-        if(err){
-          console.log(err);
-          res.send(err);
-          return err
-        }
-
-        if(!activities){
-
-                var newActivity = new Activity({
-                      activityCreator: activity.activityCreator,
-                      activityNote: activity.activityNote,
-                      activityCategory: activity.activityCategory,
-                      activityLatitude: activity.activityLatitude,
-                      activityLongitude: activity.activityLongitude,
-                      activityDuration: activity.activityDuration,
-                      activityImage: activity.image ? activity.image : ''
-                      // activityVideo: req.files['video'] ? req.files['video'][0].location : ''
-                    })
-
-                    newActivity.save(function(err, activityNew){
-                      if (err) {
-                        console.log('error has occur: ',  err)
-                      } else {
-                        console.log('Nice, you created a file')
-
-                        User.findById(activityNew.activityCreator, function(err, user){
-
-                          user.myActivity = [...user.myActivity, ...[activityNew._id.toString()]]
-
-                          user.save(function(err){
-                            if (err) {
-                              console.log('error has occur: ',  err)
-                              res.send(activityNew)
-                            } else {
-                              console.log('Nice, activity added in the user model')
-                              res.send(activityNew)
-                            }
-                          })
-                        })
-                      }
-                    })
-
-        }else{
-          console.log('activities already exist!');
-          return null;
-        }
-  });
-
-});
 
 module.exports = router;
