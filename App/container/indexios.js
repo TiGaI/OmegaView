@@ -6,7 +6,7 @@ import * as actionCreators from '../actions/loginAction';
 import Tabs from '../components/tabs';
 import Login from '../components/login'
 import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
-
+var Environment = require('../Environment.js')
 const styles = StyleSheet.create({
   wrapper: {
       marginTop: 20,
@@ -26,8 +26,8 @@ class PinVuew extends Component {
     try {
       await GoogleSignin.hasPlayServices({ autoResolve: true });
       await GoogleSignin.configure({
-        iosClientId: '370532562699-jdrkinfjg1uetd8b9obm2v9k2nghn42m.apps.googleusercontent.com',
-        webClientId: '370532562699-bkuhvhkriv8bilu16vbibsi7ah1950jl.apps.googleusercontent.com',
+        iosClientId: Environment.IOS_CLIENT_ID,
+        webClientId: Environment.WEB_CLIENT_ID,
         offlineAccess: false
       });
       const user = await GoogleSignin.currentUserAsync();

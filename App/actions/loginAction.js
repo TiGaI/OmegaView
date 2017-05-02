@@ -8,7 +8,6 @@ import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
 const facebookParams = 'id,name,email,picture.width(100).height(100), gender, age_range, about';
 
 export function getGraphData(userID, myActivity) {
-  console.log('GET INSIDE ACTION GET GRAPH DATA', userID, myActivity)
     return dispatch => {
         dispatch(attempt());
 
@@ -24,15 +23,12 @@ export function getGraphData(userID, myActivity) {
             })
             .then((response) => response.json())
             .then((responseJson) => {
-
                 var userObject = Object.assign({}, responseJson);
-                console.log('GET INSIDE ACTION IN RESPONSE GET GRAPH DATA',userObject )
                 dispatch(addUser(userObject));
             })
             .catch((err) => {
               console.log('error: ', err)
             });
-
         }
     };
 
@@ -85,7 +81,6 @@ export function googleLogin(){
               .then((response) => response.json())
               .then((responseJson) => {
 
-                  mongooseId = responseJson._id
                   var userObject = Object.assign({}, responseJson);
 
                   console.log("user information from facebook: ", userObject)

@@ -1,9 +1,11 @@
 import {loginReducer, profileReducer} from './loginReducer';
 import { combineReducers } from 'redux-immutable';
+import { mainPageData } from './getDataReducer';
 
 const applicationReducers = {
 	login: loginReducer,
-	profile: profileReducer
+	profile: profileReducer,
+	data: mainPageData
 };
 
 export default function createReducer() {

@@ -10,6 +10,7 @@ import {
 
 import { connect } from 'react-redux';
 
+import MainFeed from './MainFeed/MainFeed.js';
 import PinForm from './Form/PinForm';
 import StatsPage from './Categories/statistics.js';
 import ProfilePage from './Profile/profilePage.js';
@@ -74,16 +75,7 @@ class ApplicationTabs extends Component {
 			    renderIcon={() => <Icon containerStyle={{justifyContent: 'center', alignItems: 'center', marginTop: 12}} color={'#5e6977'} name='home' size={33} />}
 			    renderSelectedIcon={() => <Icon color={'#6296f9'} name='home' size={30} />}
 			    onPress={() => this.changeTab('homepage')}>
-						<Navigator
-							initialRoute={{ id: 'PinForm', title: 'Activity' }}
-							renderScene={ this.renderScene }
-
-							navigationBar = {
-								 <Navigator.NavigationBar
-										style = { styles.navigationBar }
-										routeMapper = { NavigationBarRouteMapper } />
-							}
-						/>
+						<MainFeed />
 			  </Tab>
 
 				<Tab

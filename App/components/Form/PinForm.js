@@ -24,9 +24,7 @@
   // workGoal: this.props.profile.userObject.dailyGoal.studyGoal,
   // sleepingGoal: this.props.profile.userObject.dailyGoal.studyGoal
   //
-  //
-  //
-
+  
   var radio_props = [
     {label: 'Studying', activityCategory: 'studying' },
     {label: 'Eating', activityCategory: 'eating' },
