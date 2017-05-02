@@ -47,6 +47,21 @@ var userSchema = new mongoose.Schema({
       workingGoal: 0,
       sleepingGoal: 0
     }
+  },
+  activityStreak: {
+    type: Object,
+    default: {
+      studying: 0,
+      eating: 0,
+      training: 0,
+      hobby: 0,
+      working: 0,
+      sleeping: 0
+    }
+  },
+  totalHoursLogged: {
+    type: Number,
+    default: 0
   }
 },
 { timestamps: true }
@@ -74,6 +89,9 @@ var activitySchema = new mongoose.Schema({
   activityDuration: {
     type: Number,
     required: true
+  },
+  activityGoalForThatDay: {
+    type: Number
   }
 },
 { timestamps: true }
