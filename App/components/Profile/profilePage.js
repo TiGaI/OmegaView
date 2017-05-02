@@ -24,6 +24,7 @@ var days  = [{day: 'Monday'},{day: 'Tuesday'},{day: 'Wednesday'},{day: 'Thursday
 class ProfilePage extends Component{
   constructor(props){
     super(props);
+      console.log('PROFILE PAGE PROPS', this.props)
       const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       this.state = {
         dataSource: ds.cloneWithRows(days),
