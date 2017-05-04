@@ -13,7 +13,7 @@ import { connect } from 'react-redux';
 import MainFeed from './MainFeed/MainFeed.js';
 import PinForm from './Form/PinForm';
 import StatsPage from './Categories/statistics.js';
-import ProfilePage from './Profile/profilePage.js';
+import ProfilePageIndex from './Profile/profilePageIndex.js';
 import MapPage from './Map/mapPage.js';
 import MapPageIndex from './Map/mapPageIndex.js';
 
@@ -131,7 +131,7 @@ class ApplicationTabs extends Component {
 					renderSelectedIcon={() => <Icon color={'#6296f9'} name='person-pin' size={30} />}
 					onPress={() => this.changeTab('profile')}>
 
-					<ProfilePage />
+					<ProfilePageIndex />
 				</Tab>
 			</Tabs>
 		);

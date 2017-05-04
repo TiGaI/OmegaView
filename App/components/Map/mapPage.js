@@ -15,6 +15,7 @@ import Slider from 'react-native-slider';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import ModalDropdown from 'react-native-modal-dropdown';
 import MapView from 'react-native-maps';
+import * as actionCreators from '../../actions/activityAction';
 
 //Import Components
 import MapFilter from './mapFilter'
@@ -33,12 +34,13 @@ const LATITUDE_DELTA = 0.03;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 
-
+var x = 0;
 
 class MapPage extends Component{
   constructor(props){
     super(props);
     console.log('MAP PAGE PROPS', props);
+    console.log('GET ACTIVITIES', this.props.actions.getActivityForMap(this.props.profile.userObject._id));
     this.state = {
       initialPosition: {
         latitude: LATITUDE,
@@ -51,8 +53,7 @@ class MapPage extends Component{
         longitude: LONGITUDE,
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
-      },
-
+      }
     }
   }
   watchID: ?number = null;
@@ -85,9 +86,12 @@ componentDidMount() {
 }
 
 filter () {
-  this.props.navigator.push({
-    id: 'MapFilter'
-  })
+
+  // this.props.navigator.push({
+  //   id: 'MapFilter'
+  // })
+
+  // this.props.data.populatedActivities
 }
 
 componentWillUnmount() {
@@ -95,9 +99,12 @@ componentWillUnmount() {
 }
 
   render() {
+      if(this.props.data.populatedActivities.length > 0){
+        console.log('FILTER', this.props);
+      }
     return (
       <View style={{flex: 1, justifyContent: 'center', backgroundColor: '#152D44'}}>
-      {this.state.currentPosition.latitude !== 1 && this.state.currentPosition.longitude !== 1 ? (
+      {this.state.currentPosition.latitude !== 1 && this.state.currentPosition.longitude !== 1 && this.props.data.populatedActivities.length !== 0 ? (
       <MapView
      resizeMode = "stretch"
       style={{flex: 1, height: null, width: null, justifyContent: 'flex-start', alignItems: 'center'}}
@@ -113,12 +120,15 @@ componentWillUnmount() {
     <Text style={{color: 'white', fontSize: 20}}>Filter</Text>
     </TouchableOpacity>
     </View>
-     <MapView.Marker
-       coordinate={{latitude: this.state.currentPosition.latitude,
-       longitude: this.state.currentPosition.longitude
-       }}
-       title='Title'
-    />
+    {this.state.markers.map(marker => (
+       <MapView.Marker
+         coordinate={{latitude: marker.activityLatitude,
+      longitude: marker.activityLongitude}}
+         title={marker.title}
+         description={marker.description}
+       />
+     ))}
+
         </MapView>
   ) : (<View><Text>LOADING...</Text></View>)
 
@@ -131,14 +141,15 @@ componentWillUnmount() {
 
 function mapStateToProps(state) {
 	return {
-    // goal: state.get('goal'),
+    profile: state.get('profile'),
+    data: state.get('data'),
     login: state.get('login')
 	};
 }
 
 function mapDispatchToProps(dispatch) {
 	return {
-		// actions: bindActionCreators(actionCreators, dispatch)
+		actions: bindActionCreators(actionCreators, dispatch)
 	};
 }
 

@@ -21,6 +21,8 @@ var {height, width} = Dimensions.get('window');
 
 var days  = [{day: 'Monday'},{day: 'Tuesday'},{day: 'Wednesday'},{day: 'Thursday'},{day: 'Friday'},{day: 'Saturaday'}, {day: 'Sunday'}]
 
+import ReportPage from './reportPage.js';
+
 class ProfilePage extends Component{
   constructor(props){
     super(props);
@@ -31,7 +33,15 @@ class ProfilePage extends Component{
       };
 
   }
+  report(rowData) {
+    console.log('ROWWWWW', rowData);
+    this.props.navigator.push({
+      id: "ReportPage",
+      passProps: {data: rowData}
+    })
+  }
   render() {
+    const {userObject} = this.props.profile;
     return (
       <View style={{flex: 1, justifyContent: 'center'}}>
         <View style={{flex: 1, backgroundColor: '#152D44'}}>
@@ -50,21 +60,17 @@ class ProfilePage extends Component{
             <View style={{flex: 2, justifyContent: 'center', alignItems: 'center'}}>
               <Image
                   style={{width: 100, height: 100, borderRadius: 50}}
-                  source={{uri: 'https://pi.tedcdn.com/r/pe.tedcdn.com/images/ted/8299f92848bc96ee92a8f03057f64cc554a2208f_254x191.jpg?'}}
+                  source={{uri: this.props.profile.userObject.profileImg}}
                 />
-              <Text style={{color: 'white', fontSize: 20, fontWeight: "400", marginTop: 10}}>Elon Musk</Text>
+              <Text style={{color: 'white', fontSize: 20, fontWeight: "400", marginTop: 10}}>{this.props.profile.userObject.firstName + " " + this.props.profile.userObject.lastName}</Text>
             </View>
             <View style={{flex: 1, flexDirection: 'row'}}>
               <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={{color: 'white', fontSize: 25, fontWeight: "400"}}>123</Text>
+                <Text style={{color: 'white', fontSize: 25, fontWeight: "400"}}>{userObject.totalHoursLogged}</Text>
                 <Text style={{color: 'white', fontSize: 12, fontWeight: "400"}}>Total Hours</Text>
               </View>
               <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={{color: 'white', fontSize: 25, fontWeight: "400"}}>123</Text>
-                <Text style={{color: 'white', fontSize: 12, fontWeight: "400"}}>Streak</Text>
-              </View>
-              <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={{color: 'white', fontSize: 25, fontWeight: "400"}}>123</Text>
+                <Text style={{color: 'white', fontSize: 25, fontWeight: "400"}}>{userObject.myActivity.length}</Text>
                 <Text style={{color: 'white', fontSize: 12, fontWeight: "400"}}>Total Pins</Text>
               </View>
             </View>
@@ -73,14 +79,14 @@ class ProfilePage extends Component{
           <ListView
             dataSource={this.state.dataSource}
             renderRow={(rowData) =>
-              <TouchableOpacity style={{flex: 1, backgroundColor: 'white', height: 75, margin: 10, marginBottom: 0}}>
+              <TouchableOpacity onPress={this.report.bind(this, rowData)} style={{flex: 1, backgroundColor: 'white', height: 75, margin: 10, marginBottom: 0}}>
                   <View style={{flex: 1, flexDirection: 'row'}}>
                   <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                     <Text style={{color: '#8AC0FF', fontSize: 25, fontWeight: '700'}}>03</Text>
                     <Text style={{color: '#8AC0FF', fontSize: 15, fontWeight: '400'}}>Jan</Text>
                   </View>
                   <View style={{flex: 3, justifyContent: 'center', alignItems: 'flex-start'}}>
-                    <Text style={{color: 'grey', fontSize: 20, fontWeight: '500'}} numberOfLines={1}>Today I landed on Mars</Text>
+                    <Text style={{color: 'grey', fontSize: 20, fontWeight: '500'}} numberOfLines={1}>{rowData.day}</Text>
                     <Text style={{color: 'black', fontSize: 12, fontWeight: '400'}}>Tuesday, 11:30 AM</Text>
                   </View>
                 </View>
@@ -98,7 +104,9 @@ class ProfilePage extends Component{
 function mapStateToProps(state) {
 	return {
     // goal: state.get('goal'),
-    login: state.get('login')
+    login: state.get('login'),
+    profile: state.get('profile'),
+    data: state.get('data')
 	};
 }
 

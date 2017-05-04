@@ -195,5 +195,21 @@ router.post('/deleteActivity', function(req,res){
   })
 });
 
+router.post('/getActivityForMap', function(req,res){
+  // var category = req.body.category;
+  console.log("INSIDE MAP SERVER")
+  var activityCreatorId = req.body.activityCreatorId;
+  Activity.find({"activityCreator": [activityCreatorId]}, function(err, newActivity){
+    if(err){
+      console.log(err);
+      res.send(err);
+      return err
+    } else {
+      res.send(newActivity);
+      console.log('ACTIVITIES', newActivity);
+      return newActivity;
+    }
+  })
+});
 
 module.exports = router;

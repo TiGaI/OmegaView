@@ -5,7 +5,7 @@ import { Spinner } from 'native-base';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../../actions/getDataAction';
 import { connect } from 'react-redux';
-
+import { Button, SocialIcon } from 'react-native-elements'
 
 class MainFeed extends Component{
   constructor(props){
@@ -45,7 +45,7 @@ class MainFeed extends Component{
       <View style={{flex: 1}}>
       { this.props.profile.userObject ?  (
         <View style={{flex: 1}}>
-            <Text>Main Page</Text>
+            <Text>Main Page Test</Text>
         </View>
         ) : (
           checkforlogin

@@ -21,6 +21,10 @@ export function mainPageData(state = {
         return Object.assign([], state, {
           allUserActivities: action.activities
         })
+    case 'MAP_ACTIVITIES':
+        return Object.assign([], state, {
+          populatedActivities: action.activities
+        })
 
 
     default:
