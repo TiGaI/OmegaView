@@ -26,8 +26,11 @@ router.post('/getFeed', function(req, res){
 });
 
 router.post('/createGoal', function(req, res){
+
+  var tomorrow = moment(req.body.today).add(1, 'days')
+
     User.findOne({$and: [
-          {'user': req.body.user}
+          {'user': req.body.userID}
           ]})
      .exec( function(err, user) {
         if (err) {
@@ -41,7 +44,38 @@ router.post('/createGoal', function(req, res){
                 console.log(err)
                 return err
               }
-              console.log('user goal created!');
+
+              Activity.find({
+                  createdAt: {
+                    $gte: req.body.today.toDate(),
+                    $lt: tomorrow.toDate()
+                  }
+                }).sort('-createdAt').exec(function(err, activties){
+
+
+                  activties.map((x, index) => {
+                    if(x.activityCategory == 'studying'){
+                      x.activityGoalForThatDay = req.body.myDailyGoal.studyingGoal
+                    }else if(x.activityCategory == 'eating'){
+                      x.activityGoalForThatDay == req.body.myDailyGoal.eatingGoal
+                    }else if(x.activityCategory == 'training'){
+                      x.activityGoalForThatDay == req.body.myDailyGoal.trainingGoal
+                    }else if(x.activityCategory == 'hobby'){
+                      x.activityGoalForThatDay == req.body.myDailyGoal.hobbyGoal
+                    }else if(x.activityCategory == 'working'){
+                      x.activityGoalForThatDay == req.body.myDailyGoal.workingGoal
+                    }else{
+                      x.activityGoalForThatDay == req.body.myDailyGoal.sleepingGoal
+                    }
+
+                    x.save(function(err, activity){
+                      if (err) {
+                          console.log(err);
+                          res.send(err)
+                      }
+                    })
+                  })
+              });
               res.send(user)
           })
       }else{

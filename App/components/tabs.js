@@ -4,55 +4,120 @@ import {
    StyleSheet,
    Text,
    Navigator,
-   TouchableOpacity
+   TouchableOpacity, Dimensions, Alert
 } from 'react-native'
 
 
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import MainFeed from './MainFeed/MainFeed.js';
 import PinForm from './Form/PinForm';
 import StatsPage from './Categories/statistics.js';
 import ProfilePage from './Profile/profilePage.js';
 
-var NavigationBarRouteMapper = {
-   LeftButton(route, navigator, index, navState) {
-         return (
-            <TouchableOpacity>
-               <Text style={ styles.leftButton }>
-                  Save
-               </Text>
-            </TouchableOpacity>
-         )
-   },
-   RightButton(route, navigator, index, navState) {
-		 	return (
-         <TouchableOpacity>
-            <Text style = { styles.rightButton }>
-               Done
-            </Text>
-         </TouchableOpacity>
-			 )
-   },
-   Title(route, navigator, index, navState) {
-      return (
-         <Text style = { styles.title }>
-            {route.title}
-         </Text>
-      )
-   }
-};
+import * as activityAction from '../actions/activityAction';
+
+
+var { width, height } = Dimensions.get('window');
+const ASPECT_RATIO = width / height;
+
+const LATITUDE = 1;
+const LONGITUDE = 1;
+
+const LATITUDE_DELTA = 0.03;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 class ApplicationTabs extends Component {
 	constructor() {
 	  super()
 	  this.state = {
 	    selectedTab: 'homepage',
+      initialPosition: {
+       latitude: LATITUDE,
+       longitude: LONGITUDE,
+       latitudeDelta: LATITUDE_DELTA,
+       longitudeDelta: LONGITUDE_DELTA
+     },
+     currentPosition: {
+       latitude: LATITUDE,
+       longitude: LONGITUDE,
+       latitudeDelta: LATITUDE_DELTA,
+       longitudeDelta: LONGITUDE_DELTA
+     }
 	  }
 	}
+
+  watchID: ?number = null;
+
+  componentDidMount() {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        var initialPosition = JSON.stringify(position);
+        this.setState({initialPosition: {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA
+        }});
+      },
+      (error) => alert(JSON.stringify(error)),
+      {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000}
+    );
+    this.watchID = navigator.geolocation.watchPosition((position) => {
+      var lastPosition = JSON.stringify(position);
+      this.setState({currentPosition: {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA
+      }});
+    },
+    );
+  }
+
+  componentWillUnmount() {
+    navigator.geolocation.clearWatch(this.watchID);
+  }
 	changeTab (selectedTab) {
 		  this.setState({selectedTab})
 	}
+  submitForm(){
+    var currentTime = new Date();
+    currentTime = currentTime.getTime();
+    if(this.props.profile.userObject.myLastActivity){
+      var lastActivityTime = this.props.profile.userObject.myLastActivity.createdAt.getTime();
+      var timeDuration = this.props.profile.userObject.myLastActivity.activityDuration * 3600
+      if((currentTime - lastActivityTime)/1000 > timeDuration){
+        this.props.activityActions.createActivity({
+          activityCreator: this.props.profile.userObject._id,
+          activityNote: this.props.form.formObject.activityNote,
+          activityCategory: this.props.form.formObject.activityCategory,
+          activityLatitude: this.state.currentPosition.latitude,
+          activityLongitude: this.state.currentPosition.longitude,
+          activityDuration: this.props.form.formObject.activityDuration,
+          activityGoal: this.props.profile.userObject.myDailyGoal[this.props.form.formObject.activityCategory]
+        }, this.props.form.formObject.photoData)
+      }else{
+        Alert.alert(
+              'Activity Error',
+              'You cannot create an activity within the time period of another activity'
+            )
+      }
+
+
+    }else{
+      this.props.activityActions.createActivity({
+        activityCreator: this.props.profile.userObject._id,
+        activityNote: this.props.form.formObject.activityNote,
+        activityCategory: this.props.form.formObject.activityCategory,
+        activityLatitude: this.state.currentPosition.latitude,
+        activityLongitude: this.state.currentPosition.longitude,
+        activityDuration: this.props.form.formObject.activityDuration,
+        activityGoal: this.props.profile.userObject.myDailyGoal[this.props.form.formObject.activityCategory]
+      }, this.props.form.formObject.photo)
+    }
+  }
 	renderScene( route, nav ) {
     switch (route.id) {
       case 'PinForm':
@@ -62,7 +127,7 @@ class ApplicationTabs extends Component {
 	render() {
 
 		const { selectedTab } = this.state
-
+    var self = this;
 		return (
 			<Tabs>
 			  <Tab
@@ -102,7 +167,34 @@ class ApplicationTabs extends Component {
 						navigationBar = {
 							 <Navigator.NavigationBar
 									style = { styles.navigationBar }
-									routeMapper = { NavigationBarRouteMapper } />
+									routeMapper = {{
+                     LeftButton(route, navigator, index, navState) {
+                           return (
+                              <TouchableOpacity>
+                                 <Text style={ styles.leftButton }>
+                                    Save
+                                 </Text>
+                              </TouchableOpacity>
+                           )
+                     },
+                     RightButton(route, navigator, index, navState) {
+                       console.log(self);
+                  		 	return (
+                           <TouchableOpacity onPress={() => self.submitForm(self.props.profile.userObject.myLastActivity)}>
+                              <Text style = { styles.rightButton }>
+                                 Done
+                              </Text>
+                           </TouchableOpacity>
+                  			 )
+                     },
+                     Title(route, navigator, index, navState) {
+                        return (
+                           <Text style = { styles.title }>
+                              {route.title}
+                           </Text>
+                        )
+                     }
+                  }} />
 						}
 						/>
 
@@ -179,13 +271,14 @@ ApplicationTabs.propTypes = {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		dispatch
+		activityActions: bindActionCreators(activityAction, dispatch)
 	};
 }
 
 function mapStateToProps(state) {
 	return {
-		activitiesPageState: state.get('activitiesPageState')
+    profile: state.get('profile'),
+		form: state.get('form')
 	};
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ApplicationTabs);

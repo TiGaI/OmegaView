@@ -1,9 +1,23 @@
 import { RNS3 } from 'react-native-aws3';
 var Environment = require('../Environment.js')
+var _ = require('underscore');
+
+export function putFormObjectIntoProp(formObject){
+  return dispatch => {
+      dispatch(pushFromObject(formObject));
+  };
+}
+
+export function pushFromObject(formObject) {
+    return {
+        type: 'PASS_FORM',
+        formObject
+    };
+}
 
 export function createActivity(activityObject, photo) {
+  var copy = Object.assign({}, activityObject)
   if(photo){
-      var copy = Object.assign({}, activityObject)
       var file = {
           // `uri` can also be a file system path (i.e. file://)
           uri: photo.uri,
@@ -14,7 +28,6 @@ export function createActivity(activityObject, photo) {
   }else{
       copy['image'] = null
   }
-
     return dispatch => {
         fetch('http://localhost:8080/createActivity', {
               method: 'POST',
@@ -26,8 +39,6 @@ export function createActivity(activityObject, photo) {
               })
             }).then((response) => response.json())
             .then(responseJson => {
-
-              console.log('this is reponseJson: ', process.env.AWS_DEFAULT_REGION)
                 if(responseJson.activityImage){
                   var options = {
                     keyPrefix: "uploads/",
@@ -56,7 +67,6 @@ export function createActivity(activityObject, photo) {
 export function editActivity(activityID, activityCreatorId, activityObject){
   console.log("INSIDE EDIT ACTIVITY", activityID, activityCreatorId, activityObject)
   return dispatch => {
-    dispatch(fetching());
     fetch('http://localhost:8080/editActivity', {
       method: 'POST',
       headers: {
@@ -80,7 +90,6 @@ export function editActivity(activityID, activityCreatorId, activityObject){
 
 export function deleteActivity(activityID, activityCreatorId){
   return dispatch => {
-    dispatch(fetching());
     fetch('http://localhost:8080/deleteActivity', {
       method: 'POST',
       headers: {
