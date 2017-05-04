@@ -129,9 +129,7 @@
 
         return this.renderImage(image);
       },
-      render() {
-        const { profile } = this.props;
-
+      componentDidUpdate(){
         this.props.formActions.putFormObjectIntoProp({
           activityCategory: this.state.activityCategory,
           activityCategoryIndex: this.state.activityCategoryIndex,
@@ -140,6 +138,9 @@
           public: this.state.public,
           photoData: this.state.photoData
         })
+      },
+      render() {
+        const { profile } = this.props;
 
         return(
         <View style={{flex: 1, padding: 5, marginTop: 50}}>

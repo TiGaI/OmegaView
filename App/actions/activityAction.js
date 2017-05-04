@@ -55,8 +55,6 @@ export function createActivity(activityObject, photo) {
                     console.log(response.body);
                   });
                 }
-
-
             })
             .catch((err) => {
               console.log('error in createActivity -> ', err)

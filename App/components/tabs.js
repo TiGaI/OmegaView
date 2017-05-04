@@ -75,7 +75,6 @@ class ApplicationTabs extends Component {
     },
     );
   }
-
   componentWillUnmount() {
     navigator.geolocation.clearWatch(this.watchID);
   }
@@ -104,8 +103,6 @@ class ApplicationTabs extends Component {
               'You cannot create an activity within the time period of another activity'
             )
       }
-
-
     }else{
       this.props.activityActions.createActivity({
         activityCreator: this.props.profile.userObject._id,
@@ -178,7 +175,6 @@ class ApplicationTabs extends Component {
                            )
                      },
                      RightButton(route, navigator, index, navState) {
-                       console.log(self);
                   		 	return (
                            <TouchableOpacity onPress={() => self.submitForm(self.props.profile.userObject.myLastActivity)}>
                               <Text style = { styles.rightButton }>
