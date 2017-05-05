@@ -31,7 +31,6 @@ class ProfilePage extends Component{
       this.state = {
         dataSource: ds.cloneWithRows(days),
       };
-
   }
   report(rowData) {
     console.log('ROWWWWW', rowData);
@@ -93,13 +92,10 @@ class ProfilePage extends Component{
             </TouchableOpacity>}
           />
         </View>
-
       </View>
     )
   }
 }
-
-
 
 function mapStateToProps(state) {
 	return {

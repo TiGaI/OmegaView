@@ -40,12 +40,12 @@ var userSchema = new mongoose.Schema({
   myDailyGoal: {
     type: Object,
     default: {
-      studyingGoal: 0,
-      featingGoal: 0,
-      trainingGoal: 0,
-      hobbyGoal: 0,
-      workingGoal: 0,
-      sleepingGoal: 0
+      studying: 0,
+      eating: 0,
+      training: 0,
+      hobby: 0,
+      working: 0,
+      sleeping: 0
     }
   },
   activityStreak: {
@@ -59,6 +59,10 @@ var userSchema = new mongoose.Schema({
       sleeping: 0
     }
   },
+  myLastActivity: {
+    type: Object,
+     default: {}
+  },
   totalHoursLogged: {
     type: Number,
     default: 0
@@ -69,7 +73,7 @@ var userSchema = new mongoose.Schema({
 
 var activitySchema = new mongoose.Schema({
   activityCreator: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
-  activityImages: String,
+  activityImage: String,
   activityNote: {
     type: String,
     default: ""
@@ -92,6 +96,10 @@ var activitySchema = new mongoose.Schema({
   },
   activityGoalForThatDay: {
     type: Number
+  },
+  activityProductivity: {
+    type: Number,
+    default: 1
   }
 },
 { timestamps: true }
@@ -116,13 +124,34 @@ var notificationsSchema = new mongoose.Schema({
   { timestamps: true }
 );
 
+var reportsSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'User'
+  },
+  activitiesForTheDay: [{type: mongoose.Schema.Types.ObjectId, ref: 'Activity'}],
+  GradeForTheDay: {
+    type: String,
+    default: 'F',
+    required: true,
+  },
+  dataObject: {
+    type: Object
+  }
+  },
+  { timestamps: true }
+);
+
 
 var User = mongoose.model("User", userSchema);
 var Activity = mongoose.model("Activity", activitySchema);
 var Usernotification = mongoose.model("Usernotification", notificationsSchema);
+var Report = mongoose.model("Report", reportsSchema);
 
 module.exports = {
   User: User,
   Activity: Activity,
-  Usernotification: Usernotification
+  Usernotification: Usernotification,
+  Report: Report
 };

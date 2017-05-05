@@ -1,31 +1,54 @@
 import React, { Component, PropTypes } from 'react';
 import {
-  StyleSheet, View } from 'react-native';
+  StyleSheet, View, Text, Alert, TouchableOpacity } from 'react-native';
 
 import { bindActionCreators } from 'redux';
-import * as actionCreators from '../actions/goalandnotificationAction';
+import * as loginAction from '../../actions/loginAction';
 import { connect } from 'react-redux';
+import {Spinner} from 'native-base';
+
+import {Button, SocialIcon, Icon} from 'react-native-elements'
 
 import Slider from 'react-native-slider'
-
 
 class GoalForm extends Component{
   constructor(props){
     super(props);
     this.state = {
-      studyGoal: this.props.profile.userObject.dailyGoal.studyGoal,
-      eatingGoal: this.props.profile.userObject.dailyGoal.eatingGoal,
-      trainingGoal: this.props.profile.userObject.dailyGoal.trainingGoal,
-      hobbyGoal: this.props.profile.userObject.dailyGoal.hobbyGoal,
-      workingGoal: this.props.profile.userObject.dailyGoal.studyGoal,
-      sleepingGoal: this.props.profile.userObject.dailyGoal.studyGoal
+      studyingGoal: this.props.profile.userObject.myDailyGoal.studying,
+      eatingGoal: this.props.profile.userObject.myDailyGoal.eating,
+      trainingGoal: this.props.profile.userObject.myDailyGoal.training,
+      hobbyGoal: this.props.profile.userObject.myDailyGoal.hobby,
+      workingGoal: this.props.profile.userObject.myDailyGoal.working,
+      sleepingGoal: this.props.profile.userObject.myDailyGoal.sleeping
     };
   }
-  submitGoalForm(){
+  componentWillMount() {
+    var self = this;
+       this.props.navigator.props.navigationBar.props.routeMapper.RightButton =  function() {
+           return (
+              <TouchableOpacity onPress={() => self.submitForm.bind(this) }>
+                 <Text style = { styles.rightButton }>
+                    Finish
+                 </Text>
+              </TouchableOpacity>
+            )
+          }
+  }
+  submitForm() {
+    console.log('this is this in submitform',this)
+   var form = {
+     studying: this.state.studyingGoal,
+     eating: this.state.eatingGoal,
+     training: this.state.trainingGoal,
+     hobby: this.state.hobbyGoal,
+     working: this.state.workingGoal,
+     sleeping: this.state.sleepingGoal
+   };
 
+   this.props.loginActions.createGoalBackEnd(this.props.profile.userObject._id, form)
   }
   render() {
-
     if(this.props.login.skip){
       var checkforlogin = (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#00A8BE'}}>
@@ -55,112 +78,141 @@ class GoalForm extends Component{
     }
 
     return(
-
-      <View style={{flex: 1}}>
+      <View style={{flex: 1, marginTop: 50, marginBottom: 50}}>
       { this.props.profile.userObject ?  (
         <View style={{flex: 1}}>
 
                             <View style={styles.container}>
                               <View style={styles.titleContainer}>
                                 <Text style={styles.caption} numberOfLines={1}>Studying Goal</Text>
+                                <Text style={styles.value}>{this.state.studyingGoal}</Text>
                               </View>
                                   <Slider
-                                    value={this.state.studyGoal}
+                                    value={this.state.studyingGoal}
                                     minimumTrackTintColor='#1fb28a'
                                      maximumTrackTintColor='#d3d3d3'
                                      thumbTintColor='#1a9274'
                                      minimumValue={0}
-                                      maximumValue={8}
+                                      maximumValue={10}
                                       step={.5}
                                       trackStyle={customStyles2.track}
                                       thumbStyle={customStyles2.thumb}
-                                    onValueChange={(studyGoal) => this.setState({studyGoal})} />
-
-                                    <Text style={styles.value, {textAlign: 'center'}} numberOfLines={1}>{this.state.studyGoal}</Text>
+                                    onValueChange={(studyingGoal) => this.setState({studyingGoal})} />
+                                    <View style={styles.titleContainer}>
+                                      <Text style={styles.caption}>0</Text>
+                                      <Text style={styles.valueForBar}>10</Text>
+                                    </View>
                               </View>
 
                               <View style={styles.container}>
                                 <View style={styles.titleContainer}>
                                   <Text style={styles.caption} numberOfLines={1}>Eating goal</Text>
+                                  <Text style={styles.value}>{this.state.eatingGoal}</Text>
                                 </View>
                                     <Slider
-                                      value={this.state.studyGoal}
+                                      value={this.state.eatingGoal}
                                       minimumTrackTintColor='#1fb28a'
                                        maximumTrackTintColor='#d3d3d3'
                                        thumbTintColor='#1a9274'
                                        minimumValue={0}
-                                        maximumValue={8}
+                                        maximumValue={10}
                                         step={.5}
                                         trackStyle={customStyles2.track}
                                         thumbStyle={customStyles2.thumb}
                                       onValueChange={(eatingGoal) => this.setState({eatingGoal})} />
-
-                                      <Text style={styles.value, {textAlign: 'center'}} numberOfLines={1}>{this.state.eatingGoal}</Text>
+                                      <View style={styles.titleContainer}>
+                                        <Text style={styles.caption}>0</Text>
+                                        <Text style={styles.valueForBar}>10</Text>
+                                      </View>
                                 </View>
 
                                 <View style={styles.container}>
                                   <View style={styles.titleContainer}>
                                     <Text style={styles.caption} numberOfLines={1}>Training goal</Text>
+                                    <Text style={styles.value}>{this.state.trainingGoal}</Text>
                                   </View>
                                       <Slider
-                                        value={this.state.studyGoal}
+                                        value={this.state.trainingGoal}
                                         minimumTrackTintColor='#1fb28a'
                                          maximumTrackTintColor='#d3d3d3'
                                          thumbTintColor='#1a9274'
                                          minimumValue={0}
-                                          maximumValue={8}
+                                          maximumValue={10}
                                           step={.5}
                                           trackStyle={customStyles2.track}
                                           thumbStyle={customStyles2.thumb}
                                         onValueChange={(trainingGoal) => this.setState({trainingGoal})} />
-
-                                        <Text style={styles.value, {textAlign: 'center'}} numberOfLines={1}>{this.state.trainingGoal}</Text>
+                                        <View style={styles.titleContainer}>
+                                          <Text style={styles.caption}>0</Text>
+                                          <Text style={styles.valueForBar}>10</Text>
+                                        </View>
                                   </View>
 
                                   <View style={styles.container}>
                                     <View style={styles.titleContainer}>
-                                      <Text style={styles.caption} numberOfLines={1}>Working goal</Text>
+                                      <Text style={styles.caption} numberOfLines={1}>Fun goal</Text>
+                                      <Text style={styles.value}>{this.state.hobbyGoal}</Text>
                                     </View>
                                         <Slider
-                                          value={this.state.studyGoal}
+                                          value={this.state.hobbyGoal}
                                           minimumTrackTintColor='#1fb28a'
                                            maximumTrackTintColor='#d3d3d3'
                                            thumbTintColor='#1a9274'
                                            minimumValue={0}
-                                            maximumValue={8}
+                                            maximumValue={10}
+                                            step={.5}
+                                            trackStyle={customStyles2.track}
+                                            thumbStyle={customStyles2.thumb}
+                                          onValueChange={(hobbyGoal) => this.setState({hobbyGoal})} />
+                                          <View style={styles.titleContainer}>
+                                            <Text style={styles.caption}>0</Text>
+                                            <Text style={styles.valueForBar}>10</Text>
+                                          </View>
+                                    </View>
+
+                                  <View style={styles.container}>
+                                    <View style={styles.titleContainer}>
+                                      <Text style={styles.caption} numberOfLines={1}>Working goal</Text>
+                                      <Text style={styles.value}>{this.state.workingGoal}</Text>
+                                    </View>
+                                        <Slider
+                                          value={this.state.workingGoal}
+                                          minimumTrackTintColor='#1fb28a'
+                                           maximumTrackTintColor='#d3d3d3'
+                                           thumbTintColor='#1a9274'
+                                           minimumValue={0}
+                                            maximumValue={10}
                                             step={.5}
                                             trackStyle={customStyles2.track}
                                             thumbStyle={customStyles2.thumb}
                                           onValueChange={(workingGoal) => this.setState({workingGoal})} />
-
-                                          <Text style={styles.value, {textAlign: 'center'}} numberOfLines={1}>{this.state.workingGoal}</Text>
+                                          <View style={styles.titleContainer}>
+                                            <Text style={styles.caption}>0</Text>
+                                            <Text style={styles.valueForBar}>10</Text>
+                                          </View>
                                     </View>
 
                                     <View style={styles.container}>
                                       <View style={styles.titleContainer}>
                                         <Text style={styles.caption} numberOfLines={1}>Sleep goal</Text>
+                                        <Text style={styles.value}>{this.state.sleepingGoal}</Text>
                                       </View>
                                           <Slider
-                                            value={this.state.studyGoal}
+                                            value={this.state.sleepingGoal}
                                             minimumTrackTintColor='#1fb28a'
                                              maximumTrackTintColor='#d3d3d3'
                                              thumbTintColor='#1a9274'
                                              minimumValue={0}
-                                              maximumValue={8}
+                                              maximumValue={10}
                                               step={.5}
                                               trackStyle={customStyles2.track}
                                               thumbStyle={customStyles2.thumb}
                                             onValueChange={(sleepingGoal) => this.setState({sleepingGoal})} />
-
-                                            <Text style={styles.value, {textAlign: 'center'}} numberOfLines={1}>{this.state.sleepingGoal}</Text>
+                                            <View style={styles.titleContainer}>
+                                              <Text style={styles.caption}>0</Text>
+                                              <Text style={styles.valueForBar}>10</Text>
+                                            </View>
                                       </View>
-
-
-                              <Button
-                                large
-                                backgroundColor={'#20C48A'}
-                                onPress={this.submitGoalForm.bind(this)}
-                                title='Submit Goal' />
           </View>
         ) : (
           checkforlogin
@@ -171,10 +223,34 @@ class GoalForm extends Component{
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingLeft: 20,
+    paddingRight: 20,
+    backgroundColor: '#ffffff',
+  },
+  titleContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      alignContent: 'flex-end',
+      alignItems: 'center',
+    },
+  caption: {
+    //flex: 1,
+    color: '#212121'
+  },
   value: {
     flex: 1,
-    textAlign: 'center',
+    textAlign: 'right',
     marginLeft: 10,
+    fontWeight: '800'
+  },
+  valueForBar: {
+    flex: 1,
+    textAlign: 'right',
+    marginLeft: 10,
+    top: -5
   }
 
 });
@@ -197,14 +273,14 @@ var customStyles2 = StyleSheet.create({
 
 function mapStateToProps(state) {
 	return {
-    // goal: state.get('goal'),
-    login: state.get('login')
+    login: state.get('login'),
+    profile: state.get('profile')
 	};
 }
 
 function mapDispatchToProps(dispatch) {
 	return {
-		actions: bindActionCreators(actionCreators, dispatch)
+		loginActions: bindActionCreators(loginAction, dispatch)
 	};
 }
 

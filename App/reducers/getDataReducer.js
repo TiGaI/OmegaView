@@ -1,13 +1,16 @@
-export function mainPageData(state = {
-  fetchingData: false,
-  populatedActivities: [],
+export function mainPageDataReducer(state = {
+  feedObject: [],
   notifications: [],
-  allUserActivities: []
 }, action) {
     switch (action.type) {
     case 'MAINPAGE_DATA':
         return Object.assign({}, state, {
-            newFeed: action.newFeed
+            feedObject: action.feedObject
+        });
+    case 'UPDATE_MAINPAGE_DATA':
+    console.log(feedObject, ' I am in getDataReducer')
+        return Object.assign(feedObject, state, {
+            feedObject: action.newFeed
         });
     case "FETCHING_DATA":
         return Object.assign({}, state, {
@@ -25,8 +28,6 @@ export function mainPageData(state = {
         return Object.assign([], state, {
           populatedActivities: action.activities
         })
-
-
     default:
         return state;
     }

@@ -1,12 +1,13 @@
   import React, { Component, PropTypes } from 'react';
   import {StyleSheet,
-  Text, View, ImagePickerIOS, Image, TextInput } from 'react-native';
+  Text, View, Image, TouchableOpacity, TextInput, ActionSheetIOS } from 'react-native';
   import {Button, Switch} from 'native-base';
 
   import { connect } from 'react-redux';
   import { bindActionCreators } from 'redux';
 
   import * as loginAction from '../../actions/loginAction';
+  import * as activityAction from '../../actions/activityAction';
 
   import Video from 'react-native-video';
   import ImagePicker from 'react-native-image-crop-picker';
@@ -15,16 +16,16 @@
   import Slider from 'react-native-slider'
   import { Icon } from 'react-native-elements'
 
-  // import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
-  //
-  // studyGoal: this.props.profile.userObject.dailyGoal.studyGoal,
-  // eatingGoal: this.props.profile.userObject.dailyGoal.eatingGoal,
-  // trainingGoal: this.props.profile.userObject.dailyGoal.trainingGoal,
-  // hobbyGoal: this.props.profile.userObject.dailyGoal.hobbyGoal,
-  // workGoal: this.props.profile.userObject.dailyGoal.studyGoal,
-  // sleepingGoal: this.props.profile.userObject.dailyGoal.studyGoal
-  //
-  
+  var BUTTONS = [
+    'Photo Library',
+    'Camera',
+    'Delete Image',
+    'Cancel',
+  ];
+
+  var DESTRUCTIVE_INDEX = 2;
+  var CANCEL_INDEX = 3;
+
   var radio_props = [
     {label: 'Studying', activityCategory: 'studying' },
     {label: 'Eating', activityCategory: 'eating' },
@@ -37,17 +38,55 @@
   var PinForm = React.createClass({
     getInitialState() {
       return {
-        activityCategory: "",
+        activityCategory: "studying",
         activityCategoryIndex: 0,
         activityDuration: 0.5,
         activityNote: '',
         public: true,
-        // position: {
-        //   latitude: this.props.latitude,
-        //   longitude: this.props.longitude
-        // },
         photoData: null
-      };
+      }
+    },
+    showActionSheet(){
+      var self = this;
+      ActionSheetIOS.showActionSheetWithOptions({
+        options: BUTTONS,
+        cancelButtonIndex: CANCEL_INDEX,
+        tintColor: 'grey',
+      },
+      (buttonIndex) => {
+        if(buttonIndex === 0){
+          self.pickSingle(true);
+        }else if(buttonIndex === 1){
+          self.pickSingleWithCamera(true);
+        }else if(buttonIndex === 2){
+          self.deleteImage()
+        }
+      });
+    },
+    deleteImage(){
+      this.setState({
+        photoData: null
+      })
+    },
+    pickSingle(cropit, circular=false) {
+      ImagePicker.openPicker({
+        width: 300,
+        height: 300,
+        cropping: cropit,
+        cropperCircleOverlay: circular,
+        compressImageMaxWidth: 640,
+        compressImageMaxHeight: 480,
+        compressImageQuality: 0.5,
+        compressVideoPreset: 'MediumQuality',
+      }).then(image => {
+        console.log('received image', image);
+        this.setState({
+          photoData: {uri: image.path, width: image.width, height: image.height, mime: image.mime}
+        });
+      }).catch(e => {
+        console.log(e);
+        Alert.alert(e.message ? e.message : e);
+      });
     },
     pickSingleWithCamera(cropping) {
        ImagePicker.openCamera({
@@ -57,24 +96,32 @@
        }).then(image => {
          console.log('received image', image);
          this.setState({
-           image: {uri: image.path, width: image.width, height: image.height},
-           images: null
+           photoData: {uri: image.path, width: image.width, height: image.height}
          });
        }).catch(e => alert(e));
      },
-     cleanupSingleImage() {
-        let image = this.state.image || (this.state.images && this.state.images.length ? this.state.images[0] : null);
-        console.log('will cleanup image', image);
-
-        ImagePicker.cleanSingle(image ? image.uri : null).then(() => {
-          console.log(`removed tmp image ${image.uri} from tmp directory`);
-        }).catch(e => {
-          alert(e);
-        })
-      },
      renderImage(image) {
-        return <Image style={{width: 300, height: 300, resizeMode: 'contain'}} source={image} />
+        return <Image style={styles.activityImage} source={image} />
       },
+      renderVideo(video) {
+          return (<View style={{height: 300, width: 300}}>
+            <Video source={{uri: video.uri, type: video.mime}}
+               style={{position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  bottom: 0,
+                  right: 0
+                }}
+               rate={1}
+               paused={false}
+               volume={1}
+               muted={false}
+               resizeMode={'cover'}
+               onError={e => console.log(e)}
+               onLoad={load => console.log(load)}
+               repeat={true} />
+           </View>);
+        },
       renderAsset(image) {
         if (image.mime && image.mime.toLowerCase().indexOf('video/') !== -1) {
           return this.renderVideo(image);
@@ -82,15 +129,32 @@
 
         return this.renderImage(image);
       },
+      componentDidUpdate(){
+        this.props.formActions.putFormObjectIntoProp({
+          activityCategory: this.state.activityCategory,
+          activityCategoryIndex: this.state.activityCategoryIndex,
+          activityDuration: this.state.activityDuration,
+          activityNote: this.state.activityNote,
+          public: this.state.public,
+          photoData: this.state.photoData
+        })
+      },
       render() {
         const { profile } = this.props;
-        console.log(this.state)
+
         return(
         <View style={{flex: 1, padding: 5, marginTop: 50}}>
 
           <View style={{flex: 0.5}}>
             <View style={styles.inputContainer}>
-                <Image style={styles.activityImage} source={{uri: 'https://facebook.github.io/react/img/logo_og.png'}}/>
+                <TouchableOpacity onPress={() => this.showActionSheet()}>
+                {this.state.photoData === null ? (
+                       <Image style={styles.activityImage} source={{uri: 'https://facebook.github.io/react/img/logo_og.png'}}/>
+                    ) : (
+                      this.renderAsset(this.state.photoData)
+                  )}
+                </TouchableOpacity>
+
                 <TextInput
                     multiline = {true}
                     numberOfLines = {4}
@@ -108,7 +172,7 @@
           <View style={{flex: 0.5, flexDirection: 'row', flexWrap: 'wrap', margin: 15}}>
 
           {radio_props.map((obj, i) => {
-            var onPressOne = (value, obj) => {
+            var onPressOne = (value, obj, index) => {
               this.setState({
                 activityCategory: obj,
                 activityCategoryIndex: value
@@ -118,10 +182,12 @@
             return (
               <View style={{margin: 10, marginBottom: 20}} key={i}>
               {this.state.activityCategoryIndex === i ? (
-                     <Button light style={{height: 30, backgroundColor: '#212121', borderWidth: 2, paddingTop: 2, paddingBottom: 2, paddingLeft: 15, paddingRight: 15,  borderColor: '#212121'}} onPress={onPressOne.bind(obj, i, obj.label)}>
+                     <Button light style={{height: 30, backgroundColor: '#212121', borderWidth: 2, paddingTop: 2, paddingBottom: 2, paddingLeft: 15, paddingRight: 15,  borderColor: '#212121'}}
+                     onPress={onPressOne.bind(obj, i, obj.activityCategory)}>
                         <Text style={{color: 'white'}}>{obj.label}</Text>
                     </Button>
-                  ) : (<Button light style={{height: 30, borderColor: '#212121', borderWidth: 2, paddingTop: 2, paddingBottom: 2, paddingLeft: 15, paddingRight: 15, backgroundColor: 'white'}} onPress={onPressOne.bind(obj, i)}>
+                  ) : (<Button light style={{height: 30, borderColor: '#212121', borderWidth: 2, paddingTop: 2, paddingBottom: 2, paddingLeft: 15, paddingRight: 15, backgroundColor: 'white'}}
+                  onPress={onPressOne.bind(obj, i, obj.activityCategory)}>
                         <Text>{obj.label}</Text>
                       </Button>
 
@@ -244,7 +310,8 @@
 
     function mapDispatchToProps(dispatch) {
       return {
-        actions: bindActionCreators(loginAction, dispatch)
+        actions: bindActionCreators(loginAction, dispatch),
+        formActions: bindActionCreators(activityAction, dispatch)
       };
     }
 

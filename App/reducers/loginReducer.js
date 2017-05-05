@@ -1,3 +1,5 @@
+import update from 'react-addons-update';
+
 export function loginReducer(state =
   {loading: false, loggedIn: false, error: null, skip: false}, action) {
     switch (action.type) {
@@ -47,7 +49,13 @@ export function profileReducer(state =
     switch (action.type) {
     case 'ADD_USER':
         return Object.assign({}, state, {
-            userObject: action.userObject,
+            userObject: action.userObject
+        });
+    case 'UPDATE_GOAL':
+        return update(state, {
+            userObject: {
+              myDailyGoal: action.myDailyGoalObject
+            }
         });
 
     default:
