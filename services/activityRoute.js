@@ -118,7 +118,7 @@ router.post('/createActivity', function(req, res){
               activityLatitude: activity.activityLatitude,
               activityLongitude: activity.activityLongitude,
               activityDuration: activity.activityDuration,
-              activityGoal: activity.activityGoal,
+              activityGoalForThatDay: activity.activityGoal,
               activityImage: activity.image ? activity.image : ''
             })
             console.log('newActivity: ', newActivity);
@@ -187,11 +187,38 @@ router.post('/deleteActivity', function(req,res){
       console.log(err);
       res.send(err);
       return err
-    } else {
+    }
+
+      User.findById(activityCreatorId).exec(function(err, user){
+
+          if(err){
+            console.log(err);
+          }
+
+          user.myActivity = user.myActivity.filter((x) => {
+              return x._id !== activityId
+          })
+
+          if(user.myLastActivity._id === activityId){
+            Activity.findById(user.myActivity[1]).exec(function(err, activity){
+              user.myLastActivity = activity
+            })
+          }
+
+          user.totalHoursLogged -= newActivity.activityDuration
+
+          user.save(function(err){
+            if(err){
+              console.log(err);
+            }
+          })
+
+      });
+
       res.send(newActivity);
       console.log('Actiity Deleted', newActivity);
       return newActivity;
-    }
+
 
   })
 });

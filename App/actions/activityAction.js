@@ -62,29 +62,29 @@ export function createActivity(activityObject, photo) {
     };
 }
 
-export function editActivity(activityID, activityCreatorId, activityObject){
-  console.log("INSIDE EDIT ACTIVITY", activityID, activityCreatorId, activityObject)
-  return dispatch => {
-    fetch('http://localhost:8080/editActivity', {
-      method: 'POST',
-      headers: {
-        'Content-Type' : 'application/json'
-      },
-      body: JSON.stringify({
-        activityID: activityID,
-        activityCreatorId: activityCreatorId,
-        activity: activityObject
-      })
-    })
-    .then((response) => response.json())
-    .then((responseJson) => {
-
-    })
-    .catch((err) => {
-      console.log('Error in editActivity', err)
-    });
-  };
-}
+// export function editActivity(activityID, activityCreatorId, activityObject){
+//   console.log("INSIDE EDIT ACTIVITY", activityID, activityCreatorId, activityObject)
+//   return dispatch => {
+//     fetch('http://localhost:8080/editActivity', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type' : 'application/json'
+//       },
+//       body: JSON.stringify({
+//         activityID: activityID,
+//         activityCreatorId: activityCreatorId,
+//         activity: activityObject
+//       })
+//     })
+//     .then((response) => response.json())
+//     .then((responseJson) => {
+//
+//     })
+//     .catch((err) => {
+//       console.log('Error in editActivity', err)
+//     });
+//   };
+// }
 
 export function deleteActivity(activityID, activityCreatorId){
   return dispatch => {

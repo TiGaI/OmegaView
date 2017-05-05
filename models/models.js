@@ -73,7 +73,7 @@ var userSchema = new mongoose.Schema({
 
 var activitySchema = new mongoose.Schema({
   activityCreator: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
-  activityImages: String,
+  activityImage: String,
   activityNote: {
     type: String,
     default: ""

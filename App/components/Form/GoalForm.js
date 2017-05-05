@@ -21,9 +21,6 @@ class GoalForm extends Component{
       sleepingGoal: this.props.profile.userObject.dailyGoal.studyGoal
     };
   }
-  submitGoalForm(){
-
-  }
   render() {
 
     if(this.props.login.skip){

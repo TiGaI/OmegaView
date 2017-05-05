@@ -4,6 +4,7 @@ import {
 } from 'react-native'
 
 import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
+import * as getDataActions from './getDataAction';
 
 const facebookParams = 'id,name,email,picture.width(100).height(100), gender, age_range, about';
 
@@ -49,7 +50,6 @@ export function getGraphData(userID, myActivity) {
             })
             .then((response) => response.json())
             .then((responseJson) => {
-              console.log('responseJson is : ', responseJson)
                 var userObject = Object.assign({}, responseJson);
                 dispatch(addUser(userObject));
             })
@@ -92,9 +92,6 @@ export function googleLogin(){
       dispatch(attempt());
 
       GoogleSignin.signIn().then((user) => {
-
-            console.log('this is user in google login: ', user)
-
             var mongooseId = '';
             fetch('http://localhost:8080/googleAuth', {
                 method: 'POST',
@@ -109,15 +106,13 @@ export function googleLogin(){
               .then((responseJson) => {
 
                   var userObject = Object.assign({}, responseJson);
-
+                  getDataActions.pushFeedObjectAction(userObject._id)(dispatch);
                   getGraphData(userObject._id, userObject.myActivity)(dispatch);
                   dispatch(loggedin());
               })
               .catch((err) => {
                 console.log('error: ', err)
               });
-
-
         })
         .catch((err) => {
           console.log('WRONG SIGNIN', err);
