@@ -28,6 +28,22 @@ const LONGITUDE = 1;
 const LATITUDE_DELTA = 0.03;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
+class NavigationBar extends Navigator.NavigationBar {
+  render() {
+    var routes = this.props.navState.routeStack;
+
+    if (routes.length) {
+      var route = routes[routes.length - 1];
+
+      if (route.display === false) {
+        return null;
+      }
+    }
+
+    return super.render();
+  }
+}
+
 class ApplicationTabs extends Component {
 	constructor() {
 	  super()
@@ -158,8 +174,48 @@ class ApplicationTabs extends Component {
 			    onPress={() => this.changeTab('homepage')}>
 
           <Navigator
-            initialRoute={{ id: 'MainFeed', title: 'MainFeed' }}
+            initialRoute={{ id: 'MainFeed', title: 'MainFeed', display: false }}
             renderScene={ this.renderMainScene }
+
+            navigationBar = {
+							 <NavigationBar
+									style = { styles.navigationBar }
+									routeMapper = {{
+                     LeftButton(route, navigator, index, navState) {
+                       if(index > 0){
+                         return (
+                            <TouchableOpacity onPress={() => navigator.pop()}>
+                               <Text style={ styles.leftButton }>
+                                  Back
+                               </Text>
+                            </TouchableOpacity>
+                         )
+                       }else {return null}
+
+                     },
+                     RightButton(route, navigator, index, navState) {
+                       if(index > 0){
+                  		 	return (
+                           <TouchableOpacity onPress={() => this.props.loginActions.submitForm()}>
+                              <Text style = { styles.rightButton }>
+                                 Done
+                              </Text>
+                           </TouchableOpacity>
+                         )
+                       }else {return null}
+                     },
+                     Title(route, navigator, index, navState) {
+                       if(index > 0){
+                        return (
+                           <Text style = { styles.title }>
+                              Daily Goals
+                           </Text>
+                         )
+                       }else {return null}
+                     }
+                  }} />
+						}
+
             />
 
 
