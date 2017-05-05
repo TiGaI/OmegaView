@@ -167,11 +167,10 @@ export function login() {
             .then((response) => response.json())
             .then((responseJson) => {
 
-                var userObject = Object.assign({}, responseJson);
-                console.log("user information from facebook: ", userObject)
-
-                getGraphData(userObject._id, userObject.myActivity)(dispatch);
-                dispatch(loggedin());
+              var userObject = Object.assign({}, responseJson);
+              getDataActions.pushFeedObjectAction(userObject._id)(dispatch);
+              getGraphData(userObject._id, userObject.myActivity)(dispatch);
+              dispatch(loggedin());
             })
             .catch((err) => {
               console.log('error: ', err)
