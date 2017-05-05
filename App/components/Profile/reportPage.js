@@ -5,7 +5,7 @@ import {
 
 
   import { TabViewAnimated, TabBar } from 'react-native-tab-view';
-  import {Bar} from "react-native-pathjs-charts";
+  import {Bar, SmoothLine} from "react-native-pathjs-charts";
 
 //
 // import Modal from 'react-native-modalbox';
@@ -70,24 +70,95 @@ class ReportPage extends Component{
     let data = [
     [{
       "v": 49,
-      "name": "fasf"
+      "name": "Jan"
     }, {
       "v": 42,
-      "name": "apple"
+      "name": "Feb"
     }],
     [{
       "v": 120,
-      "name": "banana"
+      "name": "March"
     }, {
       "v": 62,
-      "name": "banana"
+      "name": "April"
     }],
     [{
       "v": 29,
-      "name": "grape"
+      "name": "May"
     }, {
       "v": 15,
-      "name": "grape"
+      "name": "June"
+    }]
+  ]
+
+  let datas = [
+    [{
+      "x": 0,
+      "y": 10
+    }, {
+      "x": 1,
+      "y": 22
+    }, {
+      "x": 2,
+      "y": 22
+    }, {
+      "x": 3,
+      "y": 33
+    }, {
+      "x": 4,
+      "y": 64
+    }, {
+      "x": 5,
+      "y": 12
+    }, {
+      "x": 6,
+      "y": 89
+    }, {
+      "x": 7,
+      "y": 32
+    }, {
+      "x": 8,
+      "y": 76
+    }, {
+      "x": 9,
+      "y": 44
+    }, {
+      "x": 10,
+      "y": 98
+    }],
+    [{
+      "x": 0,
+      "y": 10
+    }, {
+      "x": 1,
+      "y": 12
+    }, {
+      "x": 2,
+      "y": 40
+    }, {
+      "x": 3,
+      "y": 93
+    }, {
+      "x": 4,
+      "y": 62
+    }, {
+      "x": 5,
+      "y": 12
+    }, {
+      "x": 6,
+      "y": 36
+    }, {
+      "x": 7,
+      "y": 22
+    }, {
+      "x": 8,
+      "y": 64
+    }, {
+      "x": 9,
+      "y": 22
+    }, {
+      "x": 10,
+      "y": 100
     }]
   ]
 
@@ -100,7 +171,7 @@ class ReportPage extends Component{
       bottom: 50,
       right: 20
     },
-    color: '#F0F0F0',
+    color: '#55A5FF',
     gutter: 10,
     animate: {
       type: 'oneByOne',
@@ -109,7 +180,7 @@ class ReportPage extends Component{
     },
     axisX: {
       showAxis: true,
-      showLines: true,
+      showLines: false,
       showLabels: true,
       showTicks: true,
       zeroAxis: true,
@@ -123,7 +194,7 @@ class ReportPage extends Component{
     },
     axisY: {
       showAxis: true,
-      showLines: false,
+      showLines: true,
       showLabels: true,
       showTicks: false,
       zeroAxis: false,
@@ -139,6 +210,7 @@ class ReportPage extends Component{
 
     return (
       <View style={{flex: 1, justifyContent: 'center'}}>
+
         <View style={{flex: 1, flexDirection: 'row'}}>
           <View style={{flex: 2, justifyContent: 'center', alignItems: 'flex-start', backgroundColor: 'white', padding: 10}}>
             <Text style={{fontSize: 25, fontWeight: '500', color: 'black', textAlign: 'center', backgroundColor: 'transparent'}}>
@@ -569,22 +641,25 @@ class ReportPage extends Component{
                   </Tab>
                   <Tab heading="GRAPHS">
                     <View style={{flex: 2, backgroundColor: '#152D44', justifyContent: 'center', alignItems: 'center'}}>
+                      <ScrollView>
+                        <View style={{flex: 1, backgroundColor: "white", justifyContent: 'center', padding: 10, margin: 5}}>
+                          <Text style={{fontSize: 20, fontWeight: '500', color: 'black', textAlign: 'left', backgroundColor: 'transparent'}}>Daily Insights</Text>
+                          <Text style={{fontSize: 15, fontWeight: '300', color: 'grey', textAlign: 'left', backgroundColor: 'transparent'}}>
+                            See your daily progress by tracking your productivity throughout the day.
+                          </Text>
+                        </View>
                       <View style={{flex: 4, backgroundColor: '#152D44', justifyContent: 'center', alignItems: 'center'}}>
+                        <Text style={{fontSize: 20, fontWeight: '500', color: 'white', textAlign: 'left', backgroundColor: 'transparent'}}>Goals</Text>
+                        <SmoothLine data={datas} options={options} xKey='x' yKey='y' />
+                        <Text style={{fontSize: 20, fontWeight: '500', color: 'white', textAlign: 'left', backgroundColor: 'transparent'}}>Productivity</Text>
                         <Bar data={data} options={options} accessorKey='v'/>
                       </View>
-                      <View style={{flex: 1, backgroundColor: "white", justifyContent: 'center', padding: 10, margin: 5}}>
-                        <Text style={{fontSize: 20, fontWeight: '500', color: 'black', textAlign: 'left', backgroundColor: 'transparent'}}>Daily Insights</Text>
-                        <Text style={{fontSize: 15, fontWeight: '300', color: 'grey', textAlign: 'left', backgroundColor: 'transparent'}}>
-                          See your daily progress by tracking your productivity throughout the day.
-                        </Text>
-                      </View>
 
+                      </ScrollView>
                     </View>
 
                   </Tab>
-                  <Tab heading="SOCIAL">
 
-                  </Tab>
               </Tabs>
         </View>
 
