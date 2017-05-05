@@ -27,7 +27,7 @@ class GoalForm extends Component{
     var self = this;
        this.props.navigator.props.navigationBar.props.routeMapper.RightButton =  function() {
            return (
-              <TouchableOpacity onPress={() => self.submitForm.bind(this) }>
+              <TouchableOpacity onPress={() => self.submitForm() }>
                  <Text style = { styles.rightButton }>
                     Finish
                  </Text>
@@ -36,7 +36,6 @@ class GoalForm extends Component{
           }
   }
   submitForm() {
-    console.log('this is this in submitform',this)
    var form = {
      studying: this.state.studyingGoal,
      eating: this.state.eatingGoal,
@@ -45,7 +44,7 @@ class GoalForm extends Component{
      working: this.state.workingGoal,
      sleeping: this.state.sleepingGoal
    };
-
+   this.props.navigator.pop()
    this.props.loginActions.createGoalBackEnd(this.props.profile.userObject._id, form)
   }
   render() {
