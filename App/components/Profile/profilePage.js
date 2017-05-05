@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {
-  StyleSheet, View , Text, Dimensions, TouchableOpacity, Image, ListView} from 'react-native';
+  StyleSheet, View , Text, Dimensions, TouchableOpacity, Image, ListView, NavigationBar} from 'react-native';
 //
 // import Modal from 'react-native-modalbox';
 

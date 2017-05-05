@@ -8,14 +8,13 @@ import * as getDataActions from '../../actions/getDataAction';
 import * as activityActions from '../../actions/activityAction';
 import { connect } from 'react-redux';
 
-import { Button, SocialIcon } from 'react-native-elements'
-
 class MainFeed extends Component{
   constructor(props){
     super(props);
     this.state = {
       dataSource: null
     };
+    console.log('THIS PROPS MAIN PAGE', this.props)
   }
   getDate(date){
     var myDate = new Date(date);
@@ -110,8 +109,6 @@ class MainFeed extends Component{
 
       </View>
       { this.props.profile.userObject ?  (
-        <View style={{flex: 1}}>
-            <Text>Main Page Test</Text>
         <View style={{flex: 1, backgroundColor: '#FFF', marginTop: 10}}>
           <ListView
             dataSource={dataSource}
@@ -143,7 +140,6 @@ class MainFeed extends Component{
                 </View>
             </TouchableOpacity>}
           />
->>>>>>> master
         </View>
         ) : (
           checkforlogin
@@ -159,7 +155,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
 	return {
-    // goal: state.get('goal'),
+    goal: state.get('goal'),
     login: state.get('login'),
     profile: state.get('profile'),
     data: state.get('data')

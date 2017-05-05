@@ -2,7 +2,7 @@ var moment = require('moment');
 
 export function pushFeedObjectAction(userID){
   var today = moment().startOf('day');
-
+  console.log("GET DATA", userID)
   return dispatch => {
     fetch('http://localhost:8080/getFeed', {
       method: 'POST',

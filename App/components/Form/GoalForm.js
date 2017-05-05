@@ -36,6 +36,7 @@ class GoalForm extends Component{
           }
   }
   submitForm() {
+    console.log('CLICKEDDDDDDD SUBMITTTTT')
     console.log('this is this in submitform',this)
    var form = {
      studying: this.state.studyingGoal,

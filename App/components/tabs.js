@@ -16,6 +16,8 @@ import PinForm from './Form/PinForm';
 import GoalForm from './Form/GoalForm';
 import StatsPage from './Categories/statistics.js';
 import ProfilePageIndex from './Profile/profilePageIndex.js';
+import ReportPage from './Profile/reportPage.js';
+import ProfilePage from './Profile/profilePage.js';
 import MapPage from './Map/mapPage.js';
 import MapPageIndex from './Map/mapPageIndex.js';
 
@@ -157,6 +159,14 @@ class ApplicationTabs extends Component {
         return <MainFeed navigator={ nav } title={ "MainFeed" } />
       case 'GoalForm':
         return <GoalForm navigator={ nav } title={ "GoalForm" } />
+    }
+  }
+  renderProfileScene(route, nav){
+    switch (route.id) {
+      case 'ProfilePage':
+        return <ProfilePage navigator={ nav } title={ "ProfilePage" } />
+      case 'ReportPage':
+        return <ReportPage navigator={ nav } title={ "ReportPage" } />
     }
   }
 	render() {
@@ -303,7 +313,40 @@ class ApplicationTabs extends Component {
 					renderSelectedIcon={() => <Icon color={'#6296f9'} name='person-pin' size={30} />}
 					onPress={() => this.changeTab('profile')}>
 
-					<ProfilePageIndex />
+          <Navigator
+            initialRoute={{ id: 'ProfilePage', title: 'ProfilePage', display: false }}
+            renderScene={ this.renderProfileScene }
+
+            navigationBar = {
+							 <NavigationBar
+									style = { styles.navigationBar }
+									routeMapper = {{
+                     LeftButton(route, navigator, index, navState) {
+                       if(index > 0){
+                         return (
+                            <TouchableOpacity onPress={() => navigator.pop()}>
+                               <Text style={ styles.leftButton }>
+                                  Back
+                               </Text>
+                            </TouchableOpacity>
+                         )
+                       }else {return null}
+
+                     },
+                     Title(route, navigator, index, navState) {
+                       if(index > 0){
+                        return (
+                           <Text style = { styles.title }>
+                              Daily Goals
+                           </Text>
+                         )
+                       }else {return null}
+                     }
+                  }} />
+						}
+
+            />
+
 				</Tab>
 			</Tabs>
 		);
