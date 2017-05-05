@@ -4,8 +4,39 @@ import {
 } from 'react-native'
 
 import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
+import * as getDataActions from './getDataAction';
+var moment = require('moment');
 
 const facebookParams = 'id,name,email,picture.width(100).height(100), gender, age_range, about';
+
+export function createGoalBackEnd(userID, myDailyGoalObject){
+  var today = moment().startOf('day');
+
+  return dispatch => {
+
+    dispatch(updateUserGoal(myDailyGoalObject))
+
+    fetch('http://localhost:8080/createGoal', {
+      method: 'POST',
+      headers: {
+        'Content-Type' : 'application/json'
+      },
+      body: JSON.stringify({
+        today: today,
+        userID: userID,
+        myDailyGoal: myDailyGoalObject
+      })
+    }).catch((err) => {
+      console.log('Error in createGoal', err)
+    });
+  };
+}
+
+export function updateGoalFrontEnd(myDailyGoalObject){
+  return dispatch => {
+      dispatch(updateUserGoal(myDailyGoalObject))
+  };
+}
 
 export function getGraphData(userID, myActivity) {
     return dispatch => {
@@ -65,9 +96,6 @@ export function googleLogin(){
       dispatch(attempt());
 
       GoogleSignin.signIn().then((user) => {
-
-            console.log('this is user in google login: ', user)
-
             var mongooseId = '';
             fetch('http://localhost:8080/googleAuth', {
                 method: 'POST',
@@ -82,17 +110,13 @@ export function googleLogin(){
               .then((responseJson) => {
 
                   var userObject = Object.assign({}, responseJson);
-
-                  console.log("user information from facebook: ", userObject)
-
+                  getDataActions.pushFeedObjectAction(userObject._id)(dispatch);
+                  getGraphData(userObject._id, userObject.myActivity)(dispatch);
                   dispatch(loggedin());
-                  dispatch(addUser(userObject));
               })
               .catch((err) => {
                 console.log('error: ', err)
               });
-
-
         })
         .catch((err) => {
           console.log('WRONG SIGNIN', err);
@@ -146,8 +170,8 @@ export function login() {
                 var userObject = Object.assign({}, responseJson);
                 console.log("user information from facebook: ", userObject)
 
+                getGraphData(userObject._id, userObject.myActivity)(dispatch);
                 dispatch(loggedin());
-                dispatch(addUser(userObject));
             })
             .catch((err) => {
               console.log('error: ', err)
@@ -249,9 +273,22 @@ export function loggedout() {
     };
 }
 
+export function updateUserProfile(userObject) {
+    return dispatch => {
+        dispatch(addUser(userObject));
+    };
+}
+
 export function addUser(userObject) {
     return {
         type: 'ADD_USER',
         userObject
+    };
+}
+
+export function updateUserGoal(myDailyGoalObject) {
+    return {
+        type: 'UPDATE_GOAL',
+        myDailyGoalObject
     };
 }

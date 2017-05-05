@@ -58,6 +58,7 @@ router.post('/getSortandGroupActivity', function(req, res){
               y =  _.groupBy(x[key], 'activityCategory');
               newObject[key] = y;
           }
+
           var totalPinsPerDay = 0;
           var totalHoursPerDay = 0;
           _.map(newObject, function(num, key){
@@ -80,17 +81,15 @@ router.post('/getSortandGroupActivity', function(req, res){
                 totalPinsPerDay = 0;
           })
 
-          User.findById(req.body.userID, function(err, user){
+          User.findById(req.body.userID).exec(function(err, user){
 
-              user.sortedPing = newObject
-              user.save(function(err){
+              user.sortedPing = Object.assign({}, newObject)
 
+              user.save(function(err, user){
                 res.send(user)
-                return user
               })
 
           })
-
     });
 });
 
@@ -118,24 +117,25 @@ router.post('/createActivity', function(req, res){
               activityCategory: activity.activityCategory,
               activityLatitude: activity.activityLatitude,
               activityLongitude: activity.activityLongitude,
-              activityProductivity: 1,
               activityDuration: activity.activityDuration,
-              activityImage: activity.image ? activity.image : ''
+              activityGoalForThatDay: activity.activityGoal,
+              activityImage: activity.activityImage ? activity.activityImage : ''
             })
             console.log('newActivity: ', newActivity);
+
             newActivity.save(function(err, activityNew){
               if (err) {
                 console.log('error has occur: ',  err)
               } else {
-                User.findById(activityNew.activityCreator, function(err, user){
+                User.findById(activityNew.activityCreator).exec(function(err, user){
 
                   if(streakCount){
                     // console.log(moment(activities[0].createdAt).format("DD/MM/YYYY"));
                     // console.log(moment(activityNew.createdAt).format("DD/MM/YYYY"));
                     // console.log(moment(activities[0].createdAt).format("DD/MM/YYYY") == moment(activityNew.createdAt).format("DD/MM/YYYY"))
-                     if(moment(activities[0].createdAt).format("DD/MM/YYYY") != moment(activityNew.createdAt).format("DD/MM/YYYY")){
+                      if(moment(activities[0].createdAt).format("DD/MM/YYYY") != moment(activityNew.createdAt).format("DD/MM/YYYY")){
                           user.activityStreak[newActivity.activityCategory] = user.activityStreak[newActivity.activityCategory] + 1;
-                     }
+                        }
                   }else{
                       user.activityStreak[newActivity.activityCategory] = 1
                   }
@@ -143,15 +143,17 @@ router.post('/createActivity', function(req, res){
                   user.markModified('activityStreak');
 
                   console.log(user.activityStreak)
-                  user.myActivity = [...user.myActivity, ...[activityNew._id.toString()]]
+                  user.myActivity = [...[activityNew._id.toString()], ...user.myActivity]
                   user.totalHoursLogged = user.totalHoursLogged + activity.activityDuration
+                  user.myLastActivity = activityNew
                   user.save(function(err){
                     if (err) {
                       console.log('error has occur: ',  err)
-                      res.send(activityNew)
+                      res.send(err)
                     } else {
                       console.log('Nice, activity added in the user model')
-                      res.send(activityNew)
+
+                      res.send({user: user, activity: activityNew._id})
                     }
                   })
                 })
@@ -161,7 +163,7 @@ router.post('/createActivity', function(req, res){
 
 });
 
-router.post('/editActivity', function(req,res){
+router.post('/editActivity', function(req, res){
   var activity = req.body.activity;
   var activityCreatorId = req.body.activityCreatorId;
   var activityId = req.body.activityID;
@@ -178,22 +180,71 @@ router.post('/editActivity', function(req,res){
   })
 });
 
-router.post('/deleteActivity', function(req,res){
+router.post('/deleteActivity', function(req, res){
   var activityCreatorId = req.body.activityCreatorId;
   var activityId = req.body.activityID;
+
   Activity.findByIdAndRemove(activityId, function(err, newActivity){
     if(err){
       console.log(err);
       res.send(err);
       return err
-    } else {
-      res.send(newActivity);
-      console.log('Actiity Deleted', newActivity);
-      return newActivity;
     }
+
+
+      User.findById(activityCreatorId).exec(function(err, user){
+
+          if(err){
+            console.log(err);
+          }
+
+          user.myActivity = user.myActivity.filter((x) => {
+              return x._id !== activityId
+          })
+
+          if(user.myLastActivity._id === activityId){
+            Activity.findById(user.myActivity[1]).exec(function(err, activity){
+              user.myLastActivity = activity
+            })
+          }
+
+          user.totalHoursLogged -= newActivity.activityDuration
+          Activity.find({$and: [
+                  {'activityCreator': activityCreatorId},
+                  {'activityCategory': activityId},
+                  {'createdAt': {'$gt': new Date(Date.now() - 1*24*60*60*1000)}}]}).sort('-createdAt').exec(function(err, activities){
+
+                if(err){
+                  console.log(err);
+                  res.send(err);
+                  return err
+                }
+
+                if(activities.length > 0){
+                    var streakCount = true;
+                }else{
+                    var streakCount = false;
+                }
+
+                if(!streakCount){
+                    user.activityStreak[newActivity.activityCategory] = user.activityStreak[newActivity.activityCategory] - 1;
+                }
+                user.markModified('activityStreak');
+              })
+
+          user.save(function(err, user){
+            if(err){
+              console.log(err);
+            }
+            res.send(user);
+          })
+
+      });
+
+      return newActivity;
+
 
   })
 });
-
 
 module.exports = router;
