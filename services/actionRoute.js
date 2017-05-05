@@ -8,6 +8,7 @@ const Activity= require('../models/models').Activity;
 const Usernotification= require('../models/models').Usernotification;
 
 router.post('/getFeed', function(req, res){
+  console.log("req.body", req.body)
   Activity.find({$and: [
           {'activityCreator': req.body.userID},
           {'createdAt': {'$gt': new Date(Date.now() - 5*24*60*60*1000)}}]}).sort('-createdAt')
@@ -30,7 +31,6 @@ router.post('/getFeed', function(req, res){
 router.post('/createGoal', function(req, res){
 
   var tomorrow = moment(req.body.today).add(1, 'days')
-  console.log('this is createGoal', req.body)
     User.findById(req.body.userID)
      .exec( function(err, user) {
         if (err) {

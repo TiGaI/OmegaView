@@ -14,6 +14,7 @@ class MainFeed extends Component{
     this.state = {
       dataSource: null
     };
+    console.log('THIS PROPS MAIN PAGE', this.props)
   }
   getDate(date){
     var myDate = new Date(date);
@@ -155,7 +156,7 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
 	return {
-    // goal: state.get('goal'),
+    goal: state.get('goal'),
     login: state.get('login'),
     profile: state.get('profile'),
     data: state.get('data')

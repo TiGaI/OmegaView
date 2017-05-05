@@ -6,7 +6,7 @@ import * as actionCreators from '../actions/loginAction';
 import Tabs from '../components/tabs';
 import Login from '../components/login'
 import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
-var Environment = require('../Environment.js')
+// var Environment = require('../Environment.js')
 const styles = StyleSheet.create({
   wrapper: {
       marginTop: 20,
