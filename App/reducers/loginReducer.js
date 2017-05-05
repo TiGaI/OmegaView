@@ -54,7 +54,7 @@ export function profileReducer(state =
     case 'UPDATE_GOAL':
         return update(state, {
             userObject: {
-              myDailyGoal: action.myDailyGoalObject
+              myDailyGoal:  {$set: action.myDailyGoalObject}
             }
         });
 

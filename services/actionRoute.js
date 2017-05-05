@@ -31,7 +31,6 @@ router.post('/getFeed', function(req, res){
 router.post('/createGoal', function(req, res){
 
   var tomorrow = moment(req.body.today).add(1, 'days')
-
     User.findById(req.body.userID)
      .exec( function(err, user) {
         if (err) {

@@ -170,10 +170,8 @@ class ApplicationTabs extends Component {
     }
   }
 	render() {
-
 		const { selectedTab } = this.state
     var self = this;
-    console.log('this is this.props: ',this.props)
 		return (
 			<Tabs>
 			  <Tab
