@@ -1,28 +1,30 @@
 import React, { Component, PropTypes } from 'react';
 import {
-  StyleSheet, View } from 'react-native';
+  StyleSheet, View, Text } from 'react-native';
 
 import { bindActionCreators } from 'redux';
-import * as actionCreators from '../actions/goalandnotificationAction';
+import * as loginAction from '../../actions/loginAction';
 import { connect } from 'react-redux';
+import {Spinner} from 'native-base';
+
+import {Button, SocialIcon, Icon} from 'react-native-elements'
 
 import Slider from 'react-native-slider'
-
 
 class GoalForm extends Component{
   constructor(props){
     super(props);
     this.state = {
-      studyGoal: this.props.profile.userObject.dailyGoal.studyGoal,
-      eatingGoal: this.props.profile.userObject.dailyGoal.eatingGoal,
-      trainingGoal: this.props.profile.userObject.dailyGoal.trainingGoal,
-      hobbyGoal: this.props.profile.userObject.dailyGoal.hobbyGoal,
-      workingGoal: this.props.profile.userObject.dailyGoal.studyGoal,
-      sleepingGoal: this.props.profile.userObject.dailyGoal.studyGoal
+      studyGoal: this.props.profile.userObject.myDailyGoal.studying,
+      eatingGoal: this.props.profile.userObject.myDailyGoal.eating,
+      trainingGoal: this.props.profile.userObject.myDailyGoal.training,
+      hobbyGoal: this.props.profile.userObject.myDailyGoal.hobby,
+      workingGoal: this.props.profile.userObject.myDailyGoal.working,
+      sleepingGoal: this.props.profile.userObject.myDailyGoal.sleeping
     };
   }
   render() {
-
+    console.log('I am here!')
     if(this.props.login.skip){
       var checkforlogin = (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#00A8BE'}}>
@@ -52,7 +54,6 @@ class GoalForm extends Component{
     }
 
     return(
-
       <View style={{flex: 1}}>
       { this.props.profile.userObject ?  (
         <View style={{flex: 1}}>
@@ -156,7 +157,7 @@ class GoalForm extends Component{
                               <Button
                                 large
                                 backgroundColor={'#20C48A'}
-                                onPress={this.submitGoalForm.bind(this)}
+                                onPress={() => this.submitGoalForm.bind(this)}
                                 title='Submit Goal' />
           </View>
         ) : (
@@ -194,14 +195,14 @@ var customStyles2 = StyleSheet.create({
 
 function mapStateToProps(state) {
 	return {
-    // goal: state.get('goal'),
-    login: state.get('login')
+    login: state.get('login'),
+    profile: state.get('profile')
 	};
 }
 
 function mapDispatchToProps(dispatch) {
 	return {
-		actions: bindActionCreators(actionCreators, dispatch)
+		loginActions: bindActionCreators(loginAction, dispatch)
 	};
 }
 

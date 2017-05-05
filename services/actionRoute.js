@@ -10,7 +10,7 @@ const Usernotification= require('../models/models').Usernotification;
 router.post('/getFeed', function(req, res){
   Activity.find({$and: [
           {'activityCreator': req.body.userID},
-          {'createdAt': {'$gt': new Date(Date.now() - 5*24*60*60*1000)}}]})
+          {'createdAt': {'$gt': new Date(Date.now() - 5*24*60*60*1000)}}]}).sort('-createdAt')
           .limit(10).exec(function(err, activities){
 
         if(err){

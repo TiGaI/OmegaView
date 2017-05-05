@@ -119,7 +119,7 @@ router.post('/createActivity', function(req, res){
               activityLongitude: activity.activityLongitude,
               activityDuration: activity.activityDuration,
               activityGoalForThatDay: activity.activityGoal,
-              activityImage: activity.image ? activity.image : ''
+              activityImage: activity.activityImage ? activity.activityImage : ''
             })
             console.log('newActivity: ', newActivity);
 
@@ -149,10 +149,11 @@ router.post('/createActivity', function(req, res){
                   user.save(function(err){
                     if (err) {
                       console.log('error has occur: ',  err)
-                      res.send(activityNew)
+                      res.send(err)
                     } else {
                       console.log('Nice, activity added in the user model')
-                      res.send(activityNew)
+
+                      res.send({user: user, activity: activityNew._id})
                     }
                   })
                 })
@@ -162,7 +163,7 @@ router.post('/createActivity', function(req, res){
 
 });
 
-router.post('/editActivity', function(req,res){
+router.post('/editActivity', function(req, res){
   var activity = req.body.activity;
   var activityCreatorId = req.body.activityCreatorId;
   var activityId = req.body.activityID;
@@ -179,15 +180,17 @@ router.post('/editActivity', function(req,res){
   })
 });
 
-router.post('/deleteActivity', function(req,res){
+router.post('/deleteActivity', function(req, res){
   var activityCreatorId = req.body.activityCreatorId;
   var activityId = req.body.activityID;
+
   Activity.findByIdAndRemove(activityId, function(err, newActivity){
     if(err){
       console.log(err);
       res.send(err);
       return err
     }
+
 
       User.findById(activityCreatorId).exec(function(err, user){
 
@@ -206,17 +209,38 @@ router.post('/deleteActivity', function(req,res){
           }
 
           user.totalHoursLogged -= newActivity.activityDuration
+          Activity.find({$and: [
+                  {'activityCreator': activityCreatorId},
+                  {'activityCategory': activityId},
+                  {'createdAt': {'$gt': new Date(Date.now() - 1*24*60*60*1000)}}]}).sort('-createdAt').exec(function(err, activities){
 
-          user.save(function(err){
+                if(err){
+                  console.log(err);
+                  res.send(err);
+                  return err
+                }
+
+                if(activities.length > 0){
+                    var streakCount = true;
+                }else{
+                    var streakCount = false;
+                }
+
+                if(!streakCount){
+                    user.activityStreak[newActivity.activityCategory] = user.activityStreak[newActivity.activityCategory] - 1;
+                }
+                user.markModified('activityStreak');
+              })
+
+          user.save(function(err, user){
             if(err){
               console.log(err);
             }
+            res.send(user);
           })
 
       });
 
-      res.send(newActivity);
-      console.log('Actiity Deleted', newActivity);
       return newActivity;
 
 

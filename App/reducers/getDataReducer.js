@@ -8,6 +8,7 @@ export function mainPageDataReducer(state = {
             feedObject: action.feedObject
         });
     case 'UPDATE_MAINPAGE_DATA':
+    console.log(feedObject, ' I am in getDataReducer')
         return Object.assign(feedObject, state, {
             feedObject: action.newFeed
         });

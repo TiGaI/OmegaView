@@ -13,11 +13,11 @@ import { bindActionCreators } from 'redux';
 
 import MainFeed from './MainFeed/MainFeed.js';
 import PinForm from './Form/PinForm';
+import GoalForm from './Form/GoalForm';
 import StatsPage from './Categories/statistics.js';
 import ProfilePage from './Profile/profilePage.js';
 
 import * as activityAction from '../actions/activityAction';
-
 
 var { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -84,27 +84,36 @@ class ApplicationTabs extends Component {
   submitForm(){
     var currentTime = new Date();
     currentTime = currentTime.getTime();
-    if(this.props.profile.userObject.myLastActivity){
-      var lastActivityTime = this.props.profile.userObject.myLastActivity.createdAt.getTime();
-      var timeDuration = this.props.profile.userObject.myLastActivity.activityDuration * 3600
-      if((currentTime - lastActivityTime)/1000 > timeDuration){
-        this.props.activityActions.createActivity({
-          activityCreator: this.props.profile.userObject._id,
-          activityNote: this.props.form.formObject.activityNote,
-          activityCategory: this.props.form.formObject.activityCategory,
-          activityLatitude: this.state.currentPosition.latitude,
-          activityLongitude: this.state.currentPosition.longitude,
-          activityDuration: this.props.form.formObject.activityDuration,
-          activityGoal: this.props.profile.userObject.myDailyGoal[this.props.form.formObject.activityCategory]
-        }, this.props.form.formObject.photoData)
-      }else{
-        Alert.alert(
-              'Activity Error',
-              'You cannot create an activity within the time period of another activity'
-            )
-      }
-    }else{
-      this.props.activityActions.createActivity({
+
+    //IF YOU WANT TO activate the time limit uncomment the below code
+
+    // if(this.props.profile.userObject.myLastActivity){
+    //   var lastActivityTime = new Date(this.props.profile.userObject.myLastActivity.createdAt);
+    //   lastActivityTime = lastActivityTime.getTime();
+    //
+    //   var timeDuration = this.props.profile.userObject.myLastActivity.activityDuration * 3600;
+    //
+    //   console.log((currentTime - lastActivityTime)/1000, timeDuration)
+    //
+    //   if((currentTime - lastActivityTime)/1000 > timeDuration){
+    //     this.props.activityActions.createActivity(this.props.data.feedObject, {
+    //       activityCreator: this.props.profile.userObject._id,
+    //       activityNote: this.props.form.formObject.activityNote,
+    //       activityCategory: this.props.form.formObject.activityCategory,
+    //       activityLatitude: this.state.currentPosition.latitude,
+    //       activityLongitude: this.state.currentPosition.longitude,
+    //       activityDuration: this.props.form.formObject.activityDuration,
+    //       activityGoal: this.props.profile.userObject.myDailyGoal[this.props.form.formObject.activityCategory]
+    //     }, this.props.form.formObject.photoData)
+    //   }else{
+    //     Alert.alert(
+    //           'Activity Error',
+    //           'You cannot create an activity within the time period of another activity'
+    //         )
+    //   }
+    // }else{
+      console.log('I am here!', this.props.data.feedObject)
+      this.props.activityActions.createActivity(this.props.data.feedObject, {
         activityCreator: this.props.profile.userObject._id,
         activityNote: this.props.form.formObject.activityNote,
         activityCategory: this.props.form.formObject.activityCategory,
@@ -113,18 +122,30 @@ class ApplicationTabs extends Component {
         activityDuration: this.props.form.formObject.activityDuration,
         activityGoal: this.props.profile.userObject.myDailyGoal[this.props.form.formObject.activityCategory]
       }, this.props.form.formObject.photo)
-    }
+    // }
+    this.changeTab('homepage');
   }
 	renderScene( route, nav ) {
     switch (route.id) {
       case 'PinForm':
         return <PinForm navigator={ nav } title={ "Activity" } />
+      case 'GoalForm':
+        return <GoalForm navigator={ nav } title={ "Activity" } />
+    }
+  }
+  renderMainScene(route, nav){
+    switch (route.id) {
+      case 'MainFeed':
+        return <MainFeed navigator={ nav } title={ "MainFeed" } />
+      case 'GoalForm':
+        return <GoalForm navigator={ nav } title={ "GoalForm" } />
     }
   }
 	render() {
 
 		const { selectedTab } = this.state
     var self = this;
+    console.log('this is this.props: ',this.props)
 		return (
 			<Tabs>
 			  <Tab
@@ -135,7 +156,14 @@ class ApplicationTabs extends Component {
 			    renderIcon={() => <Icon containerStyle={{justifyContent: 'center', alignItems: 'center', marginTop: 12}} color={'#5e6977'} name='home' size={33} />}
 			    renderSelectedIcon={() => <Icon color={'#6296f9'} name='home' size={30} />}
 			    onPress={() => this.changeTab('homepage')}>
-						<MainFeed />
+
+          <Navigator
+            initialRoute={{ id: 'MainFeed', title: 'MainFeed' }}
+            renderScene={ this.renderMainScene }
+            />
+
+
+
 			  </Tab>
 
 				<Tab
@@ -176,7 +204,7 @@ class ApplicationTabs extends Component {
                      },
                      RightButton(route, navigator, index, navState) {
                   		 	return (
-                           <TouchableOpacity onPress={() => self.submitForm(self.props.profile.userObject.myLastActivity)}>
+                           <TouchableOpacity onPress={() => self.submitForm()}>
                               <Text style = { styles.rightButton }>
                                  Done
                               </Text>
@@ -274,7 +302,8 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
 	return {
     profile: state.get('profile'),
-		form: state.get('form')
+		form: state.get('form'),
+    data: state.get('data')
 	};
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ApplicationTabs);

@@ -28,7 +28,6 @@ class ProfilePage extends Component{
       this.state = {
         dataSource: ds.cloneWithRows(days),
       };
-
   }
   render() {
     return (
@@ -86,13 +85,10 @@ class ProfilePage extends Component{
             </TouchableOpacity>}
           />
         </View>
-
       </View>
     )
   }
 }
-
-
 
 function mapStateToProps(state) {
 	return {

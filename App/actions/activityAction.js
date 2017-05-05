@@ -1,6 +1,8 @@
 import { RNS3 } from 'react-native-aws3';
 var Environment = require('../Environment.js')
 var _ = require('underscore');
+import * as getDataActions from './getDataAction';
+import * as loginActions from './loginAction';
 
 export function putFormObjectIntoProp(formObject){
   return dispatch => {
@@ -15,7 +17,7 @@ export function pushFromObject(formObject) {
     };
 }
 
-export function createActivity(activityObject, photo) {
+export function createActivity(feedObject, activityObject, photo) {
   var copy = Object.assign({}, activityObject)
   if(photo){
       var file = {
@@ -24,10 +26,13 @@ export function createActivity(activityObject, photo) {
           name: activityObject.activityCreator + Date.now() +'.img',
           type: photo.mime
       }
-      copy['image'] = "https://your-bucket.s3.amazonaws.com/uploads%2F"+file.name
+      copy['activityImage'] = "https://your-bucket.s3.amazonaws.com/uploads%2F"+file.name
   }else{
-      copy['image'] = null
+      copy['activityImage'] = null
   }
+
+  copy['createdAt'] = new Date();
+
     return dispatch => {
         fetch('http://localhost:8080/createActivity', {
               method: 'POST',
@@ -39,7 +44,10 @@ export function createActivity(activityObject, photo) {
               })
             }).then((response) => response.json())
             .then(responseJson => {
-                if(responseJson.activityImage){
+              console.log('responseJson', responseJson)
+              copy['_id'] = responseJson.activity;
+              copy['activityCreator'] = [responseJson.user._id]
+                if(responseJson.user.activityImage){
                   var options = {
                     keyPrefix: "uploads/",
                     bucket: "newvuew",
@@ -55,6 +63,16 @@ export function createActivity(activityObject, photo) {
                     console.log(response.body);
                   });
                 }
+
+                feedObject = [...[copy],...feedObject];
+
+                var userObject = Object.assign({}, responseJson.user);
+
+                console.log('this is feedObject from create: ', feedObject);
+
+                getDataActions.updateFeedObjectAction(feedObject)(dispatch);
+                loginActions.updateUserProfile(userObject)(dispatch);
+
             })
             .catch((err) => {
               console.log('error in createActivity -> ', err)
@@ -86,7 +104,7 @@ export function createActivity(activityObject, photo) {
 //   };
 // }
 
-export function deleteActivity(activityID, activityCreatorId){
+export function deleteActivity(feedObject, activityID, activityCreatorId){
   return dispatch => {
     fetch('http://localhost:8080/deleteActivity', {
       method: 'POST',
@@ -101,6 +119,14 @@ export function deleteActivity(activityID, activityCreatorId){
     .then((response) => response.json())
     .then((responseJson) => {
 
+          feedObject = feedObject.filter(function(x){
+              return x._id !== activityID
+          })
+          var userObject = Object.assign({}, responseJson);
+          console.log('I am HERE at the delete!!!!!!', feedObject)
+
+          getDataActions.updateDeletedFeedObjectAction(feedObject)(dispatch);
+          loginActions.updateUserProfile(userObject)(dispatch);
     })
     .catch((err) => {
       console.log('Error in editActivity', err)

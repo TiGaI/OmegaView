@@ -8,8 +8,6 @@ import * as getDataActions from '../../actions/getDataAction';
 import * as activityActions from '../../actions/activityAction';
 import { connect } from 'react-redux';
 
-var days  = [{day: 'Monday'},{day: 'Tuesday'},{day: 'Wednesday'},{day: 'Thursday'},{day: 'Friday'},{day: 'Saturaday'}, {day: 'Sunday'}]
-
 class MainFeed extends Component{
   constructor(props){
     super(props);
@@ -73,8 +71,8 @@ class MainFeed extends Component{
 
      return this.renderImage(image);
    }
-   deleteActivity(goalID){
-    this.props.activityActions.deleteActivity(goalID, this.props.profile.userObject._id)
+   deleteActivity(activityID){
+    this.props.activityActions.deleteActivity(this.props.data.feedObject, activityID, this.props.profile.userObject._id)
   }
   render() {
     if(this.props.login.skip){
@@ -84,11 +82,31 @@ class MainFeed extends Component{
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     var dataSource = ds.cloneWithRows(this.props.data.feedObject)
 
-    console.log(this.props.data.feedObject)
-
     return(
 
       <View style={{flex: 1}}>
+      <View style={{flex: 0.085, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 70, borderBottomWidth: 1, borderColor: 'grey'}}>
+
+      <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-end'}}>
+            </View>
+
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', marginLeft: 20}}>
+                  <Text style={{textAlign: 'center'}}>New Feed</Text>
+            </View>
+
+            <View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end', marginRight: 20}}>
+                  <Icon
+                     name='perm-data-setting'
+                     onPress={() => {this.props.navigator.push({
+                          id: 'GoalForm'
+                     })}}/>
+            </View>
+      </View>
+
+
+      </View>
       { this.props.profile.userObject ?  (
         <View style={{flex: 1, backgroundColor: '#FFF', marginTop: 10}}>
           <ListView

@@ -269,6 +269,12 @@ export function loggedout() {
     };
 }
 
+export function updateUserProfile(userObject) {
+    return dispatch => {
+        dispatch(addUser(userObject));
+    };
+}
+
 export function addUser(userObject) {
     return {
         type: 'ADD_USER',
