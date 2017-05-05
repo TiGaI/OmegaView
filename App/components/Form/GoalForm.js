@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {
-  StyleSheet, View, Text } from 'react-native';
+  StyleSheet, View, Text, Alert, TouchableOpacity } from 'react-native';
 
 import { bindActionCreators } from 'redux';
 import * as loginAction from '../../actions/loginAction';
@@ -22,6 +22,31 @@ class GoalForm extends Component{
       workingGoal: this.props.profile.userObject.myDailyGoal.working,
       sleepingGoal: this.props.profile.userObject.myDailyGoal.sleeping
     };
+  }
+  componentWillMount() {
+    var self = this;
+       this.props.navigator.props.navigationBar.props.routeMapper.RightButton =  function() {
+           return (
+              <TouchableOpacity onPress={() => self.submitForm.bind(this) }>
+                 <Text style = { styles.rightButton }>
+                    Finish
+                 </Text>
+              </TouchableOpacity>
+            )
+          }
+  }
+  submitForm() {
+    console.log('this is this in submitform',this)
+   var form = {
+     studying: this.state.studyingGoal,
+     eating: this.state.eatingGoal,
+     training: this.state.trainingGoal,
+     hobby: this.state.hobbyGoal,
+     working: this.state.workingGoal,
+     sleeping: this.state.sleepingGoal
+   };
+
+   this.props.loginActions.createGoalBackEnd(this.props.profile.userObject._id, form)
   }
   render() {
     if(this.props.login.skip){
@@ -122,6 +147,28 @@ class GoalForm extends Component{
                                           <Text style={styles.valueForBar}>10</Text>
                                         </View>
                                   </View>
+
+                                  <View style={styles.container}>
+                                    <View style={styles.titleContainer}>
+                                      <Text style={styles.caption} numberOfLines={1}>Fun goal</Text>
+                                      <Text style={styles.value}>{this.state.hobbyGoal}</Text>
+                                    </View>
+                                        <Slider
+                                          value={this.state.hobbyGoal}
+                                          minimumTrackTintColor='#1fb28a'
+                                           maximumTrackTintColor='#d3d3d3'
+                                           thumbTintColor='#1a9274'
+                                           minimumValue={0}
+                                            maximumValue={10}
+                                            step={.5}
+                                            trackStyle={customStyles2.track}
+                                            thumbStyle={customStyles2.thumb}
+                                          onValueChange={(hobbyGoal) => this.setState({hobbyGoal})} />
+                                          <View style={styles.titleContainer}>
+                                            <Text style={styles.caption}>0</Text>
+                                            <Text style={styles.valueForBar}>10</Text>
+                                          </View>
+                                    </View>
 
                                   <View style={styles.container}>
                                     <View style={styles.titleContainer}>

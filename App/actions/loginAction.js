@@ -5,6 +5,7 @@ import {
 
 import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
 import * as getDataActions from './getDataAction';
+var moment = require('moment');
 
 const facebookParams = 'id,name,email,picture.width(100).height(100), gender, age_range, about';
 
@@ -12,6 +13,9 @@ export function createGoalBackEnd(userID, myDailyGoalObject){
   var today = moment().startOf('day');
 
   return dispatch => {
+
+    dispatch(updateUserGoal(myDailyGoalObject))
+
     fetch('http://localhost:8080/createGoal', {
       method: 'POST',
       headers: {

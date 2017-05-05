@@ -1,7 +1,7 @@
 "use strict";
 var express = require('express');
 var router = express.Router();
-
+var moment = require('moment');
 //model
 const User  = require('../models/models').User;
 const Activity= require('../models/models').Activity;
@@ -30,10 +30,8 @@ router.post('/getFeed', function(req, res){
 router.post('/createGoal', function(req, res){
 
   var tomorrow = moment(req.body.today).add(1, 'days')
-
-    User.findOne({$and: [
-          {'user': req.body.userID}
-          ]})
+  
+    User.findById(req.body.userID)
      .exec( function(err, user) {
         if (err) {
             return {err, user}
@@ -46,11 +44,12 @@ router.post('/createGoal', function(req, res){
                 console.log(err)
                 return err
               }
+              var today = new Date(req.body.today)
 
               Activity.find({
                   createdAt: {
-                    $gte: req.body.today.toDate(),
-                    $lt: tomorrow.toDate()
+                    $gte: today.getDate(),
+                    $lt: tomorrow
                   }
                 }).sort('-createdAt').exec(function(err, activties){
 
