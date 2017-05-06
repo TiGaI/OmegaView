@@ -393,8 +393,7 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* PinVuewTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PinVuewTests.m; sourceTree = "<group>"; };
 		04E0A89A351A496387649DC3 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/native-base/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
-		05DDE55742B74D0299A7BF5B /* RNSVG.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNSVG.xcodeproj; path = "../node_modules/react-native-svg/ios/RNSVG.xcodeproj"; sourceTree = "<group>"; };
-		0A4EE4511EBD49CC00DD340E /* PinVuew.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = PinVuew.entitlements; path = PinVuew/PinVuew.entitlements; sourceTree = "<group>"; };
+		0A4EE5151EBD4B8900DD340E /* PinVuew.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = PinVuew.entitlements; path = PinVuew/PinVuew.entitlements; sourceTree = "<group>"; };
 		0A693A001EB6FC6B00BC0B89 /* ART.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ART.xcodeproj; path = "../node_modules/react-native/Libraries/ART/ART.xcodeproj"; sourceTree = "<group>"; };
 		0A6FB7851EA489E900CEB742 /* GoogleAppUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleAppUtilities.framework; sourceTree = "<group>"; };
 		0A6FB7861EA489E900CEB742 /* GoogleAuthUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleAuthUtilities.framework; sourceTree = "<group>"; };
@@ -692,7 +691,7 @@
 		13B07FAE1A68108700A75B9A /* PinVuew */ = {
 			isa = PBXGroup;
 			children = (
-				0A4EE4511EBD49CC00DD340E /* PinVuew.entitlements */,
+				0A4EE5151EBD4B8900DD340E /* PinVuew.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
