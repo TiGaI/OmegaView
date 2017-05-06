@@ -36,6 +36,7 @@ class GoalForm extends Component{
           }
   }
   submitForm() {
+
    var form = {
      studying: this.state.studyingGoal,
      eating: this.state.eatingGoal,
