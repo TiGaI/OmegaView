@@ -7,6 +7,59 @@ const User  = require('../models/models').User;
 const Activity= require('../models/models').Activity;
 const Usernotification= require('../models/models').Usernotification;
 
+router.post('/getReport', function(req, res){
+  Report.find({$and: [
+          {'user': req.body.userID}]}).sort('-createdAt')
+          .limit(6).exec(function(err, reports){
+        if(err){
+          console.log(err);
+          res.send(err);
+          return err
+        }
+
+        if(reports.length > 0){
+          res.send(reports)
+        }else{
+          res.send(null)
+        }
+  });
+});
+
+router.post('/createReport', function(req, res){
+  var today = moment().startOf('day');
+  var tomorrow = moment(today).add(1, 'days');
+
+  User.findById({'user': req.body.userID}).sort('-createdAt')
+        .exec(function(err, reports){
+
+        if(err){
+          console.log(err)
+        }else{
+
+                  Report.find({$and: [
+                            {'user': req.body.userID},
+                            {'createdAt' : {
+                                  $gte: today.toDate(),
+                                  $lt: tomorrow.toDate()
+                                }}
+                            ]
+                          }).exec(function(err, reports){
+                          if(err){
+                            console.log(err);
+                            res.send(err);
+                            return err
+                          }
+
+
+
+                            res.send(reports);
+                    });
+
+        }
+
+
+  });
+});
 
 router.post('/checkStreak', function(req, res){
   var userID = req.body.userID;

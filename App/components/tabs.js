@@ -254,45 +254,39 @@ class ApplicationTabs extends Component {
 						initialRoute={{ id: 'PinForm', title: 'Activity' }}
 						renderScene={ this.renderScene }
 
-						navigationBar = {
+            navigationBar = {
 							 <Navigator.NavigationBar
 									style = { styles.navigationBar }
-                  routeMapper = {{
+									routeMapper = {{
                      LeftButton(route, navigator, index, navState) {
-                       if(index > 0){
-                         return (
-                            <TouchableOpacity onPress={() => navigator.pop()}>
-                               <Text style={ styles.leftButton }>
-                                  Back
-                               </Text>
-                            </TouchableOpacity>
-                         )
-                       }else {return null}
-
+                           return (
+                              <TouchableOpacity>
+                                 <Text style={ styles.leftButton }>
+                                    Save
+                                 </Text>
+                              </TouchableOpacity>
+                           )
                      },
                      RightButton(route, navigator, index, navState) {
-                       if(index > 0){
                   		 	return (
-                           <TouchableOpacity onPress={() => this.props.loginActions.submitForm()}>
+                           <TouchableOpacity onPress={() => self.submitForm()}>
                               <Text style = { styles.rightButton }>
                                  Done
                               </Text>
                            </TouchableOpacity>
-                         )
-                       }else {return null}
+                  			 )
                      },
                      Title(route, navigator, index, navState) {
-                       if(index > 0){
                         return (
                            <Text style = { styles.title }>
-                              Daily Goals
+                              {route.title}
                            </Text>
-                         )
-                       }else {return null}
+                        )
                      }
                   }} />
 						}
 						/>
+
 
 				</Tab>
 
@@ -318,7 +312,7 @@ class ApplicationTabs extends Component {
 					onPress={() => this.changeTab('profile')}>
 
             <Navigator
-  						initialRoute={{ id: 'ProfilePageIndex', title: 'Activity' }}
+  						initialRoute={{ id: 'ProfilePage', title: 'Profile' }}
   						renderScene={ this.renderProfileScene }
 
   						navigationBar = {
@@ -355,8 +349,6 @@ class ApplicationTabs extends Component {
                     }} />
   						}
   						/>
-
-
 				</Tab>
 			</Tabs>
 		);
@@ -378,7 +370,6 @@ const styles = StyleSheet.create({
 			shadowOpacity: 0.3
    },
 	 leftButton: {
-
 		   color: '#A6A6A6',
 			 margin: 10,
 			 marginTop: -1,
