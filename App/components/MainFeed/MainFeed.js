@@ -76,6 +76,7 @@ class MainFeed extends Component{
     this.props.activityActions.deleteActivity(this.props.data.feedObject, activityID, this.props.profile.userObject._id)
   }
   render() {
+    console.log(this.props)
     if(this.props.login.skip){
       var checkforlogin = <Spinner color='green'/>
     }
