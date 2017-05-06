@@ -21,7 +21,8 @@ var {height, width} = Dimensions.get('window');
 
 var days  = [{day: 'Monday'},{day: 'Tuesday'},{day: 'Wednesday'},{day: 'Thursday'},{day: 'Friday'},{day: 'Saturaday'}, {day: 'Sunday'}]
 
-import ReportPage from './reportPage.js';
+// import ReportPage from './reportPage.js';
+// import MainFeed from '../reportPage.js';
 
 class ProfilePage extends Component{
   constructor(props){
@@ -36,7 +37,6 @@ class ProfilePage extends Component{
     console.log('ROWWWWW', rowData);
     this.props.navigator.push({
       id: "ReportPage"
-      // passProps: {data: rowData}
     })
   }
   render() {

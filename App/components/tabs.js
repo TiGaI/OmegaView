@@ -251,6 +251,7 @@ class ApplicationTabs extends Component {
 					renderIcon={() => <Icon containerStyle={{marginTop: -24}} color={'#1BB49C'} name='add-circle' size={80} />}
 					renderSelectedIcon={() => <Icon color={'#1BB49C'} name='add-circle' size={80} />}
 					onPress={() => this.changeTab('goalsPage')}>
+
 					<Navigator
 						initialRoute={{ id: 'PinForm', title: 'Activity' }}
 						renderScene={ this.renderScene }
@@ -258,38 +259,31 @@ class ApplicationTabs extends Component {
 						navigationBar = {
 							 <Navigator.NavigationBar
 									style = { styles.navigationBar }
-                  routeMapper = {{
+									routeMapper = {{
                      LeftButton(route, navigator, index, navState) {
-                       if(index > 0){
-                         return (
-                            <TouchableOpacity onPress={() => navigator.pop()}>
-                               <Text style={ styles.leftButton }>
-                                  Back
-                               </Text>
-                            </TouchableOpacity>
-                         )
-                       }else {return null}
-
+                           return (
+                              <TouchableOpacity>
+                                 <Text style={ styles.leftButton }>
+                                    Save
+                                 </Text>
+                              </TouchableOpacity>
+                           )
                      },
                      RightButton(route, navigator, index, navState) {
-                       if(index > 0){
                   		 	return (
-                           <TouchableOpacity onPress={() => this.props.loginActions.submitForm()}>
+                           <TouchableOpacity onPress={() => self.submitForm()}>
                               <Text style = { styles.rightButton }>
                                  Done
                               </Text>
                            </TouchableOpacity>
-                         )
-                       }else {return null}
+                  			 )
                      },
                      Title(route, navigator, index, navState) {
-                       if(index > 0){
                         return (
                            <Text style = { styles.title }>
-                              Daily Goals
+                              {route.title}
                            </Text>
-                         )
-                       }else {return null}
+                        )
                      }
                   }} />
 						}
@@ -319,7 +313,7 @@ class ApplicationTabs extends Component {
 					onPress={() => this.changeTab('profile')}>
 
             <Navigator
-  						initialRoute={{ id: 'ProfilePageIndex', title: 'Activity' }}
+  						initialRoute={{ id: 'ProfilePage', title: 'ProfilePage' }}
   						renderScene={ this.renderProfileScene }
 
   						navigationBar = {
@@ -338,18 +332,14 @@ class ApplicationTabs extends Component {
                        RightButton(route, navigator, index, navState) {
                          if(index > 0){
                     		 	return (
-                             <TouchableOpacity onPress={() => this.props.loginActions.submitForm()}>
-                                <Text style = { styles.rightButton }>
-                                   Done
-                                </Text>
-                             </TouchableOpacity>
+                             null
                            )
                          }else {return null}
                        },
                        Title(route, navigator, index, navState) {
                           return (
                              <Text style = { styles.title }>
-                                {route.title}
+                                Report Page
                              </Text>
                           )
                        }

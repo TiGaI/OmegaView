@@ -29,6 +29,7 @@
     "react-native-image-crop-picker": "^0.12.10",
     "react-native-maps": "0.14.0",
     "react-native-modal-dropdown": "^0.4.2",
+    "react-native-pathjs-charts": "0.0.28",
     "react-native-push-notification": "^2.2.1",
     "react-native-simple-radio-button": "^2.5.0-alpha.1",
     "react-native-slider": "^0.9.1",

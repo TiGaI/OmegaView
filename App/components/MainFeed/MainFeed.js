@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 class MainFeed extends Component{
   constructor(props){
     super(props);
+    console.log('MAIN FEED PROPS', this.props)
     this.state = {
       dataSource: null
     };
