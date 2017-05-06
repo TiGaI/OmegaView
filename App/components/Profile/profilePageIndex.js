@@ -41,7 +41,7 @@ export default class ProfilePageIndex extends Component {
           configureScene={(route, routeStack) =>
             Navigator.SceneConfigs.FloatFromBottom}
 
-        
+
 
         />
       </View>
