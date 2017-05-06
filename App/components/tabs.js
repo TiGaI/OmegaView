@@ -258,31 +258,38 @@ class ApplicationTabs extends Component {
 						navigationBar = {
 							 <Navigator.NavigationBar
 									style = { styles.navigationBar }
-									routeMapper = {{
+                  routeMapper = {{
                      LeftButton(route, navigator, index, navState) {
-                           return (
-                              <TouchableOpacity>
-                                 <Text style={ styles.leftButton }>
-                                    Save
-                                 </Text>
-                              </TouchableOpacity>
-                           )
+                       if(index > 0){
+                         return (
+                            <TouchableOpacity onPress={() => navigator.pop()}>
+                               <Text style={ styles.leftButton }>
+                                  Back
+                               </Text>
+                            </TouchableOpacity>
+                         )
+                       }else {return null}
+
                      },
                      RightButton(route, navigator, index, navState) {
+                       if(index > 0){
                   		 	return (
-                           <TouchableOpacity onPress={() => self.submitForm()}>
+                           <TouchableOpacity onPress={() => this.props.loginActions.submitForm()}>
                               <Text style = { styles.rightButton }>
                                  Done
                               </Text>
                            </TouchableOpacity>
-                  			 )
+                         )
+                       }else {return null}
                      },
                      Title(route, navigator, index, navState) {
+                       if(index > 0){
                         return (
                            <Text style = { styles.title }>
-                              {route.title}
+                              Daily Goals
                            </Text>
-                        )
+                         )
+                       }else {return null}
                      }
                   }} />
 						}
@@ -311,16 +318,15 @@ class ApplicationTabs extends Component {
 					renderSelectedIcon={() => <Icon color={'#6296f9'} name='person-pin' size={30} />}
 					onPress={() => this.changeTab('profile')}>
 
-          <Navigator
-            initialRoute={{ id: 'ProfilePage', title: 'ProfilePage', display: false }}
-            renderScene={ this.renderProfileScene }
+            <Navigator
+  						initialRoute={{ id: 'ProfilePageIndex', title: 'Activity' }}
+  						renderScene={ this.renderProfileScene }
 
-            navigationBar = {
-							 <NavigationBar
-									style = { styles.navigationBar }
-									routeMapper = {{
-                     LeftButton(route, navigator, index, navState) {
-                       if(index > 0){
+  						navigationBar = {
+  							 <Navigator.NavigationBar
+  									style = { styles.navigationBar }
+  									routeMapper = {{
+                       LeftButton(route, navigator, index, navState) {
                          return (
                             <TouchableOpacity onPress={() => navigator.pop()}>
                                <Text style={ styles.leftButton }>
@@ -328,22 +334,29 @@ class ApplicationTabs extends Component {
                                </Text>
                             </TouchableOpacity>
                          )
-                       }else {return null}
+                       },
+                       RightButton(route, navigator, index, navState) {
+                         if(index > 0){
+                    		 	return (
+                             <TouchableOpacity onPress={() => this.props.loginActions.submitForm()}>
+                                <Text style = { styles.rightButton }>
+                                   Done
+                                </Text>
+                             </TouchableOpacity>
+                           )
+                         }else {return null}
+                       },
+                       Title(route, navigator, index, navState) {
+                          return (
+                             <Text style = { styles.title }>
+                                {route.title}
+                             </Text>
+                          )
+                       }
+                    }} />
+  						}
+  						/>
 
-                     },
-                     Title(route, navigator, index, navState) {
-                       if(index > 0){
-                        return (
-                           <Text style = { styles.title }>
-                              Daily Goals
-                           </Text>
-                         )
-                       }else {return null}
-                     }
-                  }} />
-						}
-
-            />
 
 				</Tab>
 			</Tabs>

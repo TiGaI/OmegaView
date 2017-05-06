@@ -35,8 +35,8 @@ class ProfilePage extends Component{
   report(rowData) {
     console.log('ROWWWWW', rowData);
     this.props.navigator.push({
-      id: "ReportPage",
-      passProps: {data: rowData}
+      id: "ReportPage"
+      // passProps: {data: rowData}
     })
   }
   render() {
