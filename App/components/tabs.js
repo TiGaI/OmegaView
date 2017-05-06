@@ -15,7 +15,11 @@ import MainFeed from './MainFeed/MainFeed.js';
 import PinForm from './Form/PinForm';
 import GoalForm from './Form/GoalForm';
 import StatsPage from './Categories/statistics.js';
+import ProfilePageIndex from './Profile/profilePageIndex.js';
+import ReportPage from './Profile/reportPage.js';
 import ProfilePage from './Profile/profilePage.js';
+import MapPage from './Map/mapPage.js';
+import MapPageIndex from './Map/mapPageIndex.js';
 
 import * as activityAction from '../actions/activityAction';
 
@@ -157,6 +161,14 @@ class ApplicationTabs extends Component {
         return <GoalForm navigator={ nav } title={ "GoalForm" } />
     }
   }
+  renderProfileScene(route, nav){
+    switch (route.id) {
+      case 'ProfilePage':
+        return <ProfilePage navigator={ nav } title={ "ProfilePage" } />
+      case 'ReportPage':
+        return <ReportPage navigator={ nav } title={ "ReportPage" } />
+    }
+  }
 	render() {
 		const { selectedTab } = this.state
     var self = this;
@@ -229,7 +241,7 @@ class ApplicationTabs extends Component {
 					renderSelectedIcon={() => <Icon color={'#6296f9'} name='map' size={30} />}
 					onPress={() => this.changeTab('mapPage')}>
 
-						<StatsPage />
+						<MapPageIndex />
 				</Tab>
 
 				<Tab
@@ -288,7 +300,7 @@ class ApplicationTabs extends Component {
 			    renderSelectedIcon={() => <Icon color={'#6296f9'} name='date-range' size={30} />}
 			    onPress={() => this.changeTab('Stats')}>
 
-					<PinForm />
+					<StatsPage />
 			  </Tab>
 				<Tab
 					titleStyle={{fontWeight: 'bold', fontSize: 10}}
@@ -299,7 +311,40 @@ class ApplicationTabs extends Component {
 					renderSelectedIcon={() => <Icon color={'#6296f9'} name='person-pin' size={30} />}
 					onPress={() => this.changeTab('profile')}>
 
-					<ProfilePage />
+          <Navigator
+            initialRoute={{ id: 'ProfilePage', title: 'ProfilePage', display: false }}
+            renderScene={ this.renderProfileScene }
+
+            navigationBar = {
+							 <NavigationBar
+									style = { styles.navigationBar }
+									routeMapper = {{
+                     LeftButton(route, navigator, index, navState) {
+                       if(index > 0){
+                         return (
+                            <TouchableOpacity onPress={() => navigator.pop()}>
+                               <Text style={ styles.leftButton }>
+                                  Back
+                               </Text>
+                            </TouchableOpacity>
+                         )
+                       }else {return null}
+
+                     },
+                     Title(route, navigator, index, navState) {
+                       if(index > 0){
+                        return (
+                           <Text style = { styles.title }>
+                              Daily Goals
+                           </Text>
+                         )
+                       }else {return null}
+                     }
+                  }} />
+						}
+
+            />
+
 				</Tab>
 			</Tabs>
 		);

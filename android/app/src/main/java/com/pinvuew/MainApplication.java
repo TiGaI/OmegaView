@@ -3,6 +3,8 @@ package com.pinvuew;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.horcrux.svg.RNSvgPackage;
+import com.brentvatne.react.ReactVideoPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
@@ -29,6 +31,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNSvgPackage(),
+            new ReactVideoPackage(),
             new ReactNativePushNotificationPackage(),
             new PickerPackage(),
             new FBSDKPackage(),
