@@ -47,7 +47,6 @@ export function createActivity(feedObject, activityObject, photo) {
               })
             }).then((response) => response.json())
             .then(responseJson => {
-              console.log('responseJson', responseJson)
               copy['_id'] = responseJson.activity;
               copy['activityCreator'] = [responseJson.user._id]
                 if(responseJson.user.activityImage){
@@ -70,8 +69,6 @@ export function createActivity(feedObject, activityObject, photo) {
                 feedObject = [...[copy],...feedObject];
 
                 var userObject = Object.assign({}, responseJson.user);
-
-                console.log('this is feedObject from create: ', feedObject);
 
                 getDataActions.updateFeedObjectAction(feedObject)(dispatch);
                 loginActions.updateUserProfile(userObject)(dispatch);
