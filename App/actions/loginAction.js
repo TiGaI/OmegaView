@@ -54,6 +54,7 @@ export function getGraphData(userID, myActivity) {
             })
             .then((response) => response.json())
             .then((responseJson) => {
+              console.log('this is responseJson at getGraphData: ', responseJson)
                 var userObject = Object.assign({}, responseJson);
                 dispatch(addUser(userObject));
             })
@@ -61,7 +62,7 @@ export function getGraphData(userID, myActivity) {
               console.log('error: ', err)
             });
         }
-    };
+};
 
 
 function getInfo() {

@@ -128,7 +128,6 @@ class ApplicationTabs extends Component {
     //         )
     //   }
     // }else{
-      console.log('I am here!', this.props.data.feedObject)
       this.props.activityActions.createActivity(this.props.data.feedObject, {
         activityCreator: this.props.profile.userObject._id,
         activityNote: this.props.form.formObject.activityNote,
