@@ -7,6 +7,94 @@ const User  = require('../models/models').User;
 const Activity= require('../models/models').Activity;
 const Usernotification= require('../models/models').Usernotification;
 
+router.post('/getReport', function(req, res){
+  Report.find({$and: [
+          {'user': req.body.userID}]}).sort('-createdAt')
+          .limit(6).exec(function(err, reports){
+        if(err){
+          console.log(err);
+          res.send(err);
+          return err
+        }
+
+        if(reports.length > 0){
+          res.send(reports)
+        }else{
+          res.send(null)
+        }
+  });
+});
+
+router.post('/createReport', function(req, res){
+  var today = moment().startOf('day');
+  var tomorrow = moment(today).add(1, 'days');
+
+  User.findById({'user': req.body.userID}).sort('-createdAt')
+        .exec(function(err, reports){
+
+        if(err){
+          console.log(err)
+        }else{
+
+                  Report.find({$and: [
+                            {'user': req.body.userID},
+                            {'createdAt' : {
+                                  $gte: today.toDate(),
+                                  $lt: tomorrow.toDate()
+                                }}
+                            ]
+                          }).exec(function(err, reports){
+                          if(err){
+                            console.log(err);
+                            res.send(err);
+                            return err
+                          }
+
+
+
+                            res.send(reports);
+                    });
+
+        }
+
+
+  });
+});
+
+router.post('/checkStreak', function(req, res){
+  var userID = req.body.userID;
+    User.findById(activityNew.activityCreator).exec(function(err, user){
+
+      Activity.find({$and: [
+        {'createdAt': {'$gt': new Date(Date.now() - 1.75*24*60*60*1000)}},
+            {'_id' : {'$in': user.myActivity}}
+          ]}).sort('-createdAt').exec(function(err, activities){
+
+            var checkStreak = {
+              studying: 0,
+              eating: 0,
+              training: 0,
+              hobby: 0,
+              working: 0,
+              sleeping: 0};
+
+              activities.map(function(x){
+                  checkStreak[x.activityCategory] = user.activityStreak[x.activityCategory]
+                  return x
+              })
+
+              user.activityStreak = checkStreak;
+
+              user.save(function(err, user){
+                if(err){
+                  res.send(err)
+                }
+                res.send(user)
+              })
+          });
+    })
+});
+
 router.post('/getFeed', function(req, res){
   console.log("req.body", req.body)
   Activity.find({$and: [

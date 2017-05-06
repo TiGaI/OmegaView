@@ -6,7 +6,8 @@ var moment = require('moment');
 
 //model
 const User  = require('../models/models').User;
-const Activity= require('../models/models').Activity;
+const Activity = require('../models/models').Activity;
+const Report = require('../models/models').Report;
 const userNotification= require('../models/models').userNotification;
 
 function getRangeofLonLat(lon, lat, kilometer){
@@ -37,8 +38,14 @@ function getRangeofLonLat(lon, lat, kilometer){
 }
 
 router.post('/getSortandGroupActivity', function(req, res){
+  var today = moment().startOf('day')
+  var tomorrow = moment(today).add(1, 'days')
+
     Activity.find({$and: [
-      {'createdAt': {'$gt': new Date(Date.now() - 6*24*60*60*1000)}},
+      {'createdAt' : {
+            $gte: today.toDate(),
+            $lt: tomorrow.toDate()
+          }},
           {'_id' : {'$in': req.body.myActivity}}
         ]}).sort('-createdAt').exec(function(err, activities){
           if(err){
@@ -85,20 +92,49 @@ router.post('/getSortandGroupActivity', function(req, res){
 
               user.sortedPing = Object.assign({}, newObject)
 
-              user.save(function(err, user){
-                res.send(user)
-              })
+              Activity.find({$and: [
+                      {'createdAt': {'$gt': new Date(Date.now() - 1.75*24*60*60*1000)}},
+                          {'_id' : {'$in': user.myActivity}}
+                        ]}).sort('-createdAt').exec(function(err, activities){
+
+                          var checkStreak = {
+                            studying: 0,
+                            eating: 0,
+                            training: 0,
+                            hobby: 0,
+                            working: 0,
+                            sleeping: 0};
+
+                            activities.map(function(x){
+                                checkStreak[x.activityCategory] = user.activityStreak[x.activityCategory]
+                                return x
+                            })
+
+                            user.activityStreak = Object.assign({}, checkStreak);
+
+                            user.save(function(err, user){
+                              res.send(user)
+                            })
+              });
+
+
 
           })
     });
 });
 
 router.post('/createActivity', function(req, res){
+  var today = moment().endOf('day')
+  var yesterday = moment(today).subtract(1, 'days')
   var activity = req.body.activity;
+
   Activity.find({$and: [
           {'activityCreator': activity.activityCreator},
           {'activityCategory': activity.activityCategory},
-          {'createdAt': {'$gt': new Date(Date.now() - 2*24*60*60*1000)}}]}).sort('-createdAt').exec(function(err, activities){
+          {'createdAt' : {
+                $gte: yesterday.toDate(),
+                $lt: today.toDate()
+              }}]}).sort('-createdAt').exec(function(err, activities){
 
         if(err){
           console.log(err);
@@ -121,8 +157,6 @@ router.post('/createActivity', function(req, res){
               activityGoalForThatDay: activity.activityGoal,
               activityImage: activity.activityImage ? activity.activityImage : ''
             })
-            console.log('newActivity: ', newActivity);
-
             newActivity.save(function(err, activityNew){
               if (err) {
                 console.log('error has occur: ',  err)
@@ -133,9 +167,9 @@ router.post('/createActivity', function(req, res){
                     // console.log(moment(activities[0].createdAt).format("DD/MM/YYYY"));
                     // console.log(moment(activityNew.createdAt).format("DD/MM/YYYY"));
                     // console.log(moment(activities[0].createdAt).format("DD/MM/YYYY") == moment(activityNew.createdAt).format("DD/MM/YYYY"))
-                      if(moment(activities[0].createdAt).format("DD/MM/YYYY") != moment(activityNew.createdAt).format("DD/MM/YYYY")){
+                  if(moment(activities[0].createdAt).format("DD/MM/YYYY") != moment(activityNew.createdAt).format("DD/MM/YYYY")){
                           user.activityStreak[newActivity.activityCategory] = user.activityStreak[newActivity.activityCategory] + 1;
-                        }
+                  }
                   }else{
                       user.activityStreak[newActivity.activityCategory] = 1
                   }
@@ -143,6 +177,7 @@ router.post('/createActivity', function(req, res){
                   user.markModified('activityStreak');
 
                   console.log(user.activityStreak)
+
                   user.myActivity = [...[activityNew._id.toString()], ...user.myActivity]
                   user.totalHoursLogged = user.totalHoursLogged + activity.activityDuration
                   user.myLastActivity = activityNew
@@ -197,22 +232,23 @@ router.post('/deleteActivity', function(req, res){
           if(err){
             console.log(err);
           }
-
-          user.myActivity = user.myActivity.filter((x) => {
-              return x._id !== activityId
-          })
-
-          if(user.myLastActivity._id === activityId){
+          var check = user.myLastActivity ? user.myLastActivity._id : ''
+          if( check == newActivity._id.toString()){
             Activity.findById(user.myActivity[1]).exec(function(err, activity){
               user.myLastActivity = activity
             })
           }
 
+          user.myActivity = user.myActivity.filter((x) => {
+              return x != newActivity._id.toString()
+          })
+
           user.totalHoursLogged -= newActivity.activityDuration
           Activity.find({$and: [
                   {'activityCreator': activityCreatorId},
-                  {'activityCategory': activityId},
-                  {'createdAt': {'$gt': new Date(Date.now() - 1*24*60*60*1000)}}]}).sort('-createdAt').exec(function(err, activities){
+                  {'activityCategory': newActivity.activityCategory},
+                  {'createdAt': {'$gt': new Date(Date.now() - 1*24*60*60*1000)}}]})
+                  .sort('-createdAt').exec(function(err, activities){
 
                 if(err){
                   console.log(err);
@@ -225,7 +261,6 @@ router.post('/deleteActivity', function(req, res){
                 }else{
                     var streakCount = false;
                 }
-
                 if(!streakCount){
                     user.activityStreak[newActivity.activityCategory] = user.activityStreak[newActivity.activityCategory] - 1;
                 }
