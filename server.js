@@ -32,24 +32,24 @@ app.use('/', authRoute);
 app.use('/', activityRoute);
 app.use('/', actionRoute);
 
-var userIDs = {};
-
-io.on('connection', function(socket) {
-  var socketUser;
-
-  socket.on('userJoined', function(userID) {
-    try {
-      socket.userID = userID;
-      userIDs[userID] = userID;
-    } catch ( e ) {
-      console.log("error in userJoined Socket!", e)
-    }
-  });
-
-  socket.on('sendNotification', function(messageObject){
-      socket.broadcast.emit(messageObject.toUserID.toString(), messageObject)
-  });
-});
+// var userIDs = {};
+//
+// io.on('connection', function(socket) {
+//   var socketUser;
+//
+//   socket.on('userJoined', function(userID) {
+//     try {
+//       socket.userID = userID;
+//       userIDs[userID] = userID;
+//     } catch ( e ) {
+//       console.log("error in userJoined Socket!", e)
+//     }
+//   });
+//
+//   socket.on('sendNotification', function(messageObject){
+//       socket.broadcast.emit(messageObject.toUserID.toString(), messageObject)
+//   });
+// });
 
 
 var port = process.env.PORT || 8080;

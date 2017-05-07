@@ -1,6 +1,7 @@
 "use strict";
 var express = require('express');
 var router = express.Router();
+var _ = require('underscore');
 var moment = require('moment');
 //model
 const User  = require('../models/models').User;
@@ -26,6 +27,90 @@ router.post('/getReport', function(req, res){
   });
 });
 
+function updateReport(userID){
+  var today = moment().startOf('day');
+  var tomorrow = moment(today).add(1, 'days');
+
+  User.findById(userID).sort('-createdAt')
+        .exec(function(err, user){
+        if(err){
+          console.log(err)
+        }else{
+
+      console.log('this is user', user)
+
+      Report.findOne({$and: [{'user': userID},
+                            {'createdAt' : {
+                                  $gte: today.toDate(),
+                                  $lt: tomorrow.toDate()
+                                }}
+                            ]
+                          }).exec(function(err, report){
+
+                          if(err){
+                            console.log(err);
+                          }
+
+                          if(report){
+                            report.activityGoalForThatDay = user.myActivity
+                            report.dataObject = user.sortedPing
+
+                            var average = 0;
+                            var sumLength = 0;
+
+                            _.map(user.sortedPing[todayDate], function(x, key){
+                              if(key.length > 4 && key.length < 13){
+                                if(x.activities[0].activityGoalForThatDay > 0){
+                                  average = average + x.totalHoursForThisCategory / x.activities[0].activityGoalForThatDay
+                                  sumLength += 1
+                                }
+                              }
+                              return x;
+                            })
+
+                            report.GradeForTheDay = average/sumLength;
+                            console.log(newReport.GradeForTheDay)
+                            return null
+                            // report.save(function(err){
+                            //   if(err){
+                            //     console.log(err)
+                            //   }
+                            // })
+                          }else{
+                            var newReport = new Report({
+                              user: userID,
+                              activitiesForTheDay: user.myActivity,
+                              dataObject: user.sortedPing,
+                              GradeForTheDay: 0
+                            })
+                            var todayDate= moment(today).format("DD/MM/YYYY")
+                            // newReport.GradeForTheDay =
+                            var average = 0;
+                            var sumLength = 0;
+
+                            _.map(user.sortedPing[todayDate], function(x, key){
+                              if(key.length > 4 && key.length < 13){
+                                if(x.activities[0].activityGoalForThatDay > 0){
+                                  average = average + x.totalHoursForThisCategory / x.activities[0].activityGoalForThatDay
+                                  sumLength += 1
+                                }
+                              }
+                              return x;
+                            })
+
+                            newReport.GradeForTheDay = average/sumLength;
+                            console.log(newReport.GradeForTheDay)
+                            // newReport.save(function(err){
+                            //   if(err){
+                            //     console.log(err)
+                            //   }
+                            // })
+                            return null
+                        }
+                    });
+        }
+  });
+}
 
 router.post('/checkStreak', function(req, res){
   var userID = req.body.userID;
@@ -138,6 +223,7 @@ router.post('/createGoal', function(req, res){
         res.send(null)
       }
     })
+    updateReport(req.body.userID);
 });
 
 module.exports = router;

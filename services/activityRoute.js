@@ -367,6 +367,7 @@ router.post('/deleteActivity', function(req, res){
 
 
   })
+  updateReport(activityCreatorId);
 });
 
 module.exports = router;
