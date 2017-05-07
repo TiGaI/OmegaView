@@ -167,7 +167,7 @@ router.post('/createActivity', function(req, res){
                     // console.log(moment(activities[0].createdAt).format("DD/MM/YYYY"));
                     // console.log(moment(activityNew.createdAt).format("DD/MM/YYYY"));
                     // console.log(moment(activities[0].createdAt).format("DD/MM/YYYY") == moment(activityNew.createdAt).format("DD/MM/YYYY"))
-                  if(moment(activities[0].createdAt).format("DD/MM/YYYY") != moment(activityNew.createdAt).format("DD/MM/YYYY")){
+                  if(moment(activities[0].createdAt).format("MM/DD/YYYY") != moment(activityNew.createdAt).format("MM/DD/YYYY")){
                           user.activityStreak[newActivity.activityCategory] = user.activityStreak[newActivity.activityCategory] + 1;
                   }
                   }else{
