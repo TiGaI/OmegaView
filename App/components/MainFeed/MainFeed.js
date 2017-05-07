@@ -132,10 +132,12 @@ class MainFeed extends Component{
                     </View>
                   </View>
                   <View style={{flex: 0.5, justifyContent: 'center'}}>
-                    <Icon
+                  { new Date(rowData.createdAt).toLocaleString().split(',')[0]  == new Date().toLocaleString().split(',')[0] ?
+                    (<Icon
                        name='delete'
                        onPress={this.deleteActivity.bind(this, rowData._id)}
-                      />
+                      />) : (null)
+                    }
                   </View>
                 </View>
             </TouchableOpacity>}

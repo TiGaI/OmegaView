@@ -69,7 +69,7 @@ export function createActivity(feedObject, activityObject, photo) {
 
                 getDataActions.updateFeedObjectAction(feedObject)(dispatch);
                 loginActions.updateUserProfile(userObject)(dispatch);
-
+                loginActions.getGraphData(userObject._id, userObject.myActivity)(dispatch);
             })
             .catch((err) => {
               console.log('error in createActivity -> ', err)
