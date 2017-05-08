@@ -26,7 +26,6 @@ router.post('/getReport', function(req, res){
         }
   });
 });
-
 function updateReport(userID){
   var today = moment().startOf('day');
   var tomorrow = moment(today).add(1, 'days');
@@ -36,8 +35,6 @@ function updateReport(userID){
         if(err){
           console.log(err)
         }else{
-
-      console.log('this is user', user)
 
       Report.findOne({$and: [{'user': userID},
                             {'createdAt' : {
@@ -52,7 +49,7 @@ function updateReport(userID){
                           }
 
                           if(report){
-                            report.activityGoalForThatDay = user.myActivity
+                            report.activitiesForTheDay = [...[user.myActivity[0]], ...report.activitiesForTheDay]
                             report.dataObject = user.sortedPing
 
                             var average = 0;
@@ -67,15 +64,16 @@ function updateReport(userID){
                               }
                               return x;
                             })
-
+                            if(sumLength == 0){
+                              sumLength = 1;
+                            }
                             report.GradeForTheDay = average/sumLength;
-                            console.log(newReport.GradeForTheDay)
+                            report.save(function(err){
+                              if(err){
+                                console.log(err)
+                              }
+                            })
                             return null
-                            // report.save(function(err){
-                            //   if(err){
-                            //     console.log(err)
-                            //   }
-                            // })
                           }else{
                             var newReport = new Report({
                               user: userID,
@@ -97,14 +95,15 @@ function updateReport(userID){
                               }
                               return x;
                             })
-
+                            if(sumLength == 0){
+                              sumLength = 1;
+                            }
                             newReport.GradeForTheDay = average/sumLength;
-                            console.log(newReport.GradeForTheDay)
-                            // newReport.save(function(err){
-                            //   if(err){
-                            //     console.log(err)
-                            //   }
-                            // })
+                            newReport.save(function(err){
+                              if(err){
+                                console.log(err)
+                              }
+                            })
                             return null
                         }
                     });

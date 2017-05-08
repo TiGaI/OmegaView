@@ -6,7 +6,7 @@ const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const bodyParser = require('body-parser');
-
+var apn  = require('apn');
 var helmet = require('helmet');
 
 const mongoose = require('mongoose');
@@ -31,6 +31,26 @@ app.use(bodyParser.json());
 app.use('/', authRoute);
 app.use('/', activityRoute);
 app.use('/', actionRoute);
+
+//
+// let token = [process.env.DEVICE_ID];
+//
+// let service = new apn.Provider({
+//   cert: "cert.pem",
+//   key: "key.pem"
+// })
+//
+// let note = new apn.Notification({
+//   alert: 'NewAlert'
+// })
+//
+// note.topic = "org.reactjs.native.example.PinVuew"
+//
+// service.send(note,token).then(result => {
+//
+// })
+//
+// service.shutdown()
 
 // var userIDs = {};
 //

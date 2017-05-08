@@ -37,6 +37,92 @@ function getRangeofLonLat(lon, lat, kilometer){
 }
 }
 
+
+router.post('/getSortandGroupActivityForAsyn', function(req, res){
+  var today = moment().startOf('day')
+  var tomorrow = moment(today).add(1, 'days')
+
+User.findById(req.body.userID).exec(function(err, user){
+    Activity.find({$and: [
+      {'createdAt' : {
+            $gte: today.toDate(),
+            $lt: tomorrow.toDate()
+          }},
+          {'_id' : {'$in': user.myActivity}}
+        ]}).sort('-createdAt').exec(function(err, activities){
+          if(err){
+            console.log(err);
+            res.send(err);
+            return err
+          }
+
+          var newObject = {};
+          var copy, y;
+
+          var x = _.groupBy(activities, function (date) {
+            return moment(date.activityStartTime).format("DD/MM/YYYY");
+          });
+
+          for (var key in x) {
+              y =  _.groupBy(x[key], 'activityCategory');
+              newObject[key] = y;
+          }
+
+          var totalPinsPerDay = 0;
+          var totalHoursPerDay = 0;
+          _.map(newObject, function(num, key){
+              _.map(newObject[key], function(num2, key2){
+                totalPinsPerDay += newObject[key][key2].length
+                var tempObject = newObject[key][key2].reduce(function(sum, next){
+                    sum.activityDuration = sum.activityDuration + next.activityDuration;
+                    return sum;
+                })
+                totalHoursPerDay += tempObject.activityDuration;
+
+                newObject[key][key2] = {'activities': newObject[key][key2],
+                                        'totalHoursForThisCategory': tempObject.activityDuration}
+              });
+                newObject[key] = Object.assign(newObject[key],
+                  {'totalHoursPerDay': totalHoursPerDay},
+                  {'totalPinsPerDay': totalPinsPerDay},
+                  {'date': key})
+                totalHoursPerDay = 0;
+                totalPinsPerDay = 0;
+          })
+
+
+
+              user.sortedPing = Object.assign({}, newObject)
+
+              Activity.find({$and: [
+                      {'createdAt': {'$gt': new Date(Date.now() - 1.75*24*60*60*1000)}},
+                          {'_id' : {'$in': user.myActivity}}
+                        ]}).sort('-createdAt').exec(function(err, activities){
+
+                          var checkStreak = {
+                            studying: 0,
+                            eating: 0,
+                            training: 0,
+                            hobby: 0,
+                            working: 0,
+                            sleeping: 0};
+
+                            activities.map(function(x){
+                                checkStreak[x.activityCategory] = user.activityStreak[x.activityCategory]
+                                return x
+                            })
+
+                            user.activityStreak = Object.assign({}, checkStreak);
+
+                            user.save(function(err, user){
+                              res.send(user)
+                            })
+              });
+
+    });
+  });
+});
+
 router.post('/getSortandGroupActivity', function(req, res){
   var today = moment().startOf('day')
   var tomorrow = moment(today).add(1, 'days')
@@ -133,8 +219,6 @@ function updateReport(userID){
           console.log(err)
         }else{
 
-      console.log('this is user', user)
-
       Report.findOne({$and: [{'user': userID},
                             {'createdAt' : {
                                   $gte: today.toDate(),
@@ -148,7 +232,7 @@ function updateReport(userID){
                           }
 
                           if(report){
-                            report.activityGoalForThatDay = user.myActivity
+                            report.activitiesForTheDay = [...[user.myActivity[0]], ...report.activitiesForTheDay]
                             report.dataObject = user.sortedPing
 
                             var average = 0;
@@ -163,15 +247,16 @@ function updateReport(userID){
                               }
                               return x;
                             })
-
+                            if(sumLength == 0){
+                              sumLength = 1;
+                            }
                             report.GradeForTheDay = average/sumLength;
-                            console.log(newReport.GradeForTheDay)
+                            report.save(function(err){
+                              if(err){
+                                console.log(err)
+                              }
+                            })
                             return null
-                            // report.save(function(err){
-                            //   if(err){
-                            //     console.log(err)
-                            //   }
-                            // })
                           }else{
                             var newReport = new Report({
                               user: userID,
@@ -193,14 +278,15 @@ function updateReport(userID){
                               }
                               return x;
                             })
-
+                            if(sumLength == 0){
+                              sumLength = 1;
+                            }
                             newReport.GradeForTheDay = average/sumLength;
-                            console.log(newReport.GradeForTheDay)
-                            // newReport.save(function(err){
-                            //   if(err){
-                            //     console.log(err)
-                            //   }
-                            // })
+                            newReport.save(function(err){
+                              if(err){
+                                console.log(err)
+                              }
+                            })
                             return null
                         }
                     });
