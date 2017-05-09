@@ -1,5 +1,3 @@
-var moment = require('moment');
-
 export function pushFeedObjectAction(userID){
   return dispatch => {
     fetch('http://localhost:8080/getFeed', {
@@ -21,8 +19,6 @@ export function pushFeedObjectAction(userID){
 }
 
 export function pushReportObjectAction(userID){
-  var today = moment().startOf('day');
-
   return dispatch => {
     fetch('http://localhost:8080/getReport', {
       method: 'POST',
@@ -34,6 +30,7 @@ export function pushReportObjectAction(userID){
       })
     }).then((response) => response.json())
       .then((responseJson) => {
+        console.log('reportObject: ', responseJson)
           var reportObject = [...responseJson];
           dispatch(pushReportObject(reportObject));
     }).catch((err) => {

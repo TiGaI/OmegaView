@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import {
   StyleSheet, View, Text, TouchableOpacity, Image, ListView } from 'react-native';
+import PushNotification from 'react-native-push-notification';
+
 import { Spinner } from 'native-base';
 import { Button, SocialIcon,  Icon } from 'react-native-elements'
 import { bindActionCreators } from 'redux';
@@ -51,8 +53,8 @@ class MainFeed extends Component{
   }
   renderImage(image) {
      return <Image style={styles.activityImage} source={image} />
-   }
-   renderVideo(video) {
+  }
+  renderVideo(video) {
        return (<View style={{height: 300, width: 300}}>
          <Video source={{uri: video.uri, type: video.mime}}
             style={{position: 'absolute',
@@ -70,18 +72,31 @@ class MainFeed extends Component{
             onLoad={load => console.log(load)}
             repeat={true} />
         </View>);
-     }
-   renderAsset(image) {
+  }
+  renderAsset(image) {
      if (image.mime && image.mime.toLowerCase().indexOf('video/') !== -1) {
        return this.renderVideo(image);
      }
 
      return this.renderImage(image);
-   }
-   deleteActivity(activityID){
+  }
+  deleteActivity(activityID){
     this.props.activityActions.deleteActivity(this.props.data.feedObject, activityID, this.props.profile.userObject._id)
-   }
-   render() {
+  }
+  componentDidMount(){
+    PushNotification.configure({
+      onNotification: function(notification){
+        console.log('notification', notification)
+      }
+    });
+  }
+  pushNotificationOnGoal(message, createdAt){
+    PushNotification.localNotificationSchedule({
+      message: message,
+      date: new Date(object)
+    })
+  }
+  render() {
     console.log(this.props)
     if(this.props.login.skip){
       var checkforlogin = <Spinner color='green'/>

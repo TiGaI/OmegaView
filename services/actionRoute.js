@@ -26,6 +26,7 @@ router.post('/getReport', function(req, res){
         }
   });
 });
+
 function updateReport(userID){
   var today = moment().startOf('day');
   var tomorrow = moment(today).add(1, 'days');

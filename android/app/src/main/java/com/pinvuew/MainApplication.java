@@ -3,6 +3,7 @@ package com.pinvuew;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.wix.reactnativenotifications.RNNotificationsPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
@@ -29,6 +30,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNNotificationsPackage(),
             new ReactNativePushNotificationPackage(),
             new PickerPackage(),
             new FBSDKPackage(),
