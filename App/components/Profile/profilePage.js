@@ -11,6 +11,7 @@ import { bindActionCreators } from 'redux';
 
 import { connect } from 'react-redux';
 import Icons from 'react-native-vector-icons/Ionicons';
+import * as getDataActions from '../../actions/getDataAction';
 
 import Slider from 'react-native-slider';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
@@ -27,6 +28,10 @@ class ProfilePage extends Component{
   constructor(props){
     super(props);
       console.log('PROFILE PAGE PROPS', this.props)
+      this.props.getDataActions.pushReportObjectAction(this.props.profile.userObject._id);
+
+      //you need to change this
+
       const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       this.state = {
         dataSource: ds.cloneWithRows(days),
@@ -34,7 +39,6 @@ class ProfilePage extends Component{
       };
   }
   report(rowData) {
-    console.log('ROWWWWW', rowData);
     this.props.navigator.push({
       id: "ReportPage",
       passProps: {data: rowData}
@@ -143,7 +147,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		// actions: bindActionCreators(actionCreators, dispatch)
+		getDataActions: bindActionCreators(getDataActions, dispatch)
 	};
 }
 
