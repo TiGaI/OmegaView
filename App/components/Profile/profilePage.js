@@ -28,10 +28,9 @@ class ProfilePage extends Component{
     super(props);
       console.log('PROFILE PAGE PROPS', this.props)
       const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-      console.log("SORTED PIN", this.props.profile.userObject.sortedPing);
       this.state = {
         dataSource: ds.cloneWithRows(days),
-        dataSource2: ds.cloneWithRows(this.props.profile.userObject.sortedPing)
+
       };
   }
   report(rowData) {
@@ -42,79 +41,92 @@ class ProfilePage extends Component{
     })
   }
   render() {
-    const {userObject} = this.props.profile;
+    var x = 1;
+    if(this.props.profile.userObject){
+      x = 0;
+      console.log('INSIDE IN IF STATEMENT', this.props.profile)
+      const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+      var dataSource2 = ds.cloneWithRows(this.props.profile.userObject.sortedPing)
+
+
+    }
     return (
       <View style={{flex: 1, justifyContent: 'center'}}>
-        <View style={{flex: 1, backgroundColor: '#152D44'}}>
-            <View style={{flex: 1, flexDirection: 'row'}}>
-              <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-start', marginLeft: 15}}>
-                <TouchableOpacity>
-                  <Icons style={{fontSize: 35, color: 'white', backgroundColor: 'transparent'}} name="md-settings"/>
-                </TouchableOpacity>
+        {x !== 0 ? <View><Text>loading</Text></View> :
+          (<View style={{flex: 1}}>
+            <View style={{flex: 1, backgroundColor: '#152D44'}}>
+              <View style={{flex: 1, flexDirection: 'row'}}>
+                <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-start', marginLeft: 15}}>
+                  <TouchableOpacity>
+                    <Icons style={{fontSize: 35, color: 'white', backgroundColor: 'transparent'}} name="md-settings"/>
+                  </TouchableOpacity>
+                </View>
+                <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-end', marginRight: 15}}>
+                  <TouchableOpacity>
+                    <Icons style={{fontSize: 35, color: 'white', backgroundColor: 'transparent'}} name="md-images"/>
+                  </TouchableOpacity>
+                </View>
               </View>
-              <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-end', marginRight: 15}}>
-                <TouchableOpacity>
-                  <Icons style={{fontSize: 35, color: 'white', backgroundColor: 'transparent'}} name="md-images"/>
-                </TouchableOpacity>
+              <View style={{flex: 2, justifyContent: 'center', alignItems: 'center'}}>
+                <Image
+                    style={{width: 100, height: 100, borderRadius: 50}}
+                    source={{uri: this.props.profile.userObject.profileImg}}
+                  />
+                <Text style={{color: 'white', fontSize: 20, fontWeight: "400", marginTop: 10}}>{this.props.profile.userObject.firstName + " " + this.props.profile.userObject.lastName}</Text>
               </View>
-            </View>
-            <View style={{flex: 2, justifyContent: 'center', alignItems: 'center'}}>
-              <Image
-                  style={{width: 100, height: 100, borderRadius: 50}}
-                  source={{uri: this.props.profile.userObject.profileImg}}
-                />
-              <Text style={{color: 'white', fontSize: 20, fontWeight: "400", marginTop: 10}}>{this.props.profile.userObject.firstName + " " + this.props.profile.userObject.lastName}</Text>
-            </View>
-            <View style={{flex: 1, flexDirection: 'row'}}>
-              <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={{color: 'white', fontSize: 25, fontWeight: "400"}}>{userObject.totalHoursLogged}</Text>
-                <Text style={{color: 'white', fontSize: 12, fontWeight: "400"}}>Total Hours</Text>
+              <View style={{flex: 1, flexDirection: 'row'}}>
+                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                  <Text style={{color: 'white', fontSize: 25, fontWeight: "400"}}>{this.props.profile.userObject.totalHoursLogged}</Text>
+                  <Text style={{color: 'white', fontSize: 12, fontWeight: "400"}}>Total Hours</Text>
+                </View>
+                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                  <Text style={{color: 'white', fontSize: 25, fontWeight: "400"}}>{this.props.profile.userObject.myActivity.length}</Text>
+                  <Text style={{color: 'white', fontSize: 12, fontWeight: "400"}}>Total Pins</Text>
+                </View>
               </View>
-              <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={{color: 'white', fontSize: 25, fontWeight: "400"}}>{userObject.myActivity.length}</Text>
-                <Text style={{color: 'white', fontSize: 12, fontWeight: "400"}}>Total Pins</Text>
-              </View>
-            </View>
-        </View>
-        <View style={{flex: 1, backgroundColor: '#F4F2F2'}}>
-          <ScrollView>
+          </View>
+          <View style={{flex: 1, backgroundColor: '#F4F2F2'}}>
+            <ScrollView>
+              <ListView
+                dataSource={dataSource2}
+                renderRow={(rowData) =>
+                  <TouchableOpacity onPress={this.report.bind(this, rowData)} style={{flex: 1, backgroundColor: 'white', height: 75, margin: 10, marginBottom: 0}}>
+                    {console.log('ROWDATA 2',rowData )}
+                      <View style={{flex: 1, flexDirection: 'row'}}>
+                      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                        <Text style={{color: '#8AC0FF', fontSize: 25, fontWeight: '700'}}>{rowData.date.substring(0,2)}</Text>
+                        <Text style={{color: '#8AC0FF', fontSize: 15, fontWeight: '400'}}>Jan</Text>
+                      </View>
+                      <View style={{flex: 3, justifyContent: 'center', alignItems: 'flex-start'}}>
+                        <Text style={{color: 'grey', fontSize: 20, fontWeight: '500'}} numberOfLines={1}>Total Hours {rowData.totalHoursPerDay} hrs</Text>
+                        <Text style={{color: 'black', fontSize: 12, fontWeight: '400'}}>Total Pins {rowData.totalPinsPerDay} </Text>
+                      </View>
+                    </View>
+                </TouchableOpacity>}
+              />
+
+
             <ListView
-              dataSource={this.state.dataSource2}
+              dataSource={this.state.dataSource}
               renderRow={(rowData) =>
                 <TouchableOpacity onPress={this.report.bind(this, rowData)} style={{flex: 1, backgroundColor: 'white', height: 75, margin: 10, marginBottom: 0}}>
-                  {console.log('ROWDATA 2',rowData )}
                     <View style={{flex: 1, flexDirection: 'row'}}>
                     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                      <Text style={{color: '#8AC0FF', fontSize: 25, fontWeight: '700'}}>{rowData.date.substring(0,2)}</Text>
+                      <Text style={{color: '#8AC0FF', fontSize: 25, fontWeight: '700'}}>03</Text>
                       <Text style={{color: '#8AC0FF', fontSize: 15, fontWeight: '400'}}>Jan</Text>
                     </View>
                     <View style={{flex: 3, justifyContent: 'center', alignItems: 'flex-start'}}>
-                      <Text style={{color: 'grey', fontSize: 20, fontWeight: '500'}} numberOfLines={1}>Total Hours {rowData.totalHoursPerDay} hrs</Text>
-                      <Text style={{color: 'black', fontSize: 12, fontWeight: '400'}}>Total Pins {rowData.totalPinsPerDay} </Text>
+                      <Text style={{color: 'grey', fontSize: 20, fontWeight: '500'}} numberOfLines={1}>{rowData.day}</Text>
+                      <Text style={{color: 'black', fontSize: 12, fontWeight: '400'}}>Tuesday, 11:30 AM</Text>
                     </View>
                   </View>
               </TouchableOpacity>}
             />
+          </ScrollView>
+          </View>
+          </View>
+        )}
 
-
-          <ListView
-            dataSource={this.state.dataSource}
-            renderRow={(rowData) =>
-              <TouchableOpacity onPress={this.report.bind(this, rowData)} style={{flex: 1, backgroundColor: 'white', height: 75, margin: 10, marginBottom: 0}}>
-                  <View style={{flex: 1, flexDirection: 'row'}}>
-                  <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                    <Text style={{color: '#8AC0FF', fontSize: 25, fontWeight: '700'}}>03</Text>
-                    <Text style={{color: '#8AC0FF', fontSize: 15, fontWeight: '400'}}>Jan</Text>
-                  </View>
-                  <View style={{flex: 3, justifyContent: 'center', alignItems: 'flex-start'}}>
-                    <Text style={{color: 'grey', fontSize: 20, fontWeight: '500'}} numberOfLines={1}>{rowData.day}</Text>
-                    <Text style={{color: 'black', fontSize: 12, fontWeight: '400'}}>Tuesday, 11:30 AM</Text>
-                  </View>
-                </View>
-            </TouchableOpacity>}
-          />
-        </ScrollView>
-        </View>
       </View>
     )
   }
