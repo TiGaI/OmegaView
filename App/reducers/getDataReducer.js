@@ -1,5 +1,6 @@
 export function mainPageDataReducer(state = {
   feedObject: [],
+  reportObject: [],
   notifications: [],
 }, action) {
     switch (action.type) {
@@ -7,8 +8,11 @@ export function mainPageDataReducer(state = {
         return Object.assign({}, state, {
             feedObject: action.feedObject
         });
+    case 'REPORT_DATA':
+        return Object.assign(reportObject, state, {
+            reportObject: action.reportObject
+        });
     case 'UPDATE_MAINPAGE_DATA':
-    console.log(feedObject, ' I am in getDataReducer')
         return Object.assign(feedObject, state, {
             feedObject: action.newFeed
         });

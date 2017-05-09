@@ -256,15 +256,16 @@ class ApplicationTabs extends Component {
 						initialRoute={{ id: 'PinForm', title: 'Activity' }}
 						renderScene={ this.renderScene }
 
+
 						navigationBar = {
 							 <Navigator.NavigationBar
 									style = { styles.navigationBar }
 									routeMapper = {{
                      LeftButton(route, navigator, index, navState) {
                            return (
-                              <TouchableOpacity>
+                              <TouchableOpacity onPress={() => self.changeTab('homepage')}>
                                  <Text style={ styles.leftButton }>
-                                    Save
+                                    Back
                                  </Text>
                               </TouchableOpacity>
                            )

@@ -1,10 +1,12 @@
 "use strict";
 var express = require('express');
 var router = express.Router();
+var _ = require('underscore');
 var moment = require('moment');
 //model
 const User  = require('../models/models').User;
 const Activity= require('../models/models').Activity;
+const Report= require('../models/models').Report;
 const Usernotification= require('../models/models').Usernotification;
 
 router.post('/getReport', function(req, res){
@@ -25,41 +27,90 @@ router.post('/getReport', function(req, res){
   });
 });
 
-router.post('/createReport', function(req, res){
+function updateReport(userID){
   var today = moment().startOf('day');
   var tomorrow = moment(today).add(1, 'days');
 
-  User.findById({'user': req.body.userID}).sort('-createdAt')
-        .exec(function(err, reports){
-
+  User.findById(userID).sort('-createdAt')
+        .exec(function(err, user){
         if(err){
           console.log(err)
         }else{
 
-                  Report.find({$and: [
-                            {'user': req.body.userID},
+      Report.findOne({$and: [{'user': userID},
                             {'createdAt' : {
                                   $gte: today.toDate(),
                                   $lt: tomorrow.toDate()
                                 }}
                             ]
-                          }).exec(function(err, reports){
+                          }).exec(function(err, report){
+
                           if(err){
                             console.log(err);
-                            res.send(err);
-                            return err
                           }
 
+                          if(report){
+                            report.activitiesForTheDay = [...[user.myActivity[0]], ...report.activitiesForTheDay]
+                            report.dataObject = user.sortedPing
 
+                            var average = 0;
+                            var sumLength = 0;
 
-                            res.send(reports);
+                            _.map(user.sortedPing[todayDate], function(x, key){
+                              if(key.length > 4 && key.length < 13){
+                                if(x.activities[0].activityGoalForThatDay > 0){
+                                  average = average + x.totalHoursForThisCategory / x.activities[0].activityGoalForThatDay
+                                  sumLength += 1
+                                }
+                              }
+                              return x;
+                            })
+                            if(sumLength == 0){
+                              sumLength = 1;
+                            }
+                            report.GradeForTheDay = average/sumLength;
+                            report.save(function(err){
+                              if(err){
+                                console.log(err)
+                              }
+                            })
+                            return null
+                          }else{
+                            var newReport = new Report({
+                              user: userID,
+                              activitiesForTheDay: user.myActivity,
+                              dataObject: user.sortedPing,
+                              GradeForTheDay: 0
+                            })
+                            var todayDate= moment(today).format("DD/MM/YYYY")
+                            // newReport.GradeForTheDay =
+                            var average = 0;
+                            var sumLength = 0;
+
+                            _.map(user.sortedPing[todayDate], function(x, key){
+                              if(key.length > 4 && key.length < 13){
+                                if(x.activities[0].activityGoalForThatDay > 0){
+                                  average = average + x.totalHoursForThisCategory / x.activities[0].activityGoalForThatDay
+                                  sumLength += 1
+                                }
+                              }
+                              return x;
+                            })
+                            if(sumLength == 0){
+                              sumLength = 1;
+                            }
+                            newReport.GradeForTheDay = average/sumLength;
+                            newReport.save(function(err){
+                              if(err){
+                                console.log(err)
+                              }
+                            })
+                            return null
+                        }
                     });
-
         }
-
-
   });
-});
+}
 
 router.post('/checkStreak', function(req, res){
   var userID = req.body.userID;
@@ -172,6 +223,7 @@ router.post('/createGoal', function(req, res){
         res.send(null)
       }
     })
+    updateReport(req.body.userID);
 });
 
 module.exports = router;
