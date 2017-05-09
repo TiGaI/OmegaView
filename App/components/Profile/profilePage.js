@@ -52,7 +52,7 @@ class ProfilePage extends Component{
     }
     return (
       <View style={{flex: 1, justifyContent: 'center'}}>
-        {x !== 0 ? <View><Text>loading</Text></View> :
+        {x === 1 ? <View><Text>loading</Text></View> :
           (<View style={{flex: 1}}>
             <View style={{flex: 1, backgroundColor: '#152D44'}}>
               <View style={{flex: 1, flexDirection: 'row'}}>
