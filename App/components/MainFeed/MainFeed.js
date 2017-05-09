@@ -3,6 +3,7 @@ import {
   StyleSheet, View, Text, TouchableOpacity, Image, ListView } from 'react-native';
 import PushNotification from 'react-native-push-notification';
 
+import Modal from 'react-native-modalbox';
 import { Spinner } from 'native-base';
 import { Button, SocialIcon,  Icon } from 'react-native-elements'
 import { bindActionCreators } from 'redux';
@@ -14,7 +15,9 @@ class MainFeed extends Component{
   constructor(props){
     super(props);
     this.state = {
-      dataSource: null
+      dataSource: null,
+      isOpen: false,
+      productivity: 1
     };
   }
   getDate(date){
@@ -86,8 +89,17 @@ class MainFeed extends Component{
   componentDidMount(){
     PushNotification.configure({
       onNotification: function(notification){
-        console.log('notification', notification)
-      }
+        this.setState({
+          open: true
+        })
+      },
+      permissions: {
+          alert: true,
+          badge: true,
+          sound: true
+      },
+      popInitialNotification: true,
+      requestPermissions: true,
     });
   }
   pushNotificationOnGoal(message, createdAt){
@@ -95,6 +107,16 @@ class MainFeed extends Component{
       message: message,
       date: new Date(object)
     })
+  }
+  submitGoalForm(){
+    if(this.state.productivity !== 1){
+      this.props.getDataActions.changeProductivityAction(this.props.profile.userObject.myLastActivity, this.state.productivity)
+    }
+
+    this.setState({
+      isOpen: false,
+      productivity: 1
+    });
   }
   render() {
     console.log(this.props)
@@ -167,17 +189,88 @@ class MainFeed extends Component{
           checkforlogin
         )}
       </View>
+
+      <Modal isOpen={this.state.isOpen} onClosed={() => this.setState({isOpen: false})} style={[styles.modal, styles.modal4]} position={"top"} backdropContent={BContent}>
+
+                              <View style={styles.container}>
+                              <View style={styles.titleContainer}>
+                                <Text style={styles.caption} numberOfLines={1}>How productive were you?</Text>
+                              </View>
+                                  <Slider
+                                    value={this.state.productivity}
+                                    minimumTrackTintColor='#1fb28a'
+                                     maximumTrackTintColor='#d3d3d3'
+                                     thumbTintColor='#1a9274'
+                                     minimumValue={0}
+                                      maximumValue={1}
+                                      step={0.05}
+                                      trackStyle={customStyles2.track}
+                                      thumbStyle={customStyles2.thumb}
+                                    onValueChange={(value) => this.setState({value})} />
+
+                                    <Text style={styles.value, {textAlign: 'center'}} numberOfLines={1}>{this.state.productivity}</Text>
+                              </View>
+
+                              <Button
+                                large
+                                backgroundColor={'#20C48A'}
+                                onPress={this.submitProductivityForm.bind(this)}
+                                title='Submit Goal' />
+          </Modal>
     )
   }
 }
 
 const styles = StyleSheet.create({
+  modal: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 50
+  },
+  modal4: {
+    height: 350,
+    backgroundColor: "#3B5998"
+  },
+  container: {
+    flex: 1,
+    marginLeft: 10,
+    marginRight: 10,
+    alignItems: 'stretch',
+    justifyContent: 'center'
+  },
+  titleContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  caption: {
+    //flex: 1,
+  },
+  value: {
+    flex: 1,
+    textAlign: 'center',
+    marginLeft: 10,
+  }
+});
 
+var customStyles2 = StyleSheet.create({
+  track: {
+    height: 4,
+    borderRadius: 2,
+  },
+  thumb: {
+    width: 30,
+    height: 30,
+    borderRadius: 30 / 2,
+    backgroundColor: 'white',
+    borderColor: '#30a935',
+    borderWidth: 2,
+    top: 22
+  }
 });
 
 function mapStateToProps(state) {
 	return {
-    // goal: state.get('goal'),
     login: state.get('login'),
     profile: state.get('profile'),
     data: state.get('data')
