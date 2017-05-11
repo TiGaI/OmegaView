@@ -30,8 +30,6 @@ class ProfilePage extends Component{
       console.log('PROFILE PAGE PROPS', this.props)
       this.props.getDataActions.pushReportObjectAction(this.props.profile.userObject._id);
 
-      //you need to change this
-
       const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       this.state = {
         dataSource: ds.cloneWithRows(days),
@@ -103,7 +101,6 @@ class ProfilePage extends Component{
 
 function mapStateToProps(state) {
 	return {
-    // goal: state.get('goal'),
     login: state.get('login'),
     profile: state.get('profile'),
     data: state.get('data')

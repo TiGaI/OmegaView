@@ -9,6 +9,21 @@ const Activity= require('../models/models').Activity;
 const Report= require('../models/models').Report;
 const Usernotification= require('../models/models').Usernotification;
 
+
+router.post('/addProductivity', function(req, res){
+  Activity.findById(req.body.myLastActivity._id).exec(function(err, activity){
+    activity.activityProductivity = req.body.productivity
+    activity.save(function(err){
+      if(err){
+        console.log(err)
+      }
+      // User.findById(req.body.myLastActivity.activityCreator).exec(function(err. user){
+      //   user.myLastActivity = activity
+      // })
+    })
+  })
+});
+
 router.post('/getReport', function(req, res){
   Report.find({$and: [
           {'user': req.body.userID}]}).sort('-createdAt')
@@ -151,7 +166,7 @@ router.post('/getFeed', function(req, res){
           {'activityCreator': req.body.userID},
           {'createdAt': {'$gt': new Date(Date.now() - 5*24*60*60*1000)}}]}).sort('-createdAt')
           .limit(10).exec(function(err, activities){
-
+          console.log(activities)
         if(err){
           console.log(err);
           res.send(err);

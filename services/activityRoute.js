@@ -90,9 +90,7 @@ User.findById(req.body.userID).exec(function(err, user){
                 totalPinsPerDay = 0;
           })
 
-
-
-              user.sortedPing = Object.assign({}, newObject)
+            user.sortedPing = Object.assign({}, newObject)
 
               Activity.find({$and: [
                       {'createdAt': {'$gt': new Date(Date.now() - 1.75*24*60*60*1000)}},
