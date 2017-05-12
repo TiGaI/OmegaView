@@ -68,7 +68,7 @@ export function pushReportObjectAction(userID){
     }).then((response) => response.json())
       .then((responseJson) => {
         console.log('reportObject: ', responseJson)
-          var reportObject = [...responseJson];
+          var reportObject = responseJson;
           dispatch(pushReportObject(reportObject));
     }).catch((err) => {
       console.log('Error in createGoal', err)

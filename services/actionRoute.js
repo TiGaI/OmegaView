@@ -42,7 +42,11 @@ router.post('/getReport', function(req, res){
   });
 });
 
-function updateReport(userID){
+router.post('/updateReportTest', function(req, res){
+  updateReport(req.body.userID);
+});
+
+function updateReport(userID, activityId){
   var today = moment().startOf('day');
   var tomorrow = moment(today).add(1, 'days');
 
@@ -65,7 +69,15 @@ function updateReport(userID){
                           }
 
                           if(report){
-                            report.activitiesForTheDay = [...[user.myActivity[0]], ...report.activitiesForTheDay]
+                            var todayDate= moment(today).format("DD/MM/YYYY");
+                            if(!activityId){
+                              report.activitiesForTheDay = [...[user.myActivity[0]], ...report.activitiesForTheDay]
+                            }else if(activityId){
+                              report.activitiesForTheDay = report.activitiesForTheDay.filter(function(x){
+                                  return x !== activityId
+                              })
+                            }
+
                             report.dataObject = user.sortedPing
 
                             var average = 0;
@@ -98,7 +110,6 @@ function updateReport(userID){
                               GradeForTheDay: 0
                             })
                             var todayDate= moment(today).format("DD/MM/YYYY")
-                            // newReport.GradeForTheDay =
                             var average = 0;
                             var sumLength = 0;
 
@@ -166,7 +177,6 @@ router.post('/getFeed', function(req, res){
           {'activityCreator': req.body.userID},
           {'createdAt': {'$gt': new Date(Date.now() - 5*24*60*60*1000)}}]}).sort('-createdAt')
           .limit(10).exec(function(err, activities){
-          console.log(activities)
         if(err){
           console.log(err);
           res.send(err);
@@ -184,7 +194,6 @@ router.post('/getFeed', function(req, res){
 router.post('/createGoal', function(req, res){
 
   var tomorrow = moment(req.body.today).add(1, 'days')
-  console.log('this is createGoal', req.body)
     User.findById(req.body.userID)
      .exec( function(err, user) {
         if (err) {
