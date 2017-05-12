@@ -209,8 +209,6 @@ router.post('/getSortandGroupActivity', function(req, res){
 function updateReport(myActivity, userID, activityId){
   var today = moment().startOf('day');
   var tomorrow = moment(today).add(1, 'days');
-
-  console.log('this is req.body in updateReport', myActivity, userID, activityId)
     Activity.find({$and: [
       {'createdAt' : {
             $gte: today.toDate(),
@@ -260,7 +258,6 @@ function updateReport(myActivity, userID, activityId){
           User.findById(userID).exec(function(err, user){
 
               user.sortedPing = Object.assign({}, newObject)
-              console.log('this is the new user.sortedPing', user.sortedPing)
               Activity.find({$and: [
                       {'createdAt': {'$gt': new Date(Date.now() - 1.75*24*60*60*1000)}},
                           {'_id' : {'$in': user.myActivity}}

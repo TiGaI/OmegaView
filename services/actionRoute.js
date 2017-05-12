@@ -102,7 +102,9 @@ router.post('/getFeed', function(req, res){
 router.post('/createGoal', function(req, res){
 
   var tomorrow = moment(req.body.today).add(1, 'days')
-    User.findById(req.body.userID)
+  var today =  moment(req.body.today).startOf('day')
+
+  User.findById(req.body.userID)
      .exec( function(err, user) {
         if (err) {
             return {err, user}
@@ -115,41 +117,45 @@ router.post('/createGoal', function(req, res){
                 console.log(err)
                 return err
               }
-              var today = new Date(req.body.today)
 
-              Activity.find({
-                  createdAt: {
-                    $gte: today.getDate(),
-                    $lt: tomorrow
-                  }
-                }).sort('-createdAt').exec(function(err, activties){
+              Activity.find({$and: [
+                      {'activityCreator': req.body.userID},
+                      {'createdAt': {
+                        $gte: today,
+                        $lt: tomorrow
+                      }}]})
+                      .sort('-createdAt').exec(function(err, activties){
 
+                        console.log(activties)
 
-                  activties.map((x, index) => {
+                  activties.map(function(x){
                     if(x.activityCategory == 'studying'){
-                      x.activityGoalForThatDay = req.body.myDailyGoal.studyingGoal
+                      x.activityGoalForThatDay = req.body.myDailyGoal.studying
                     }else if(x.activityCategory == 'eating'){
-                      x.activityGoalForThatDay == req.body.myDailyGoal.eatingGoal
+                      x.activityGoalForThatDay = req.body.myDailyGoal.eating
                     }else if(x.activityCategory == 'training'){
-                      x.activityGoalForThatDay == req.body.myDailyGoal.trainingGoal
+                      x.activityGoalForThatDay = req.body.myDailyGoal.training
                     }else if(x.activityCategory == 'hobby'){
-                      x.activityGoalForThatDay == req.body.myDailyGoal.hobbyGoal
+                      x.activityGoalForThatDay = req.body.myDailyGoal.hobby
                     }else if(x.activityCategory == 'working'){
-                      x.activityGoalForThatDay == req.body.myDailyGoal.workingGoal
-                    }else{
-                      x.activityGoalForThatDay == req.body.myDailyGoal.sleepingGoal
+                      x.activityGoalForThatDay = req.body.myDailyGoal.working
+                    }else if(x.activityCategory == 'sleeping'){
+                      x.activityGoalForThatDay = req.body.myDailyGoal.sleeping
                     }
-
-                    x.save(function(err, activity){
+                    console.log(x.activityGoalForThatDay)
+                    x.save(function(err){
                       if (err) {
                           console.log(err);
-                          res.send(err)
                       }
+                        console.log('save it')
+                        return x
+
                     })
                   })
               });
+
               res.send(user)
-              updateReport(user.myActivity, user._id);
+              updateReportGoal(user.myActivity, user._id);
           })
       }else{
         console.log('No user existed!')
@@ -158,11 +164,10 @@ router.post('/createGoal', function(req, res){
     })
 });
 
-function updateReport(myActivity, userID, activityId){
+function updateReportGoal(myActivity, userID, activityId){
   var today = moment().startOf('day');
   var tomorrow = moment(today).add(1, 'days');
 
-  console.log('this is req.body in updateReport', myActivity, userID, activityId)
     Activity.find({$and: [
       {'createdAt' : {
             $gte: today.toDate(),
@@ -212,7 +217,6 @@ function updateReport(myActivity, userID, activityId){
           User.findById(userID).exec(function(err, user){
 
               user.sortedPing = Object.assign({}, newObject)
-              console.log('this is the new user.sortedPing', user.sortedPing)
               Activity.find({$and: [
                       {'createdAt': {'$gt': new Date(Date.now() - 1.75*24*60*60*1000)}},
                           {'_id' : {'$in': user.myActivity}}
@@ -258,14 +262,6 @@ function updateReport(myActivity, userID, activityId){
 
                                                      if(report){
                                                        var todayDate= moment(today).format("DD/MM/YYYY");
-
-                                                       if(!activityId){
-                                                         report.activitiesForTheDay = [...[user.myActivity[0]], ...report.activitiesForTheDay]
-                                                       }else if(activityId){
-                                                         report.activitiesForTheDay = report.activitiesForTheDay.filter(function(x){
-                                                             return x != activityId
-                                                         })
-                                                       }
 
                                                        report.dataObject = user.sortedPing
                                                        var average = 0;
