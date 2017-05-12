@@ -47,7 +47,6 @@ export function createActivity(feedObject, activityObject, photo) {
               })
             }).then((response) => response.json())
             .then(responseJson => {
-              console.log('responseJson', responseJson)
               copy['_id'] = responseJson.activity;
               copy['activityCreator'] = [responseJson.user._id]
                 if(responseJson.user.activityImage){
@@ -71,11 +70,9 @@ export function createActivity(feedObject, activityObject, photo) {
 
                 var userObject = Object.assign({}, responseJson.user);
 
-                console.log('this is feedObject from create: ', feedObject);
-
                 getDataActions.updateFeedObjectAction(feedObject)(dispatch);
                 loginActions.updateUserProfile(userObject)(dispatch);
-
+                loginActions.getGraphData(userObject._id, userObject.myActivity)(dispatch);
             })
             .catch((err) => {
               console.log('error in createActivity -> ', err)
@@ -83,6 +80,7 @@ export function createActivity(feedObject, activityObject, photo) {
     };
 }
 
+// later to do
 // export function editActivity(activityID, activityCreatorId, activityObject){
 //   console.log("INSIDE EDIT ACTIVITY", activityID, activityCreatorId, activityObject)
 //   return dispatch => {
@@ -108,6 +106,12 @@ export function createActivity(feedObject, activityObject, photo) {
 // }
 
 export function deleteActivity(feedObject, activityID, activityCreatorId){
+
+  feedObject = feedObject.filter(function(x){
+      return x._id !== activityID
+  })
+  getDataActions.updateDeletedFeedObjectAction(feedObject)(dispatch);
+
   return dispatch => {
     fetch('http://localhost:8080/deleteActivity', {
       method: 'POST',
@@ -121,14 +125,7 @@ export function deleteActivity(feedObject, activityID, activityCreatorId){
     })
     .then((response) => response.json())
     .then((responseJson) => {
-
-          feedObject = feedObject.filter(function(x){
-              return x._id !== activityID
-          })
           var userObject = Object.assign({}, responseJson);
-          console.log('I am HERE at the delete!!!!!!', feedObject)
-
-          getDataActions.updateDeletedFeedObjectAction(feedObject)(dispatch);
           loginActions.updateUserProfile(userObject)(dispatch);
     })
     .catch((err) => {

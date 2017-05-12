@@ -20,8 +20,27 @@ const styles = StyleSheet.create({
 
 class PinVuew extends Component {
   componentDidMount() {
+    this._loadInitialState();
     this._setupGoogleSignin();
   }
+  _loadInitialState = async () => {
+    try {
+      var value = await AsyncStorage.getItem("USER_ID");
+      console.log('I am here in loadInitialState: ', value)
+      if (value !== null){
+        this.props.actions.getGraphDataForAsyn(value)
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  _removeStorage = async () => {
+     try {
+       await AsyncStorage.removeItem("USER_ID");
+     } catch (error) {
+       console.log(error.message);
+     }
+   };
   async _setupGoogleSignin() {
     try {
       await GoogleSignin.hasPlayServices({ autoResolve: true });

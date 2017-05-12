@@ -38,6 +38,31 @@ export function updateGoalFrontEnd(myDailyGoalObject){
   };
 }
 
+export function getGraphDataForAsyn(userID) {
+    return dispatch => {
+        dispatch(loggedin());
+          fetch('http://localhost:8080/getSortandGroupActivityForAsyn', {
+              method: 'POST',
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                userID: userID
+              })
+            })
+            .then((response) => response.json())
+            .then((responseJson) => {
+              console.log('this is responseJson at getGraphDataForAsyn: ', responseJson)
+                var userObject = Object.assign({}, responseJson);
+                getDataActions.pushFeedObjectAction(userObject._id)(dispatch);
+                dispatch(addUser(userObject));
+            })
+            .catch((err) => {
+              console.log('error: ', err)
+            });
+        }
+};
+
 export function getGraphData(userID, myActivity) {
     return dispatch => {
         dispatch(attempt());
@@ -54,6 +79,7 @@ export function getGraphData(userID, myActivity) {
             })
             .then((response) => response.json())
             .then((responseJson) => {
+              console.log('this is responseJson at getGraphData: ', responseJson)
                 var userObject = Object.assign({}, responseJson);
                 dispatch(addUser(userObject));
             })
@@ -61,7 +87,7 @@ export function getGraphData(userID, myActivity) {
               console.log('error: ', err)
             });
         }
-    };
+};
 
 
 function getInfo() {
@@ -113,6 +139,7 @@ export function googleLogin(){
                   getDataActions.pushFeedObjectAction(userObject._id)(dispatch);
                   getGraphData(userObject._id, userObject.myActivity)(dispatch);
                   dispatch(loggedin());
+                  AsyncStorage.setItem("USER_ID", userObject._id);
               })
               .catch((err) => {
                 console.log('error: ', err)
@@ -171,6 +198,7 @@ export function login() {
               getDataActions.pushFeedObjectAction(userObject._id)(dispatch);
               getGraphData(userObject._id, userObject.myActivity)(dispatch);
               dispatch(loggedin());
+              AsyncStorage.setItem("USER_ID", userObject._id);
             })
             .catch((err) => {
               console.log('error: ', err)

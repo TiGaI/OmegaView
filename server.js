@@ -6,7 +6,7 @@ const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 const bodyParser = require('body-parser');
-
+var apn  = require('apn');
 var helmet = require('helmet');
 
 const mongoose = require('mongoose');
@@ -32,24 +32,44 @@ app.use('/', authRoute);
 app.use('/', activityRoute);
 app.use('/', actionRoute);
 
-var userIDs = {};
+//
+// let token = [process.env.DEVICE_ID];
+//
+// let service = new apn.Provider({
+//   cert: "cert.pem",
+//   key: "key.pem"
+// })
+//
+// let note = new apn.Notification({
+//   alert: 'NewAlert'
+// })
+//
+// note.topic = "org.reactjs.native.example.PinVuew"
+//
+// service.send(note,token).then(result => {
+//
+// })
+//
+// service.shutdown()
 
-io.on('connection', function(socket) {
-  var socketUser;
-
-  socket.on('userJoined', function(userID) {
-    try {
-      socket.userID = userID;
-      userIDs[userID] = userID;
-    } catch ( e ) {
-      console.log("error in userJoined Socket!", e)
-    }
-  });
-
-  socket.on('sendNotification', function(messageObject){
-      socket.broadcast.emit(messageObject.toUserID.toString(), messageObject)
-  });
-});
+// var userIDs = {};
+//
+// io.on('connection', function(socket) {
+//   var socketUser;
+//
+//   socket.on('userJoined', function(userID) {
+//     try {
+//       socket.userID = userID;
+//       userIDs[userID] = userID;
+//     } catch ( e ) {
+//       console.log("error in userJoined Socket!", e)
+//     }
+//   });
+//
+//   socket.on('sendNotification', function(messageObject){
+//       socket.broadcast.emit(messageObject.toUserID.toString(), messageObject)
+//   });
+// });
 
 
 var port = process.env.PORT || 8080;

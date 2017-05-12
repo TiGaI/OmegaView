@@ -4,9 +4,6 @@ import { Navigator, View, NavigationBar, StyleSheet } from 'react-native';
 import ReportPage from './reportPage.js';
 import ProfilePage from './profilePage.js';
 
-
-
-
 export default class ProfilePageIndex extends Component {
   renderScene(route, navigator) {
     const {state,actions} = this.props;
@@ -40,8 +37,6 @@ export default class ProfilePageIndex extends Component {
           renderScene={this.renderScene.bind(this)}
           configureScene={(route, routeStack) =>
             Navigator.SceneConfigs.FloatFromBottom}
-
-
 
         />
       </View>

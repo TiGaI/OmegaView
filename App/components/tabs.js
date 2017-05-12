@@ -132,7 +132,6 @@ class ApplicationTabs extends Component {
     //         )
     //   }
     // }else{
-      console.log('I am here!', this.props.data.feedObject)
       this.props.activityActions.createActivity(this.props.data.feedObject, {
         activityCreator: this.props.profile.userObject._id,
         activityNote: this.props.form.formObject.activityNote,
@@ -254,16 +253,15 @@ class ApplicationTabs extends Component {
 					<Navigator
 						initialRoute={{ id: 'PinForm', title: 'Activity' }}
 						renderScene={ this.renderScene }
-
-						navigationBar = {
+            navigationBar = {
 							 <Navigator.NavigationBar
 									style = { styles.navigationBar }
 									routeMapper = {{
                      LeftButton(route, navigator, index, navState) {
                            return (
-                              <TouchableOpacity>
+                              <TouchableOpacity onPress={() => self.changeTab('homepage')}>
                                  <Text style={ styles.leftButton }>
-                                    Save
+                                    Back
                                  </Text>
                               </TouchableOpacity>
                            )
@@ -288,6 +286,7 @@ class ApplicationTabs extends Component {
 						}
 						/>
 
+
 				</Tab>
 
 
@@ -311,6 +310,7 @@ class ApplicationTabs extends Component {
 					renderSelectedIcon={() => <Icon color={'#6296f9'} name='person-pin' size={30} />}
 					onPress={() => this.changeTab('profile')}>
 
+
           <Navigator
             initialRoute={{ id: 'ProfilePage', title: 'ProfilePage', display: false }}
             renderScene={ this.renderProfileScene }
@@ -321,6 +321,7 @@ class ApplicationTabs extends Component {
 									routeMapper = {{
                      LeftButton(route, navigator, index, navState) {
                        if(index > 0){
+
                          return (
                             <TouchableOpacity onPress={() => navigator.pop()}>
                                <Text style={ styles.leftButton }>
@@ -328,6 +329,7 @@ class ApplicationTabs extends Component {
                                </Text>
                             </TouchableOpacity>
                          )
+
                        }else {return null}
 
                      },
@@ -344,6 +346,7 @@ class ApplicationTabs extends Component {
 						}
 
             />
+
 
 				</Tab>
 			</Tabs>
@@ -366,7 +369,6 @@ const styles = StyleSheet.create({
 			shadowOpacity: 0.3
    },
 	 leftButton: {
-
 		   color: '#A6A6A6',
 			 margin: 10,
 			 marginTop: -1,

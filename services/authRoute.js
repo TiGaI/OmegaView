@@ -59,9 +59,6 @@ router.post('/googleAuth', function(req, res) {
                   profileImg: profile.photo ? profile.photo : 'http://shurl.esy.es/y'
               });
 
-              console.log(newUser)
-
-
               newUser.save(function(err, user) {
                     if (err) console.log(err);
                             res.send(user)
