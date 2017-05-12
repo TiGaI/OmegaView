@@ -303,7 +303,7 @@ function updateReport(myActivity, userID, activityId){
                                                      if(err){
                                                        console.log(err);
                                                      }
-                                                     console.log('report', report)
+
                                                      if(report){
                                                        var todayDate= moment(today).format("DD/MM/YYYY");
 
@@ -314,17 +314,22 @@ function updateReport(myActivity, userID, activityId){
                                                              return x != activityId
                                                          })
                                                        }
-                                                       console.log(!activityId, ' is this true or false, ', report.activitiesForTheDay)
-                                                       report.dataObject = user.sortedPing
 
+                                                       report.dataObject = user.sortedPing
                                                        var average = 0;
                                                        var sumLength = 0;
 
                                                        _.map(user.sortedPing[todayDate], function(x, key){
                                                          if(key.length > 4 && key.length < 13){
                                                            if(x.activities[0].activityGoalForThatDay > 0){
-                                                             average = average + x.totalHoursForThisCategory / x.activities[0].activityGoalForThatDay
-                                                             sumLength += 1
+                                                             if((x.totalHoursForThisCategory/x.activities[0].activityGoalForThatDay) >= 1){
+                                                               average = average + 1
+                                                               sumLength += 1
+                                                             }else{
+                                                               average = average + x.totalHoursForThisCategory / x.activities[0].activityGoalForThatDay
+                                                               sumLength += 1
+                                                             }
+
                                                            }
                                                          }
                                                          return x;
@@ -332,6 +337,7 @@ function updateReport(myActivity, userID, activityId){
                                                        if(sumLength == 0){
                                                          sumLength = 1;
                                                        }
+
                                                        report.GradeForTheDay = average/sumLength;
                                                        report.save(function(err){
                                                          if(err){
@@ -342,7 +348,7 @@ function updateReport(myActivity, userID, activityId){
                                                      }else{
                                                        var newReport = new Report({
                                                          user: userID,
-                                                         activitiesForTheDay: user.myActivity,
+                                                         activitiesForTheDay: user.myActivity[0],
                                                          dataObject: user.sortedPing,
                                                          GradeForTheDay: 0
                                                        })
