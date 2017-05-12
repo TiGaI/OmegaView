@@ -45,7 +45,6 @@ export function pushFeedObjectAction(userID){
       })
     }).then((response) => response.json())
       .then((responseJson) => {
-        console.log('I am here!')
           var feedObject = [...responseJson];
           dispatch(pushFeedObject(feedObject));
     }).catch((err) => {

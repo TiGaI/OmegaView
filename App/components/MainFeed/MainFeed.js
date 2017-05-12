@@ -18,7 +18,7 @@ class MainFeed extends Component{
     super(props);
     this.state = {
       dataSource: null,
-      isOpen: false,
+      isOpen: true,
       productivity: 1
     };
   }
@@ -92,7 +92,7 @@ class MainFeed extends Component{
     PushNotification.configure({
       onNotification: function(notification){
         this.setState({
-          open: true
+          isOpen: true
         })
       },
       permissions: {
@@ -202,16 +202,21 @@ class MainFeed extends Component{
                                           step={0.05}
                                           trackStyle={customStyles2.track}
                                           thumbStyle={customStyles2.thumb}
-                                        onValueChange={(value) => this.setState({value})} />
+                                          onClosed={() => {
+                                            if(productivity < 1){
+                                              this.submitProductivityForm();
+                                            }
+                                          }}
+                                          onValueChange={(productivity) => {
+                                              var num = parseFloat(productivity.toFixed(2));
+                                              this.setState({productivity: num})
+                                          }}
+                                          />
 
                                         <Text style={styles.value, {textAlign: 'center'}} numberOfLines={1}>{this.state.productivity}</Text>
                                   </View>
 
-                                  <Button
-                                    large
-                                    backgroundColor={'#20C48A'}
-                                    onPress={() => this.submitProductivityForm()}
-                                    title='Submit Goal' />
+
               </Modal>
         </View>
         ) : (
@@ -230,7 +235,7 @@ const styles = StyleSheet.create({
   },
   modal4: {
     height: 350,
-    backgroundColor: "#3B5998"
+    backgroundColor: "#fff"
   },
   container: {
     flex: 1,
