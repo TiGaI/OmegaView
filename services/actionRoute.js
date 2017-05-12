@@ -105,7 +105,7 @@ router.post('/createGoal', function(req, res){
   var today =  moment(req.body.today).startOf('day')
 
   User.findById(req.body.userID)
-     .exec( function(err, user) {
+     .exec(function(err, user) {
         if (err) {
             return {err, user}
         }
@@ -126,42 +126,44 @@ router.post('/createGoal', function(req, res){
                       }}]})
                       .sort('-createdAt').exec(function(err, activties){
 
-                        console.log(activties)
+                  var promises = activties.map(function(x){
+                    return new Promise(function(resolve, reject){
 
-                  activties.map(function(x){
-                    if(x.activityCategory == 'studying'){
-                      x.activityGoalForThatDay = req.body.myDailyGoal.studying
-                    }else if(x.activityCategory == 'eating'){
-                      x.activityGoalForThatDay = req.body.myDailyGoal.eating
-                    }else if(x.activityCategory == 'training'){
-                      x.activityGoalForThatDay = req.body.myDailyGoal.training
-                    }else if(x.activityCategory == 'hobby'){
-                      x.activityGoalForThatDay = req.body.myDailyGoal.hobby
-                    }else if(x.activityCategory == 'working'){
-                      x.activityGoalForThatDay = req.body.myDailyGoal.working
-                    }else if(x.activityCategory == 'sleeping'){
-                      x.activityGoalForThatDay = req.body.myDailyGoal.sleeping
-                    }
-                    console.log(x.activityGoalForThatDay)
-                    x.save(function(err){
-                      if (err) {
-                          console.log(err);
+                      if(x.activityCategory == 'studying'){
+                        x.activityGoalForThatDay = req.body.myDailyGoal.studying
+                      }else if(x.activityCategory == 'eating'){
+                        x.activityGoalForThatDay = req.body.myDailyGoal.eating
+                      }else if(x.activityCategory == 'training'){
+                        x.activityGoalForThatDay = req.body.myDailyGoal.training
+                      }else if(x.activityCategory == 'hobby'){
+                        x.activityGoalForThatDay = req.body.myDailyGoal.hobby
+                      }else if(x.activityCategory == 'working'){
+                        x.activityGoalForThatDay = req.body.myDailyGoal.working
+                      }else if(x.activityCategory == 'sleeping'){
+                        x.activityGoalForThatDay = req.body.myDailyGoal.sleeping
                       }
-                        console.log('save it')
-                        return x
+
+                      x.save(function(err){
+                        if (err) {
+                          console.log(err);
+                          return reject(err)
+                        }
+                          resolve()
+                      })
 
                     })
                   })
-              });
 
-              res.send(user)
-              updateReportGoal(user.myActivity, user._id);
-          })
+                  Promise.all(promises).then(() => {
+                      updateReportGoal(user.myActivity, user._id);
+                    })
+                  })
+              });
       }else{
         console.log('No user existed!')
         res.send(null)
       }
-    })
+  });
 });
 
 function updateReportGoal(myActivity, userID, activityId){
@@ -237,18 +239,12 @@ function updateReportGoal(myActivity, userID, activityId){
 
                             user.activityStreak = Object.assign({}, checkStreak);
 
-                            user.save(function(err, user){
+                            user.save(function(err, newUser){
                              if(err){
                                console.log(err);
                              }
 
-                             User.findById(userID).sort('-createdAt')
-                                   .exec(function(err, user){
-                                   if(err){
-                                     console.log(err)
-                                   }else{
-
-                                 Report.findOne({$and: [{'user': userID},
+                                 Report.findOne({$and: [{'user': newUser._id},
                                                        {'createdAt' : {
                                                              $gte: today.toDate(),
                                                              $lt: tomorrow.toDate()
@@ -259,15 +255,14 @@ function updateReportGoal(myActivity, userID, activityId){
                                                      if(err){
                                                        console.log(err);
                                                      }
-
                                                      if(report){
                                                        var todayDate= moment(today).format("DD/MM/YYYY");
 
-                                                       report.dataObject = user.sortedPing
+                                                       report.dataObject = newUser.sortedPing
                                                        var average = 0;
                                                        var sumLength = 0;
 
-                                                       _.map(user.sortedPing[todayDate], function(x, key){
+                                                       _.map(newUser.sortedPing[todayDate], function(x, key){
                                                          if(key.length > 4 && key.length < 13){
                                                            if(x.activities[0].activityGoalForThatDay > 0){
                                                              if((x.totalHoursForThisCategory/x.activities[0].activityGoalForThatDay) >= 1){
@@ -287,47 +282,14 @@ function updateReportGoal(myActivity, userID, activityId){
                                                        }
 
                                                        report.GradeForTheDay = average/sumLength;
-                                                       report.save(function(err){
+                                                       report.save(function(err, newReport){
                                                          if(err){
                                                            console.log(err)
                                                          }
                                                        })
                                                        return null
-                                                     }else{
-                                                       var newReport = new Report({
-                                                         user: userID,
-                                                         activitiesForTheDay: user.myActivity[0],
-                                                         dataObject: user.sortedPing,
-                                                         GradeForTheDay: 0
-                                                       })
-                                                       var todayDate= moment(today).format("DD/MM/YYYY")
-                                                       var average = 0;
-                                                       var sumLength = 0;
-
-                                                       _.map(user.sortedPing[todayDate], function(x, key){
-                                                         if(key.length > 4 && key.length < 13){
-                                                           if(x.activities[0].activityGoalForThatDay > 0){
-                                                             average = average + x.totalHoursForThisCategory / x.activities[0].activityGoalForThatDay
-                                                             sumLength += 1
-                                                           }
-                                                         }
-                                                         return x;
-                                                       })
-                                                       if(sumLength == 0){
-                                                         sumLength = 1;
-                                                       }
-                                                       newReport.GradeForTheDay = average/sumLength;
-                                                       newReport.save(function(err){
-                                                         if(err){
-                                                           console.log(err)
-                                                         }
-                                                       })
-                                                       return null
-                                                   }
+                                                     }
                                                });
-                                   }
-                             });
-
 
                             })
               });
