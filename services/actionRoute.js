@@ -25,6 +25,7 @@ router.post('/addProductivity', function(req, res){
 });
 
 router.post('/getReport', function(req, res){
+  console.log('INSIDE PUSH REPORT SERVER')
   Report.find({$and: [
           {'user': req.body.userID}]}).sort('-createdAt')
           .limit(6).exec(function(err, reports){
