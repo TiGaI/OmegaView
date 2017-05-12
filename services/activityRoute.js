@@ -34,7 +34,7 @@ function getRangeofLonLat(lon, lat, kilometer){
           maxLatitude: maxLatitude,
           minLongitude: minLongitude,
           maxLongitude: maxLongitude
-}
+        }
 }
 
 router.post('/getSortandGroupActivityForAsyn', function(req, res){
@@ -269,7 +269,8 @@ function updateReport(myActivity, userID, activityId){
                             training: 0,
                             hobby: 0,
                             working: 0,
-                            sleeping: 0};
+                            sleeping: 0
+                            };
 
                             activities.map(function(x){
                                 checkStreak[x.activityCategory] = user.activityStreak[x.activityCategory]
@@ -278,18 +279,11 @@ function updateReport(myActivity, userID, activityId){
 
                             user.activityStreak = Object.assign({}, checkStreak);
 
-                            user.save(function(err, user){
+                            user.save(function(err, newUser){
                              if(err){
                                console.log(err);
                              }
-
-                             User.findById(userID).sort('-createdAt')
-                                   .exec(function(err, user){
-                                   if(err){
-                                     console.log(err)
-                                   }else{
-
-                                 Report.findOne({$and: [{'user': userID},
+                                 Report.findOne({$and: [{'user': newUser._id},
                                                        {'createdAt' : {
                                                              $gte: today.toDate(),
                                                              $lt: tomorrow.toDate()
@@ -305,18 +299,18 @@ function updateReport(myActivity, userID, activityId){
                                                        var todayDate= moment(today).format("DD/MM/YYYY");
 
                                                        if(!activityId){
-                                                         report.activitiesForTheDay = [...[user.myActivity[0]], ...report.activitiesForTheDay]
+                                                         report.activitiesForTheDay = [...[newUser.myActivity[0]], ...report.activitiesForTheDay]
                                                        }else if(activityId){
                                                          report.activitiesForTheDay = report.activitiesForTheDay.filter(function(x){
                                                              return x != activityId
                                                          })
                                                        }
 
-                                                       report.dataObject = user.sortedPing
+                                                       report.dataObject = newUser.sortedPing
                                                        var average = 0;
                                                        var sumLength = 0;
 
-                                                       _.map(user.sortedPing[todayDate], function(x, key){
+                                                       _.map(newUser.sortedPing[todayDate], function(x, key){
                                                          if(key.length > 4 && key.length < 13){
                                                            if(x.activities[0].activityGoalForThatDay > 0){
                                                              if((x.totalHoursForThisCategory/x.activities[0].activityGoalForThatDay) >= 1){
@@ -326,7 +320,6 @@ function updateReport(myActivity, userID, activityId){
                                                                average = average + x.totalHoursForThisCategory / x.activities[0].activityGoalForThatDay
                                                                sumLength += 1
                                                              }
-
                                                            }
                                                          }
                                                          return x;
@@ -374,10 +367,6 @@ function updateReport(myActivity, userID, activityId){
                                                        return null
                                                    }
                                                });
-                                   }
-                             });
-
-
                             })
               });
           })

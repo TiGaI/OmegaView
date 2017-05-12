@@ -12,7 +12,6 @@ export function changeProductivityAction(myLastActivity, productivity, userObjec
 
   newuserObject.sortedPing[today][myLastActivity.activityCategory][activities][0].activityProductivity = productivity;
 
-
   return dispatch => {
     dispatch(loginActions.addUser(newuserObject));
     fetch('http://localhost:8080/addProductivity', {
