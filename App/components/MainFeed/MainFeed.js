@@ -110,15 +110,14 @@ class MainFeed extends Component{
       date: new Date(object)
     })
   }
-  submitGoalForm(){
-    if(this.state.productivity !== 1){
-      this.props.getDataActions.changeProductivityAction(this.props.profile.userObject.myLastActivity, this.state.productivity)
-    }
-
-    this.setState({
-      isOpen: false,
-      productivity: 1
-    });
+  submitProductivityForm(){
+    this.props.activityActions.changeProductivityAction(
+      this.state.productivity,
+      this.props.profile.userObject.myLastActivity,
+      this.props.data.feedObject,
+      this.props.profile.userObject
+      )
+    // changeProductivityAction(productivity, myLastActivity, feedObject, userObject)
   }
   render() {
     console.log(this.props)
@@ -186,7 +185,16 @@ class MainFeed extends Component{
                 </View>
             </TouchableOpacity>}
           />
-          <Modal isOpen={this.state.isOpen} onClosed={() => this.setState({isOpen: false})} style={[styles.modal, styles.modal4]} position={"top"}>
+          <Modal isOpen={this.state.isOpen}
+          onClosed={() =>{
+              this.setState({isOpen: false})
+
+              if(this.state.productivity < 1){
+                this.submitProductivityForm();
+              }
+            }
+          }
+          style={[styles.modal, styles.modal4]} position={"top"}>
 
                                   <View style={styles.container}>
                                   <View style={styles.titleContainer}>
@@ -202,11 +210,6 @@ class MainFeed extends Component{
                                           step={0.05}
                                           trackStyle={customStyles2.track}
                                           thumbStyle={customStyles2.thumb}
-                                          onClosed={() => {
-                                            if(productivity < 1){
-                                              this.submitProductivityForm();
-                                            }
-                                          }}
                                           onValueChange={(productivity) => {
                                               var num = parseFloat(productivity.toFixed(2));
                                               this.setState({productivity: num})

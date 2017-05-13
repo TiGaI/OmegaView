@@ -13,13 +13,82 @@ const Usernotification= require('../models/models').Usernotification;
 router.post('/addProductivity', function(req, res){
   Activity.findById(req.body.myLastActivity._id).exec(function(err, activity){
     activity.activityProductivity = req.body.productivity
-    activity.save(function(err){
+    activity.save(function(err, newActivity){
       if(err){
         console.log(err)
       }
-      // User.findById(req.body.myLastActivity.activityCreator).exec(function(err. user){
-      //   user.myLastActivity = activity
-      // })
+      User.findById(req.body.myLastActivity.activityCreator).exec(function(err, user){
+        user.myLastActivity = newActivity
+        user.sortedPing = req.body.sortedPing
+
+        user.save(function(err, newUser){
+
+          if(err){
+            console.log(err);
+          }
+
+          if(newUser){
+            var today = moment().startOf('day');
+            var tomorrow = moment(today).add(1, 'days');
+
+            Report.findOne({$and: [{'user': newUser._id},
+                                  {'createdAt' : {
+                                        $gte: today.toDate(),
+                                        $lt: tomorrow.toDate()
+                                      }}
+                                  ]
+                                }).exec(function(err, report){
+
+                                if(err){
+                                  console.log(err);
+                                }
+                                if(report){
+                                  var todayDate= moment(today).format("DD/MM/YYYY");
+
+                                  report.dataObject = newUser.sortedPing
+                                  var totalHoursForThisCategory = 0;
+                                  var average = 0;
+                                  var sumLength = 0;
+
+                                  _.map(newUser.sortedPing[todayDate], function(x, key){
+                                    if(key.length > 4 && key.length < 13){
+                                      if(x.activities[0].activityGoalForThatDay > 0){
+                                        var sum = x.activities.map(function(x){
+                                            totalHoursForThisCategory = totalHoursForThisCategory + x.activityDuration*x.activityProductivity
+                                            return x
+                                        })
+                                        console.log('totalHoursForThisCategory: ', totalHoursForThisCategory)
+                                        if((totalHoursForThisCategory/x.activities[0].activityGoalForThatDay) >= 1){
+                                          average = average + 1
+                                          sumLength += 1
+                                        }else{
+                                          average = average + totalHoursForThisCategory/x.activities[0].activityGoalForThatDay
+                                          sumLength += 1
+                                        }
+
+                                        totalHoursForThisCategory = 0;
+
+                                      }
+                                    }
+                                    return x;
+                                  })
+                                  if(sumLength == 0){
+                                    sumLength = 1;
+                                  }
+
+                                  report.GradeForTheDay = average/sumLength;
+                                  report.save(function(err, newReport){
+                                    if(err){
+                                      console.log(err)
+                                    }
+                                    res.send(newReport)
+                                  })
+                                  return null
+                                }
+                          });
+          }
+        })
+      })
     })
   })
 });
@@ -40,10 +109,6 @@ router.post('/getReport', function(req, res){
           res.send(null)
         }
   });
-});
-
-router.post('/updateReportTest', function(req, res){
-  updateReport(req.body.userID);
 });
 
 router.post('/checkStreak', function(req, res){
@@ -261,22 +326,31 @@ function updateReportGoal(myActivity, userID, activityId){
                                                        report.dataObject = newUser.sortedPing
                                                        var average = 0;
                                                        var sumLength = 0;
+                                                       var totalHoursForThisCategory = 0;
 
                                                        _.map(newUser.sortedPing[todayDate], function(x, key){
                                                          if(key.length > 4 && key.length < 13){
                                                            if(x.activities[0].activityGoalForThatDay > 0){
-                                                             if((x.totalHoursForThisCategory/x.activities[0].activityGoalForThatDay) >= 1){
+                                                             var sum = x.activities.map(function(x){
+                                                                 totalHoursForThisCategory = totalHoursForThisCategory + x.activityDuration*x.activityProductivity
+                                                                 return x
+                                                             })
+                                                             console.log('totalHoursForThisCategory: ', totalHoursForThisCategory)
+                                                             if((totalHoursForThisCategory/x.activities[0].activityGoalForThatDay) >= 1){
                                                                average = average + 1
                                                                sumLength += 1
                                                              }else{
-                                                               average = average + x.totalHoursForThisCategory / x.activities[0].activityGoalForThatDay
+                                                               average = average + totalHoursForThisCategory/x.activities[0].activityGoalForThatDay
                                                                sumLength += 1
                                                              }
+
+                                                             totalHoursForThisCategory = 0;
 
                                                            }
                                                          }
                                                          return x;
                                                        })
+
                                                        if(sumLength == 0){
                                                          sumLength = 1;
                                                        }

@@ -1,8 +1,48 @@
 import { RNS3 } from 'react-native-aws3';
 var Environment = require('../Environment.js')
+var moment = require('moment');
 var _ = require('underscore');
 import * as getDataActions from './getDataAction';
 import * as loginActions from './loginAction';
+
+
+export function changeProductivityAction(productivity, myLastActivity, feedObject, userObject){
+  return dispatch => {
+  //frontend
+  feedObject[0].activityProductivity = productivity
+  getDataActions.updateFeedObjectAction(feedObject)(dispatch);
+  var today = moment().startOf('day').format("DD/MM/YYYY");
+
+  var newuserObject = Object.assign({}, userObject);
+  var newmyLastActivity = Object.assign({}, myLastActivity);
+  newmyLastActivity.activityProductivity = productivity;
+  newuserObject.myLastActivity = newmyLastActivity;
+
+  newuserObject.sortedPing[today][myLastActivity.activityCategory]['activities'][0].activityProductivity = productivity;
+  loginActions.updateUserProfile(newuserObject)(dispatch);
+
+  //backend
+    dispatch(loginActions.addUser(newuserObject));
+    fetch('http://localhost:8080/addProductivity', {
+      method: 'POST',
+      headers: {
+        'Content-Type' : 'application/json'
+      },
+      body: JSON.stringify({
+        myLastActivity: myLastActivity,
+        productivity: productivity,
+        sortedPing: newuserObject.sortedPing
+      })
+    }).then((response) => response.json())
+      .then((responseJson) => {
+  
+
+    }).catch((err) => {
+      console.log('Error in createGoal', err)
+    });
+
+  };
+}
 
 export function putFormObjectIntoProp(formObject){
   return dispatch => {

@@ -311,19 +311,20 @@ function updateReport(myActivity, userID, activityId){
                                                        var sumLength = 0;
 
                                                        _.map(newUser.sortedPing[todayDate], function(x, key){
-                                                         if(key.length > 4 && key.length < 13){
-                                                           if(x.activities[0].activityGoalForThatDay > 0){
-                                                             if((x.totalHoursForThisCategory/x.activities[0].activityGoalForThatDay) >= 1){
-                                                               average = average + 1
-                                                               sumLength += 1
-                                                             }else{
-                                                               average = average + x.totalHoursForThisCategory / x.activities[0].activityGoalForThatDay
-                                                               sumLength += 1
-                                                             }
-                                                           }
-                                                         }
-                                                         return x;
-                                                       })
+                                                          if(key.length > 4 && key.length < 13){
+                                                            if(x.activities[0].activityGoalForThatDay > 0){
+                                                              if((x.totalHoursForThisCategory*x.activityProductivity/x.activities[0].activityGoalForThatDay) >= 1){
+                                                                average = average + 1
+                                                                sumLength += 1
+                                                              }else{
+                                                                average = average + x.totalHoursForThisCategory*x.activityProductivity/x.activities[0].activityGoalForThatDay
+                                                                sumLength += 1
+                                                              }
+
+                                                            }
+                                                          }
+                                                          return x;
+                                                        })
                                                        if(sumLength == 0){
                                                          sumLength = 1;
                                                        }
@@ -345,12 +346,26 @@ function updateReport(myActivity, userID, activityId){
                                                        var todayDate= moment(today).format("DD/MM/YYYY")
                                                        var average = 0;
                                                        var sumLength = 0;
+                                                       var totalHoursForThisCategory = 0;
 
-                                                       _.map(user.sortedPing[todayDate], function(x, key){
+                                                       _.map(newUser.sortedPing[todayDate], function(x, key){
                                                          if(key.length > 4 && key.length < 13){
                                                            if(x.activities[0].activityGoalForThatDay > 0){
-                                                             average = average + x.totalHoursForThisCategory / x.activities[0].activityGoalForThatDay
-                                                             sumLength += 1
+                                                             var sum = x.activities.map(function(x){
+                                                                 totalHoursForThisCategory = totalHoursForThisCategory + x.activityDuration*x.activityProductivity
+                                                                 return x
+                                                             })
+                                                             console.log('totalHoursForThisCategory: ', totalHoursForThisCategory)
+                                                             if((totalHoursForThisCategory/x.activities[0].activityGoalForThatDay) >= 1){
+                                                               average = average + 1
+                                                               sumLength += 1
+                                                             }else{
+                                                               average = average + totalHoursForThisCategory/x.activities[0].activityGoalForThatDay
+                                                               sumLength += 1
+                                                             }
+
+                                                             totalHoursForThisCategory = 0;
+
                                                            }
                                                          }
                                                          return x;
