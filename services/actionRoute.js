@@ -25,6 +25,7 @@ router.post('/addProductivity', function(req, res){
 });
 
 router.post('/getReport', function(req, res){
+  console.log('INSIDE GET REPORT SERVER')
   Report.find({$and: [
           {'user': req.body.userID}]}).sort('-createdAt')
           .limit(6).exec(function(err, reports){
@@ -103,15 +104,11 @@ router.post('/getFeed', function(req, res){
 router.post('/createGoal', function(req, res){
 
   var tomorrow = moment(req.body.today).add(1, 'days')
-<<<<<<< HEAD
-    User.findById(req.body.userID)
-     .exec( function(err, user) {
-=======
+
   var today =  moment(req.body.today).startOf('day')
 
   User.findById(req.body.userID)
      .exec(function(err, user) {
->>>>>>> pushNotif
         if (err) {
             return {err, user}
         }

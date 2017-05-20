@@ -55,6 +55,28 @@ export function pushFeedObjectAction(userID){
   };
 }
 
+// export function getReportAction(userID){
+//   console.log('INSIDE GET REPORT')
+//   return dispatch => {
+//     fetch('http://localhost:8080/getReport', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type' : 'application/json'
+//       },
+//       body: JSON.stringify({
+//         userID: userID
+//       })
+//     }).then((response) => response.json())
+//       .then((responseJson) => {
+//           var feedObject = [...responseJson];
+//           console.log('REPORT DATA DATA', feedObject)
+//           dispatch(pushReportObject(feedObject));
+//     }).catch((err) => {
+//       console.log('Error in createGoal', err)
+//     });
+//   };
+// }
+
 export function pushReportObjectAction(userID){
   return dispatch => {
     fetch('http://localhost:8080/getReport', {
@@ -69,6 +91,7 @@ export function pushReportObjectAction(userID){
       .then((responseJson) => {
         console.log('reportObject: ', responseJson)
           var reportObject = responseJson;
+          console.log('REPORT OBJ', reportObject)
           dispatch(pushReportObject(reportObject));
     }).catch((err) => {
       console.log('Error in createGoal', err)
@@ -96,6 +119,7 @@ export function pushFeedObject(feedObject) {
 }
 
 export function pushReportObject(reportObject) {
+  console.log("PUSH OBJ", reportObject)
     return {
         type: 'REPORT_DATA',
         reportObject

@@ -312,40 +312,10 @@ class ApplicationTabs extends Component {
 
 
           <Navigator
-            initialRoute={{ id: 'ProfilePage', title: 'ProfilePage', display: false }}
-            renderScene={ this.renderProfileScene }
+    						initialRoute={{ id: 'ProfilePage', title: 'Profile' }}
+    						renderScene={ this.renderProfileScene }
 
-            navigationBar = {
-							 <NavigationBar
-									style = { styles.navigationBar }
-									routeMapper = {{
-                     LeftButton(route, navigator, index, navState) {
-                       if(index > 0){
-
-                         return (
-                            <TouchableOpacity onPress={() => navigator.pop()}>
-                               <Text style={ styles.leftButton }>
-                                  Back
-                               </Text>
-                            </TouchableOpacity>
-                         )
-
-                       }else {return null}
-
-                     },
-                     Title(route, navigator, index, navState) {
-                       if(index > 0){
-                        return (
-                           <Text style = { styles.title }>
-                              Daily Goals
-                           </Text>
-                         )
-                       }else {return null}
-                     }
-                  }} />
-						}
-
-            />
+                  />
 
 
 				</Tab>

@@ -30,7 +30,7 @@ class ProfilePage extends Component{
       console.log('PROFILE PAGE PROPS', this.props)
 
       this.props.getDataActions.pushReportObjectAction(this.props.profile.userObject._id);
-
+      // this.props.getDataActions.getReportAction(this.props.profile.userObject._id);
 
       const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       this.state = {
@@ -46,6 +46,7 @@ class ProfilePage extends Component{
     })
   }
   render() {
+    console.log('PROFILE PAGE PROPS RENDER', this.props)
     const {userObject} = this.props.profile;
     return (
       <View style={{flex: 1, justifyContent: 'center'}}>
@@ -67,7 +68,7 @@ class ProfilePage extends Component{
                   style={{width: 100, height: 100, borderRadius: 50}}
                   source={{uri: this.props.profile.userObject.profileImg}}
                 />
-              <Text style={{color: 'white', fontSize: 20, fontWeight: "400", marginTop: 10}}>{this.props.profile.userObject.firstName + " " + this.props.profile.userObject.lastName}</Text>
+              <Text style={{color: 'white', fontSize: 20, fontWeight: "400", marginTop: 10}}>Username</Text>
             </View>
             <View style={{flex: 1, flexDirection: 'row'}}>
               <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
