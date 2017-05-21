@@ -6,7 +6,22 @@ import * as actionCreators from '../actions/loginAction';
 import Tabs from '../components/tabs';
 import Login from '../components/login'
 import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
+import { LoginManager, AccessToken } from 'react-native-fbsdk'
+
 var Environment = require('../Environment.js')
+
+import firebase from 'firebase';
+
+const config = {
+    apiKey: "AIzaSyAcY1_e9lOIncECVUUJlpHHzg38Gz4MhCE",
+    authDomain: "docbit-26951.firebaseapp.com",
+    databaseURL: "https://docbit-26951.firebaseio.com",
+    storageBucket: "docbit-26951.appspot.com",
+    messagingSenderId: "81290310087"
+};
+firebase.initializeApp(config);
+
+
 const styles = StyleSheet.create({
   wrapper: {
       marginTop: 20,
@@ -23,13 +38,26 @@ class PinVuew extends Component {
     this._loadInitialState();
     this._setupGoogleSignin();
   }
+  async _setupGoogleSignin() {
+     try {
+       await GoogleSignin.hasPlayServices({ autoResolve: true });
+       await GoogleSignin.configure({
+         iosClientId: Environment.IOS_CLIENT_ID,
+         webClientId: Environment.WEB_CLIENT_ID,
+         offlineAccess: false
+       });
+       const user = await GoogleSignin.currentUserAsync();
+     }
+     catch(err) {
+       console.log("Google signin error", err.code, err.message);
+     }
+   }
   _loadInitialState = async () => {
     try {
-      var value = await AsyncStorage.getItem("USER_ID");
-      console.log('I am here in loadInitialState: ', value)
-      if (value !== null){
-        this.props.actions.getGraphDataForAsyn(value)
-      }
+      var user = await AsyncStorage.getItem("USER");
+      if (user !== null){
+        this.props.actions.facebookLogin(JSON.parse(user));
+    }
     } catch (error) {
       console.log(error.message);
     }
@@ -41,24 +69,32 @@ class PinVuew extends Component {
        console.log(error.message);
      }
    };
-  async _setupGoogleSignin() {
-    try {
-      await GoogleSignin.hasPlayServices({ autoResolve: true });
-      await GoogleSignin.configure({
-        iosClientId: Environment.IOS_CLIENT_ID,
-        webClientId: Environment.WEB_CLIENT_ID,
-        offlineAccess: false
-      });
-      const user = await GoogleSignin.currentUserAsync();
-    }
-    catch(err) {
-      console.log("Google signin error", err.code, err.message);
-    }
+  async googleLogin() {
+     GoogleSignin.signIn().then(async (user) => {
+            var credential = firebase.auth.GoogleAuthProvider.credential(user.idToken, user.accessToken);
+            const newUser = await firebase.auth().signInWithCredential(credential);
+            this.props.actions.googleLogin(user);
+        }).then()
+        .catch((err) => {
+          console.log('WRONG SIGNIN', err);
+        })
+        .done();
+
+  }
+  async facebookLogin(){
+    const result = await LoginManager.logInWithReadPermissions(['public_profile', 'email', 'user_friends', 'user_about_me']);
+    const newUser = result
+    const tokenData = await AccessToken.getCurrentAccessToken();
+    const token = tokenData.accessToken.toString();
+    const credential = firebase.auth.FacebookAuthProvider.credential(token);
+    const user = await firebase.auth().signInWithCredential(credential);
+    this.props.actions.facebookLogin(user);
   }
   render() {
         const { actions, login, profile } = this.props;
+        console.log(this.props)
         let tabsComponent = <Tabs onPress={() => actions.logout()} profile={profile} />;
-        let loginComponent = <Login google={() => actions.googleLogin()} facebook={() => actions.login()} onSkip={() => actions.skip()} />;
+        let loginComponent = <Login google={() => this.googleLogin()} facebook={() => this.facebookLogin()} onSkip={() => actions.skip()} />;
 
         if(login.error) {
             loginComponent = <View><Login onPress={() => actions.login()} /><Text style={styles.text}>{login.error}</Text></View>;

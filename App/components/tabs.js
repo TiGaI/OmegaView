@@ -155,7 +155,8 @@ class ApplicationTabs extends Component {
   renderMainScene(route, nav){
     switch (route.id) {
       case 'MainFeed':
-        return <MainFeed navigator={ nav } title={ "MainFeed" } />
+        return <PinForm navigator={ nav } title={ "Activity" } />
+        // <MainFeed navigator={ nav } title={ "MainFeed" } />
       case 'GoalForm':
         return <GoalForm navigator={ nav } title={ "GoalForm" } />
     }

@@ -29,6 +29,7 @@
 		0A6FB7991EA48CE600CEB742 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A6FB7951EA48CE600CEB742 /* FBSDKLoginKit.framework */; };
 		0A6FB79A1EA48CE600CEB742 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A6FB7961EA48CE600CEB742 /* FBSDKShareKit.framework */; };
 		0A6FB7A61EA4918F00CEB742 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A6FB7A51EA4918F00CEB742 /* libz.tbd */; };
+		0A839FE31ECF9B9300E7B902 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0A839FE21ECF9B9300E7B902 /* GoogleService-Info.plist */; };
 		0D4A6752A8624D25B86D1CBC /* Roboto_medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FEA1DC0F0EF24983A23187D1 /* Roboto_medium.ttf */; };
 		0F77B0980EA84682BEF0AFB2 /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DF4EB1514A9434A8404B5D5 /* SafariServices.framework */; };
 		133E29F31AD74F7200F7D852 /* libRCTLinking.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 78C398B91ACF4ADC00677621 /* libRCTLinking.a */; };
@@ -401,6 +402,7 @@
 		0A6FB7951EA48CE600CEB742 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
 		0A6FB7961EA48CE600CEB742 /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
 		0A6FB7A51EA4918F00CEB742 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		0A839FE21ECF9B9300E7B902 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0E9CDB3E7DA24444ABABA8FD /* Rubik-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Rubik-Bold.ttf"; path = "../node_modules/native-base/Fonts/Rubik-Bold.ttf"; sourceTree = "<group>"; };
 		11DA12E6881F4873B3C19D0F /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
@@ -708,6 +710,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
+				0A839FE21ECF9B9300E7B902 /* GoogleService-Info.plist */,
 			);
 			name = PinVuew;
 			sourceTree = "<group>";
@@ -1406,6 +1409,7 @@
 				3E88D12E65B34D49821C92E5 /* Rubik-MediumItalic.ttf in Resources */,
 				C78B6A684E2F47AAA1DA8AB4 /* Rubik-Regular.ttf in Resources */,
 				F24EDAEEF3FB4851AB218901 /* SanFrancisco.ttf in Resources */,
+				0A839FE31ECF9B9300E7B902 /* GoogleService-Info.plist in Resources */,
 				BCF7A42FC08846389D49C229 /* SanFranciscoBold.ttf in Resources */,
 				B069AC32760042C6953EBB54 /* SanFranciscoThin.ttf in Resources */,
 				9416FCDBEBE44F158DB9D45C /* SF-UI-Text-Regular.otf in Resources */,

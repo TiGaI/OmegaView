@@ -8,7 +8,6 @@ import {
   setCustomText,
 } from 'react-native-global-props';
 
-
 const store = configureStore();
 
 const customTextInputProps = {
