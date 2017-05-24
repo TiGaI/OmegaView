@@ -46,6 +46,8 @@ export function pushFeedObjectAction(userID){
       })
     }).then((response) => response.json())
       .then((responseJson) => {
+        console.log('I am here!')
+          var feedObject = [...responseJson];
           dispatch(pushFeedObject(feedObject));
     }).catch((err) => {
       console.log('Error in createGoal', err)
@@ -54,7 +56,6 @@ export function pushFeedObjectAction(userID){
 }
 
 export function pushReportObjectAction(userID){
-   console.log('INSIDE PUSH REPORT')
   return dispatch => {
     fetch('http://localhost:8080/getReport', {
       method: 'POST',
