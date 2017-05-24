@@ -20,7 +20,11 @@ router.post('/addProductivity', function(req, res){
       // User.findById(req.body.myLastActivity.activityCreator).exec(function(err. user){
       //   user.myLastActivity = activity
       // })
+<<<<<<< HEAD
     })
+=======
+    })    
+>>>>>>> ad646e0167b81294fd7b2d116c07df74d8d6b99c
   })
 });
 
