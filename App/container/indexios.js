@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
 
 class PinVuew extends Component {
   componentDidMount() {
-    this._loadInitialState().done();
+    this._loadInitialState();
     this._setupGoogleSignin();
   }
   _loadInitialState = async () => {
