@@ -53,9 +53,9 @@ class ProfilePage extends Component{
       const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       var dataSource2 = ds.cloneWithRows(this.props.data.reportObject ? this.props.data.reportObject  : [])
 
-
+      console.log('PROFILE PAGE PROPS INSIDE IF STATEMENT', this.props)
     }
-    console.log('PROFILE PAGE PROPS INSIDE RENDER', this.props)
+
     return (
       <View style={{flex: 1, justifyContent: 'center'}}>
         {x === 1 ? <View><Text>loading</Text></View> :
