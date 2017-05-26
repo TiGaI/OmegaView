@@ -205,7 +205,7 @@
                   </View>
                       <Slider
                           value={this.state.activityDuration}
-                          minimumTrackTintColor='#21CE99'
+                          minimumTrackTintColor='white'
                           minimumValue={0.5}
                           maximumValue={10}
                           step={.5}
@@ -294,7 +294,7 @@
         width: 10,
         height: 30,
         borderRadius: 5,
-        backgroundColor: '#21CE99',
+        backgroundColor: 'white',
           top: 25
       }
     });
