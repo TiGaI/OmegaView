@@ -186,6 +186,8 @@ class StatsPage extends Component{
 }
 
 
+
+
 var customStyles2 = StyleSheet.create({
   track: {
     height: 4,
