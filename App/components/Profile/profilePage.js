@@ -48,11 +48,10 @@ class ProfilePage extends Component{
   }
   render() {
     var x = 1;
-    if(this.props.profile.userObject){
+    if(this.props.data.reportObject){
       x = 0;
-      console.log('INSIDE IN IF STATEMENT', this.props.profile)
       const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-      var dataSource2 = ds.cloneWithRows(this.props.profile.userObject.sortedPing ? this.props.profile.userObject.sortedPing  : [])
+      var dataSource2 = ds.cloneWithRows(this.props.data.reportObject ? this.props.data.reportObject  : [])
 
 
     }
@@ -98,34 +97,16 @@ class ProfilePage extends Component{
                     {console.log('ROWDATA 2',rowData )}
                       <View style={{flex: 1, flexDirection: 'row'}}>
                       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                        <Text style={{color: '#2671B1', fontSize: 25, fontWeight: '700'}}>{rowData.date.substring(0,2)}</Text>
+                        <Text style={{color: '#2671B1', fontSize: 25, fontWeight: '700'}}>TEst</Text>
                         <Text style={{color: '#2671B1', fontSize: 15, fontWeight: '400'}}>Jan</Text>
                       </View>
                       <View style={{flex: 3, justifyContent: 'center', alignItems: 'flex-start'}}>
-                        <Text style={{color: 'grey', fontSize: 20, fontWeight: '500'}} numberOfLines={1}>Total Hours {rowData.totalHoursPerDay} hrs</Text>
-                        <Text style={{color: 'black', fontSize: 12, fontWeight: '400'}}>Total Pins {rowData.totalPinsPerDay} </Text>
+                        <Text style={{color: 'grey', fontSize: 20, fontWeight: '500'}} numberOfLines={1}>Total Hours  hrs</Text>
+                        <Text style={{color: 'black', fontSize: 12, fontWeight: '400'}}>Total Pins {rowData.createdAt} </Text>
                       </View>
                     </View>
                 </TouchableOpacity>}
               />
-
-
-            <ListView
-              dataSource={this.state.dataSource}
-              renderRow={(rowData) =>
-                <TouchableOpacity onPress={this.report.bind(this, rowData)} style={{flex: 1, backgroundColor: 'white', height: 75, margin: 10, marginBottom: 0}}>
-                    <View style={{flex: 1, flexDirection: 'row'}}>
-                    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                      <Text style={{color: '#8AC0FF', fontSize: 25, fontWeight: '700'}}>03</Text>
-                      <Text style={{color: '#8AC0FF', fontSize: 15, fontWeight: '400'}}>Jan</Text>
-                    </View>
-                    <View style={{flex: 3, justifyContent: 'center', alignItems: 'flex-start'}}>
-                      <Text style={{color: 'grey', fontSize: 20, fontWeight: '500'}} numberOfLines={1}>{rowData.day}</Text>
-                      <Text style={{color: 'black', fontSize: 12, fontWeight: '400'}}>Tuesday, 11:30 AM</Text>
-                    </View>
-                  </View>
-              </TouchableOpacity>}
-            />
           </ScrollView>
           </View>
           </View>
