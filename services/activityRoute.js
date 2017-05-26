@@ -209,6 +209,7 @@ router.post('/getSortandGroupActivity', function(req, res){
 function updateReport(myActivity, userID, activityId){
   var today = moment().startOf('day');
   var tomorrow = moment(today).add(1, 'days');
+
     Activity.find({$and: [
       {'createdAt' : {
             $gte: today.toDate(),
@@ -269,8 +270,7 @@ function updateReport(myActivity, userID, activityId){
                             training: 0,
                             hobby: 0,
                             working: 0,
-                            sleeping: 0
-                            };
+                            sleeping: 0};
 
                             activities.map(function(x){
                                 checkStreak[x.activityCategory] = user.activityStreak[x.activityCategory]
@@ -283,6 +283,7 @@ function updateReport(myActivity, userID, activityId){
                              if(err){
                                console.log(err);
                              }
+
                                  Report.findOne({$and: [{'user': newUser._id},
                                                        {'createdAt' : {
                                                              $gte: today.toDate(),
@@ -294,56 +295,10 @@ function updateReport(myActivity, userID, activityId){
                                                      if(err){
                                                        console.log(err);
                                                      }
-
                                                      if(report){
                                                        var todayDate= moment(today).format("DD/MM/YYYY");
 
-                                                       if(!activityId){
-                                                         report.activitiesForTheDay = [...[newUser.myActivity[0]], ...report.activitiesForTheDay]
-                                                       }else if(activityId){
-                                                         report.activitiesForTheDay = report.activitiesForTheDay.filter(function(x){
-                                                             return x != activityId
-                                                         })
-                                                       }
-
                                                        report.dataObject = newUser.sortedPing
-                                                       var average = 0;
-                                                       var sumLength = 0;
-
-                                                       _.map(newUser.sortedPing[todayDate], function(x, key){
-                                                          if(key.length > 4 && key.length < 13){
-                                                            if(x.activities[0].activityGoalForThatDay > 0){
-                                                              if((x.totalHoursForThisCategory*x.activityProductivity/x.activities[0].activityGoalForThatDay) >= 1){
-                                                                average = average + 1
-                                                                sumLength += 1
-                                                              }else{
-                                                                average = average + x.totalHoursForThisCategory*x.activityProductivity/x.activities[0].activityGoalForThatDay
-                                                                sumLength += 1
-                                                              }
-
-                                                            }
-                                                          }
-                                                          return x;
-                                                        })
-                                                       if(sumLength == 0){
-                                                         sumLength = 1;
-                                                       }
-
-                                                       report.GradeForTheDay = average/sumLength;
-                                                       report.save(function(err){
-                                                         if(err){
-                                                           console.log(err)
-                                                         }
-                                                       })
-                                                       return null
-                                                     }else{
-                                                       var newReport = new Report({
-                                                         user: userID,
-                                                         activitiesForTheDay: user.myActivity[0],
-                                                         dataObject: user.sortedPing,
-                                                         GradeForTheDay: 0
-                                                       })
-                                                       var todayDate= moment(today).format("DD/MM/YYYY")
                                                        var average = 0;
                                                        var sumLength = 0;
                                                        var totalHoursForThisCategory = 0;
@@ -370,18 +325,21 @@ function updateReport(myActivity, userID, activityId){
                                                          }
                                                          return x;
                                                        })
+
                                                        if(sumLength == 0){
                                                          sumLength = 1;
                                                        }
-                                                       newReport.GradeForTheDay = average/sumLength;
-                                                       newReport.save(function(err){
+
+                                                       report.GradeForTheDay = average/sumLength;
+                                                       report.save(function(err, newReport){
                                                          if(err){
                                                            console.log(err)
                                                          }
                                                        })
                                                        return null
-                                                   }
+                                                     }
                                                });
+
                             })
               });
           })
@@ -432,9 +390,9 @@ router.post('/createActivity', function(req, res){
                     // console.log(moment(activities[0].createdAt).format("DD/MM/YYYY"));
                     // console.log(moment(activityNew.createdAt).format("DD/MM/YYYY"));
                     // console.log(moment(activities[0].createdAt).format("DD/MM/YYYY") == moment(activityNew.createdAt).format("DD/MM/YYYY"))
-                  if(moment(activities[0].createdAt).format("DD/MM/YYYY") != moment(activityNew.createdAt).format("DD/MM/YYYY")){
-                          user.activityStreak[newActivity.activityCategory] = user.activityStreak[newActivity.activityCategory] + 1;
-                  }
+                          if(moment(activities[0].createdAt).format("DD/MM/YYYY") != moment(activityNew.createdAt).format("DD/MM/YYYY")){
+                                  user.activityStreak[newActivity.activityCategory] = user.activityStreak[newActivity.activityCategory] + 1;
+                          }
                   }else{
                       user.activityStreak[newActivity.activityCategory] = 1
                   }
@@ -444,20 +402,19 @@ router.post('/createActivity', function(req, res){
                   user.myActivity = [...[activityNew._id.toString()], ...user.myActivity]
                   user.totalHoursLogged = user.totalHoursLogged + activity.activityDuration
                   user.myLastActivity = activityNew
-                  user.save(function(err){
-                    if (err) {
-                      console.log('error has occur: ',  err)
-                      res.send(err)
-                    } else {
+
+                    user.save(function(err){
+                      if (err) {
+                        console.log('error has occur: ',  err)
+                      }
                       console.log('Nice, activity added in the user model')
 
+                    }).then(() => {
+                      console.log('I AM here')
                       res.send({user: user, activity: activityNew._id})
-                    }
+                      updateReport(user.myActivity, user._id);
+                    })
                   })
-
-
-                  updateReport(user.myActivity, user._id);
-                })
               }
             })
 
@@ -541,9 +498,10 @@ router.post('/deleteActivity', function(req, res){
               console.log(err);
             }
             res.send(user);
+          }).then(() => {
+              updateReport(user.myActivity, user._id, req.body.activityID);
           })
 
-          updateReport(user.myActivity, user._id, req.body.activityID)
       });
 
       return newActivity;
