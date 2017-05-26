@@ -30,19 +30,18 @@ class StatsPage extends Component{
       dailyHours: 3,
       totalPins: 15,
       totalStreak: 3,
-
+      category: 'Studying'
 
     }
   }
-  submitGoalForm(){
-
-  }
   select(idx, value){
-    console.log('CLICKED', idx, value);
+    this.setState({
+      category: value
+    })
   }
   render() {
     return (
-      <View style={{flex: 1, justifyContent: 'center', backgroundColor: '#152D44'}}>
+      <View style={{flex: 1, justifyContent: 'center', backgroundColor: '#21CE99'}}>
         <View style={{flex: 1, justifyContent: 'flex-start', padding: 20}}>
           <ModalDropdown style={{backgroundColor: 'transparent', padding: 0}}
             defaultValue="Eating"
@@ -51,7 +50,12 @@ class StatsPage extends Component{
             options={['Eating', 'Hobby', 'Sleeping', 'Studying', 'Training', 'Working']}
             onSelect={(idx, value) => this.select(idx, value)}
             >
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Text style={{marginRight: 10, fontSize: 22, fontWeight: 'bold'}}>{this.state.category}</Text>
+                <Icons style={{fontSize: 25, color: 'white', backgroundColor: 'transparent'}} name="ios-arrow-down"/>
+            </View>
             </ModalDropdown>
+
         </View>
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <Text style={{fontSize: 15, fontWeight: '700', color: 'white', textAlign: 'center', marginBottom: 5, backgroundColor: 'transparent'}}>
@@ -62,8 +66,8 @@ class StatsPage extends Component{
         width={10}
         fill={((this.state.totalHours/this.state.goalHours)*100)}
         rotation={0}
-        tintColor="#00e0ff"
-        backgroundColor="#3d5875">
+        tintColor="white"
+        backgroundColor="#ABABAB">
         {
           (fill) => (
             <View style={{height: 150, width: 150, justifyContent: 'center', alignItems: 'center' ,position: 'absolute', top: 0, left: 0}}>
@@ -89,8 +93,8 @@ class StatsPage extends Component{
             width={5}
             fill={80}
             rotation={0}
-            tintColor="#00e0ff"
-            backgroundColor="#3d5875">
+            tintColor="white"
+            backgroundColor="#ABABAB">
             {
               (fill) => (
                 <View style={{height: 75, width: 75, justifyContent: 'center', alignItems: 'center' ,position: 'absolute', top: 0, left: 0}}>
@@ -113,8 +117,8 @@ class StatsPage extends Component{
             width={5}
             fill={20}
             rotation={0}
-            tintColor="#00e0ff"
-            backgroundColor="#3d5875">
+            tintColor="white"
+            backgroundColor="#ABABAB">
             {
               (fill) => (
                 <View style={{height: 75, width: 75, justifyContent: 'center', alignItems: 'center' ,position: 'absolute', top: 0, left: 0}}>
@@ -136,8 +140,8 @@ class StatsPage extends Component{
             width={5}
             fill={50}
             rotation={0}
-            tintColor="#00e0ff"
-            backgroundColor="#3d5875">
+            tintColor="white"
+            backgroundColor="#ABABAB">
             {
               (fill) => (
                 <View style={{height: 75, width: 75, justifyContent: 'center', alignItems: 'center' ,position: 'absolute', top: 0, left: 0}}>

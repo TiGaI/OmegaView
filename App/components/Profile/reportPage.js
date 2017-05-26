@@ -270,7 +270,7 @@ class ReportPage extends Component{
                                 width={5}
                                 fill={(100)}
                                 rotation={0}
-                                tintColor="#44CB60"
+                                tintColor="#21CE99"
                                 backgroundColor="#C6C6C6">
                                 {
                                   (fill) => (
@@ -296,7 +296,7 @@ class ReportPage extends Component{
                                 width={5}
                                 fill={((this.state.totalHours/this.state.goalHours)*100)}
                                 rotation={0}
-                                tintColor="#FFA042"
+                                tintColor="#21CE99"
                                 backgroundColor="#C6C6C6">
                                 {
                                   (fill) => (
@@ -325,7 +325,7 @@ class ReportPage extends Component{
                                 width={5}
                                 fill={((this.state.totalHours/this.state.goalHours)*100)}
                                 rotation={0}
-                                tintColor="#4FB1FF"
+                                tintColor="#21CE99"
                                 backgroundColor="#C6C6C6">
                                 {
                                   (fill) => (
@@ -351,7 +351,7 @@ class ReportPage extends Component{
                                 width={5}
                                 fill={((this.state.totalHours/this.state.goalHours)*100)}
                                 rotation={0}
-                                tintColor="#D142FF"
+                                tintColor="#21CE99"
                                 backgroundColor="#C6C6C6">
                                 {
                                   (fill) => (
@@ -380,7 +380,7 @@ class ReportPage extends Component{
                                 width={5}
                                 fill={((this.state.totalHours/this.state.goalHours)*100)}
                                 rotation={0}
-                                tintColor="#FF4646"
+                                tintColor="#21CE99"
                                 backgroundColor="#C6C6C6">
                                 {
                                   (fill) => (
@@ -406,7 +406,7 @@ class ReportPage extends Component{
                                 width={5}
                                 fill={((this.state.totalHours/this.state.goalHours)*100)}
                                 rotation={0}
-                                tintColor="#434344"
+                                tintColor="#21CE99"
                                 backgroundColor="#C6C6C6">
                                 {
                                   (fill) => (
@@ -440,7 +440,7 @@ class ReportPage extends Component{
                           </View>
                           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
 
-                            <Icons style={{fontSize: 35, color: '#44CB60', backgroundColor: 'transparent'}} name="md-pin"/>
+                            <Icons style={{fontSize: 35, color: '#21CE99', backgroundColor: 'transparent'}} name="md-pin"/>
                             <Text style={{fontSize: 15, fontWeight: '700', color: 'black', textAlign: 'center', backgroundColor: 'transparent'}}>3</Text>
                           </View>
                         </View>
@@ -453,7 +453,7 @@ class ReportPage extends Component{
                           <View style={{flex: 1, justifyContent: 'center'}}>
                             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
 
-                              <Icons style={{fontSize: 35, color: '#FFA042', backgroundColor: 'transparent'}} name="md-pin"/>
+                              <Icons style={{fontSize: 35, color: '#21CE99', backgroundColor: 'transparent'}} name="md-pin"/>
                               <Text style={{fontSize: 15, fontWeight: '700', color: 'black', textAlign: 'center', backgroundColor: 'transparent'}}>12</Text>
                             </View>
                           </View>
@@ -471,7 +471,7 @@ class ReportPage extends Component{
                             <View style={{flex: 1, justifyContent: 'center'}}>
                               <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
 
-                                <Icons style={{fontSize: 35, color: '#4FB1FF', backgroundColor: 'transparent'}} name="md-pin"/>
+                                <Icons style={{fontSize: 35, color: '#21CE99', backgroundColor: 'transparent'}} name="md-pin"/>
                                 <Text style={{fontSize: 15, fontWeight: '700', color: 'black', textAlign: 'center', backgroundColor: 'transparent'}}>5</Text>
                               </View>
                             </View>
@@ -486,7 +486,7 @@ class ReportPage extends Component{
                           <View style={{flex: 1, justifyContent: 'center'}}>
                             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
 
-                              <Icons style={{fontSize: 35, color: '#D142FF', backgroundColor: 'transparent'}} name="md-pin"/>
+                              <Icons style={{fontSize: 35, color: '#21CE99', backgroundColor: 'transparent'}} name="md-pin"/>
                               <Text style={{fontSize: 15, fontWeight: '700', color: 'black', textAlign: 'center', backgroundColor: 'transparent'}}>9</Text>
                             </View>
 
@@ -505,7 +505,7 @@ class ReportPage extends Component{
 
                             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
 
-                              <Icons style={{fontSize: 35, color: '#FF4646', backgroundColor: 'transparent'}} name="md-pin"/>
+                              <Icons style={{fontSize: 35, color: '#21CE99', backgroundColor: 'transparent'}} name="md-pin"/>
                               <Text style={{fontSize: 15, fontWeight: '700', color: 'black', textAlign: 'center', backgroundColor: 'transparent'}}>12</Text>
                             </View>
                           </View>
@@ -520,7 +520,7 @@ class ReportPage extends Component{
 
                             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
 
-                              <Icons style={{fontSize: 35, color: '#434344', backgroundColor: 'transparent'}} name="md-pin"/>
+                              <Icons style={{fontSize: 35, color: '#21CE99', backgroundColor: 'transparent'}} name="md-pin"/>
                               <Text style={{fontSize: 15, fontWeight: '700', color: 'black', textAlign: 'center', backgroundColor: 'transparent'}}>12</Text>
                             </View>
                           </View>

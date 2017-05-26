@@ -61,12 +61,9 @@ class ProfilePage extends Component{
       <View style={{flex: 1, justifyContent: 'center'}}>
         {x === 1 ? <View><Text>loading</Text></View> :
           (<View style={{flex: 1}}>
-            <View style={{flex: 1, backgroundColor: '#152D44'}}>
+            <View style={{flex: 1, backgroundColor: '#21CE99'}}>
               <View style={{flex: 1, flexDirection: 'row'}}>
                 <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-start', marginLeft: 15}}>
-                  <TouchableOpacity>
-                    <Icons style={{fontSize: 35, color: 'white', backgroundColor: 'transparent'}} name="md-settings"/>
-                  </TouchableOpacity>
                 </View>
                 <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-end', marginRight: 15}}>
                   <TouchableOpacity>
@@ -101,8 +98,8 @@ class ProfilePage extends Component{
                     {console.log('ROWDATA 2',rowData )}
                       <View style={{flex: 1, flexDirection: 'row'}}>
                       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                        <Text style={{color: '#8AC0FF', fontSize: 25, fontWeight: '700'}}>{rowData.date.substring(0,2)}</Text>
-                        <Text style={{color: '#8AC0FF', fontSize: 15, fontWeight: '400'}}>Jan</Text>
+                        <Text style={{color: '#2671B1', fontSize: 25, fontWeight: '700'}}>{rowData.date.substring(0,2)}</Text>
+                        <Text style={{color: '#2671B1', fontSize: 15, fontWeight: '400'}}>Jan</Text>
                       </View>
                       <View style={{flex: 3, justifyContent: 'center', alignItems: 'flex-start'}}>
                         <Text style={{color: 'grey', fontSize: 20, fontWeight: '500'}} numberOfLines={1}>Total Hours {rowData.totalHoursPerDay} hrs</Text>

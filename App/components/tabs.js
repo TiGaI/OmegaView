@@ -171,14 +171,14 @@ class ApplicationTabs extends Component {
 		const { selectedTab } = this.state
     var self = this;
 		return (
-			<Tabs>
+			<Tabs tabBarStyle={{backgroundColor: '#fff', overflow: 'visible', height: 50}} tabBarShadowStyle={{height: 0}}>
 			  <Tab
-			    titleStyle={{fontWeight: 'bold', fontSize: 10}}
-			    selectedTitleStyle={{marginTop: -1, marginBottom: 6}}
+			    titleStyle={{fontWeight: 'bold', fontSize: 10, color: "#21CE99"}}
+			    selectedTitleStyle={{marginTop: -1, marginBottom: 6, color: "#21CE99"}}
 			    selected={selectedTab === 'homepage'}
 			    title={selectedTab === 'homepage' ? 'MyPins' : null}
-			    renderIcon={() => <Icon containerStyle={{justifyContent: 'center', alignItems: 'center', marginTop: 12}} color={'#5e6977'} name='home' size={33} />}
-			    renderSelectedIcon={() => <Icon color={'#6296f9'} name='home' size={30} />}
+			    renderIcon={() => <Icon containerStyle={{justifyContent: 'center', alignItems: 'center', marginTop: 12}} color={'#2671B1'} name='home' size={33} />}
+			    renderSelectedIcon={() => <Icon color={'#21CE99'} name='home' size={30} />}
 			    onPress={() => this.changeTab('homepage')}>
 
           <Navigator
@@ -187,7 +187,7 @@ class ApplicationTabs extends Component {
 
             navigationBar = {
 							 <NavigationBar
-									style = { styles.navigationBar }
+									style = { styles.mainFeednavigationBar }
 									routeMapper = {{
                      LeftButton(route, navigator, index, navState) {
                        if(index > 0){
@@ -202,15 +202,9 @@ class ApplicationTabs extends Component {
 
                      },
                      RightButton(route, navigator, index, navState) {
-                       if(index > 0){
-                  		 	return (
-                           <TouchableOpacity onPress={() => this.props.loginActions.submitForm()}>
-                              <Text style = { styles.rightButton }>
-                                 Done
-                              </Text>
-                           </TouchableOpacity>
-                         )
-                       }else {return null}
+                       if(index == 0){
+                  		 	return null
+                      }
                      },
                      Title(route, navigator, index, navState) {
                        if(index > 0){
@@ -228,23 +222,27 @@ class ApplicationTabs extends Component {
 			  </Tab>
 
 				<Tab
-					titleStyle={{fontWeight: 'bold', fontSize: 10}}
-					selectedTitleStyle={{marginTop: -1, marginBottom: 6}}
+          titleStyle={{fontWeight: 'bold', fontSize: 10, color: "#21CE99"}}
+          selectedTitleStyle={{marginTop: -1, marginBottom: 6, color: "#21CE99"}}
 					selected={selectedTab === 'mapPage'}
 					title={selectedTab === 'mapPage' ? 'Maps' : null}
-					renderIcon={() => <Icon containerStyle={{justifyContent: 'center', alignItems: 'center', marginTop: 12}} color={'#5e6977'} name='map' size={33} />}
-					renderSelectedIcon={() => <Icon color={'#6296f9'} name='map' size={30} />}
+					renderIcon={() => <Icon containerStyle={{justifyContent: 'center', alignItems: 'center', marginTop: 12}} color={'#2671B1'} name='map' size={33} />}
+					renderSelectedIcon={() => <Icon color={'#21CE99'} name='map' size={30} />}
 					onPress={() => this.changeTab('mapPage')}>
 
 						<MapPageIndex />
 				</Tab>
 
 				<Tab
-					selectedTitleStyle={{marginTop: -1, marginBottom: 6}}
+          titleStyle={{marginTop: -1, marginBottom: 6, color: 'black', opacity: 1}}
+					selectedTitleStyle={{marginTop: -1, marginBottom: 6, color: "#21CE99"}}
 					selected={selectedTab === 'goalsPage'}
-					title={selectedTab === 'goalsPage' ? 'Add Goals' : null}
-					renderIcon={() => <Icon containerStyle={{marginTop: -24}} color={'#1BB49C'} name='add-circle' size={80} />}
-					renderSelectedIcon={() => <Icon color={'#1BB49C'} name='add-circle' size={80} />}
+					title={'Add Goals'}
+          tabStyle={{opacity: 1}}
+					renderIcon={() =>
+            <Icon containerStyle={{zIndex: 1, marginTop: -24, borderRadius: 30, borderColor: 'white', borderWidth: 1, backgroundColor: '#2671B1', height: 60, width: 60, opacity: 1}}
+            color={'white'} name='border-color' size={30} />}
+					renderSelectedIcon={() => <Icon containerStyle={{marginTop: -24, borderColor: 'white', borderWidth: 1, borderRadius: 30, backgroundColor: '#21CE99', height: 60, width: 60}} color={'white'} name='border-color' size={30} />}
 					onPress={() => this.changeTab('goalsPage')}>
 					<Navigator
 						initialRoute={{ id: 'PinForm', title: 'Activity' }}
@@ -284,24 +282,23 @@ class ApplicationTabs extends Component {
 				</Tab>
 
 			  <Tab
-			    titleStyle={{fontWeight: 'bold', fontSize: 10}}
-			    selectedTitleStyle={{marginTop: -1, marginBottom: 6}}
+          titleStyle={{fontWeight: 'bold', fontSize: 10, color: "#21CE99"}}
+          selectedTitleStyle={{marginTop: -1, marginBottom: 6, color: "#21CE99"}}
 			    selected={selectedTab === 'Stats'}
 			    title={selectedTab === 'Stats' ? 'Stats' : null}
-			    renderIcon={() => <Icon containerStyle={{justifyContent: 'center', alignItems: 'center', marginTop: 12}} color={'#5e6977'} name='date-range' size={33} />}
-			    renderSelectedIcon={() => <Icon color={'#6296f9'} name='date-range' size={30} />}
+			    renderIcon={() => <Icon containerStyle={{justifyContent: 'center', alignItems: 'center', marginTop: 12}} color={'#2671B1'} name='date-range' size={33} />}
+			    renderSelectedIcon={() => <Icon color={'#21CE99'} name='date-range' size={30} />}
 			    onPress={() => this.changeTab('Stats')}>
-
 					<StatsPage />
 			  </Tab>
 
 				<Tab
-					titleStyle={{fontWeight: 'bold', fontSize: 10}}
-					selectedTitleStyle={{marginTop: -1, marginBottom: 6}}
+          titleStyle={{fontWeight: 'bold', fontSize: 10, color: "#21CE99"}}
+          selectedTitleStyle={{marginTop: -1, marginBottom: 6, color: "#21CE99"}}
 					selected={selectedTab === 'profile'}
 					title={selectedTab === 'profile' ? 'PROFILE' : null}
-					renderIcon={() => <Icon containerStyle={{justifyContent: 'center', alignItems: 'center', marginTop: 12}} color={'#5e6977'} name='person-pin' size={33} />}
-					renderSelectedIcon={() => <Icon color={'#6296f9'} name='person-pin' size={30} />}
+					renderIcon={() => <Icon containerStyle={{justifyContent: 'center', alignItems: 'center', marginTop: 12}} color={'#2671B1'} name='person-pin' size={33} />}
+					renderSelectedIcon={() => <Icon color={'#21CE99'} name='person-pin' size={30} />}
 					onPress={() => this.changeTab('profile')}>
 
             <Navigator
@@ -309,7 +306,6 @@ class ApplicationTabs extends Component {
   						renderScene={ this.renderProfileScene }
   						navigationBar = {
   							 <Navigator.NavigationBar
-  									style = { styles.navigationBar }
                     routeMapper = {{
                        LeftButton(route, navigator, index, navState) {
                          if(index > 0){
@@ -341,7 +337,6 @@ class ApplicationTabs extends Component {
                          }else{
                            return null
                          }
-
                        }
                     }}
   									 />
@@ -355,35 +350,38 @@ class ApplicationTabs extends Component {
 
 const styles = StyleSheet.create({
    navigationBar: {
-      backgroundColor: 'white',
+      backgroundColor: '#21CE99',
 			height: 50,
-			borderBottomWidth: 1,
-			borderColor: '#F6F6F6',
 			padding: 10,
-			shadowColor: '#F3F3F3',
-			shadowOffset: {
-				width: 0,
-				height: 3
-			},
-			shadowOpacity: 0.3
+      borderBottomWidth: 0,
+      borderColor: 'transparent'
+   },
+   mainFeednavigationBar: {
+     backgroundColor:'#21CE99',
+     height: 50,
+     borderBottomWidth: 0
    },
 	 leftButton: {
-		   color: '#A6A6A6',
+		   color: 'white',
 			 margin: 10,
 			 marginTop: -1,
        fontSize: 16
 	 },
    title: {
-      color: '#222222',
+      color: 'white',
       justifyContent: 'center',
 			marginTop: -1,
       fontSize: 18
    },
    rightButton: {
-      color: '#222222',
+      color: 'white',
       margin: 10,
 			marginTop: -1,
       fontSize: 16
+   },
+   tabStyleBarstyle: {
+     borderWidth: 0,
+     borderColor: 'white'
    }
 })
 

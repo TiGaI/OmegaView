@@ -125,23 +125,82 @@ class MainFeed extends Component{
     if(this.props.login.skip){
       var checkforlogin = <Spinner color='green'/>
     }
+
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     var dataSource = ds.cloneWithRows(this.props.data.feedObject)
+    if(this.props.data.feedObject.length === 0){
+      console.log('there is nothing in here');
 
+      var mainPageContent =
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <Icon
+               style={{marginTop: -50}}
+               color={'#6D6E70'}
+               size={60}
+               name='location-off'
+              />
+
+            <Text style={{color: 'black', fontSize: 20, padding: 10, paddingLeft: 50, paddingRight: 50, textAlign: 'center'}}>
+              Nothing logged within these 5 days
+            </Text>
+        </View>
+
+    }else{
+      console.log('there is something in here');
+      var mainPageContent =
+        <ListView
+          dataSource={dataSource}
+          renderRow={(rowData) =>
+            <TouchableOpacity style={{flex: 1, backgroundColor: 'white', height: 110, marginLeft: 10, marginRight: 10, marginBottom: 0}}>
+
+                <View style={{flex: 1, flexDirection: 'row'}}>
+                <View style={{flex: 0.35, justifyContent: 'center', alignItems: 'flex-end'}}>
+                  <Text style={{color: '#8AC0FF', fontSize: 22, fontWeight: '700'}}>{this.getDate(rowData.createdAt)}</Text>
+                  <Text style={{color: '#8AC0FF', fontSize: 12, fontWeight: '400'}}>{this.getMonth(rowData.createdAt)}</Text>
+                </View>
+                <View style={{flex: 0.75, justifyContent: 'center', alignItems: 'center', borderRightWidth: 2, borderColor: '#EB3F54'}}>
+                  <Text style={{color: '#5A6C76', fontSize: 18, fontWeight: '700'}}>{this.getTime(rowData.createdAt, rowData.activityDuration)}</Text>
+                  <Text style={{color: '#5A6C76', fontSize: 8, fontWeight: '400'}}>{this.getAMPM(rowData.createdAt, rowData.activityDuration)}</Text>
+                  <Text style={{color: '#5A6C76', fontSize: 22, fontWeight: '400'}}>-</Text>
+                  <Text style={{color: '#5A6C76', fontSize: 18, fontWeight: '700'}}>{this.getTime(rowData.createdAt)}</Text>
+                  <Text style={{color: '#5A6C76', fontSize: 8, fontWeight: '400'}}>{this.getAMPM(rowData.createdAt)}</Text>
+                </View>
+                <View style={{flex: 3, justifyContent: 'center', alignItems: 'flex-start', marginLeft: 10}}>
+                  { rowData.activityImage ? this.renderAsset(this.state.photoData) : null}
+                  <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
+                    <Text style={{color: 'grey', fontSize: 17, fontWeight: '500'}} numberOfLines={1}>{rowData.activityDuration} hr -> {rowData.activityCategory}</Text>
+                    <Text style={{color: 'grey', fontSize: 12, fontWeight: '500'}} numberOfLines={1}>Note: {rowData.activityNote}</Text>
+                  </View>
+                </View>
+                <View style={{flex: 0.5, justifyContent: 'center'}}>
+                { new Date(rowData.createdAt).toLocaleString().split(',')[0]  == new Date().toLocaleString().split(',')[0] ?
+                  (<Icon
+                     name='delete'
+                     onPress={this.deleteActivity.bind(this, rowData._id)}
+                    />) : (null)
+                  }
+                </View>
+              </View>
+          </TouchableOpacity>}
+        />
+
+    }
     return(
       <View style={{flex: 1}}>
-      <View style={{flex: 0.085, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', height: 70, borderBottomWidth: 1, borderColor: 'grey'}}>
-      <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{flex: 0.12, flexDirection: 'row', backgroundColor: '#21CE99', justifyContent: 'center', alignItems: 'center', height: 170}}>
+      <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }}>
 
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-end'}}>
             </View>
 
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', marginLeft: 20}}>
-                  <Text style={{textAlign: 'center'}}>New Feed</Text>
+                  <Text style={{textAlign: 'center', color: 'white', fontSize: 18}}>New Feed</Text>
             </View>
 
             <View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end', marginRight: 20}}>
                   <Icon
+                     color={'white'}
+                     size={30}
                      name='perm-data-setting'
                      onPress={() => {this.props.navigator.push({
                           id: 'GoalForm'
@@ -151,41 +210,8 @@ class MainFeed extends Component{
       </View>
       { this.props.profile.userObject ?  (
         <View style={{flex: 1, backgroundColor: '#FFF', marginTop: 10}}>
-          <ListView
-            dataSource={dataSource}
-            renderRow={(rowData) =>
-              <TouchableOpacity style={{flex: 1, backgroundColor: 'white', height: 110, marginLeft: 10, marginRight: 10, marginBottom: 0}}>
 
-                  <View style={{flex: 1, flexDirection: 'row'}}>
-                  <View style={{flex: 0.35, justifyContent: 'center', alignItems: 'flex-end'}}>
-                    <Text style={{color: '#8AC0FF', fontSize: 22, fontWeight: '700'}}>{this.getDate(rowData.createdAt)}</Text>
-                    <Text style={{color: '#8AC0FF', fontSize: 12, fontWeight: '400'}}>{this.getMonth(rowData.createdAt)}</Text>
-                  </View>
-                  <View style={{flex: 0.75, justifyContent: 'center', alignItems: 'center', borderRightWidth: 2, borderColor: '#EB3F54'}}>
-                    <Text style={{color: '#5A6C76', fontSize: 18, fontWeight: '700'}}>{this.getTime(rowData.createdAt, rowData.activityDuration)}</Text>
-                    <Text style={{color: '#5A6C76', fontSize: 8, fontWeight: '400'}}>{this.getAMPM(rowData.createdAt, rowData.activityDuration)}</Text>
-                    <Text style={{color: '#5A6C76', fontSize: 22, fontWeight: '400'}}>-</Text>
-                    <Text style={{color: '#5A6C76', fontSize: 18, fontWeight: '700'}}>{this.getTime(rowData.createdAt)}</Text>
-                    <Text style={{color: '#5A6C76', fontSize: 8, fontWeight: '400'}}>{this.getAMPM(rowData.createdAt)}</Text>
-                  </View>
-                  <View style={{flex: 3, justifyContent: 'center', alignItems: 'flex-start', marginLeft: 10}}>
-                    { rowData.activityImage ? this.renderAsset(this.state.photoData) : null}
-                    <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
-                      <Text style={{color: 'grey', fontSize: 17, fontWeight: '500'}} numberOfLines={1}>{rowData.activityDuration} hr -> {rowData.activityCategory}</Text>
-                      <Text style={{color: 'grey', fontSize: 12, fontWeight: '500'}} numberOfLines={1}>Note: {rowData.activityNote}</Text>
-                    </View>
-                  </View>
-                  <View style={{flex: 0.5, justifyContent: 'center'}}>
-                  { new Date(rowData.createdAt).toLocaleString().split(',')[0]  == new Date().toLocaleString().split(',')[0] ?
-                    (<Icon
-                       name='delete'
-                       onPress={this.deleteActivity.bind(this, rowData._id)}
-                      />) : (null)
-                    }
-                  </View>
-                </View>
-            </TouchableOpacity>}
-          />
+          {mainPageContent}
           <Modal isOpen={this.state.isOpen} onClosed={() => this.setState({isOpen: false})} style={[styles.modal, styles.modal4]} position={"top"}>
 
                                   <View style={styles.container}>

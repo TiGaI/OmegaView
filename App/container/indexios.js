@@ -14,7 +14,8 @@ const styles = StyleSheet.create({
   },
   text: {
       fontSize: 20,
-      color: '#01579B'
+      color: 'white'
+      // color: '#01579B'
   }
 })
 
