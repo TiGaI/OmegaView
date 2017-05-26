@@ -4,11 +4,8 @@ import {
 import PushNotification from 'react-native-push-notification';
 
 import Modal from 'react-native-modalbox';
-<<<<<<< HEAD
 import Slider from 'react-native-slider'
 
-=======
->>>>>>> ad646e0167b81294fd7b2d116c07df74d8d6b99c
 import { Spinner } from 'native-base';
 import { Button, SocialIcon,  Icon } from 'react-native-elements'
 import { bindActionCreators } from 'redux';
@@ -221,34 +218,6 @@ class MainFeed extends Component{
           checkforlogin
         )}
       </View>
-
-      <Modal isOpen={this.state.isOpen} onClosed={() => this.setState({isOpen: false})} style={[styles.modal, styles.modal4]} position={"top"} backdropContent={BContent}>
-
-                              <View style={styles.container}>
-                              <View style={styles.titleContainer}>
-                                <Text style={styles.caption} numberOfLines={1}>How productive were you?</Text>
-                              </View>
-                                  <Slider
-                                    value={this.state.productivity}
-                                    minimumTrackTintColor='#1fb28a'
-                                     maximumTrackTintColor='#d3d3d3'
-                                     thumbTintColor='#1a9274'
-                                     minimumValue={0}
-                                      maximumValue={1}
-                                      step={0.05}
-                                      trackStyle={customStyles2.track}
-                                      thumbStyle={customStyles2.thumb}
-                                    onValueChange={(value) => this.setState({value})} />
-
-                                    <Text style={styles.value, {textAlign: 'center'}} numberOfLines={1}>{this.state.productivity}</Text>
-                              </View>
-
-                              <Button
-                                large
-                                backgroundColor={'#20C48A'}
-                                onPress={this.submitProductivityForm.bind(this)}
-                                title='Submit Goal' />
-          </Modal>
     )
   }
 }

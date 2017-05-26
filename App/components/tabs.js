@@ -15,7 +15,6 @@ import MainFeed from './MainFeed/MainFeed.js';
 import PinForm from './Form/PinForm';
 import GoalForm from './Form/GoalForm';
 import StatsPage from './Categories/statistics.js';
-import ProfilePageIndex from './Profile/profilePageIndex.js';
 import ReportPage from './Profile/reportPage.js';
 import ProfilePage from './Profile/profilePage.js';
 import MapPage from './Map/mapPage.js';
@@ -226,9 +225,6 @@ class ApplicationTabs extends Component {
 						}
 
             />
-
-
-
 			  </Tab>
 
 				<Tab
@@ -285,10 +281,7 @@ class ApplicationTabs extends Component {
                   }} />
 						}
 						/>
-
-
 				</Tab>
-
 
 			  <Tab
 			    titleStyle={{fontWeight: 'bold', fontSize: 10}}
@@ -301,6 +294,7 @@ class ApplicationTabs extends Component {
 
 					<StatsPage />
 			  </Tab>
+
 				<Tab
 					titleStyle={{fontWeight: 'bold', fontSize: 10}}
 					selectedTitleStyle={{marginTop: -1, marginBottom: 6}}
@@ -311,41 +305,46 @@ class ApplicationTabs extends Component {
 					onPress={() => this.changeTab('profile')}>
 
             <Navigator
-  						initialRoute={{ id: 'ProfilePage', title: 'Profile' }}
+  						initialRoute={{ id: 'ProfilePage', title: 'Profile', display: false }}
   						renderScene={ this.renderProfileScene }
-
   						navigationBar = {
   							 <Navigator.NavigationBar
   									style = { styles.navigationBar }
-  									routeMapper = {{
+                    routeMapper = {{
                        LeftButton(route, navigator, index, navState) {
-                         return (
-                            <TouchableOpacity onPress={() => navigator.pop()}>
-                               <Text style={ styles.leftButton }>
-                                  Back
-                               </Text>
-                            </TouchableOpacity>
-                         )
-                       },
-                       RightButton(route, navigator, index, navState) {
                          if(index > 0){
-                    		 	return (
-                             <TouchableOpacity onPress={() => this.props.loginActions.submitForm()}>
-                                <Text style = { styles.rightButton }>
-                                   Done
-                                </Text>
-                             </TouchableOpacity>
+                           return (
+                              <TouchableOpacity onPress={() => {
+                                 navigator.props.navigationBar.props.routeMapper.Title =  function Title(route, navigator, index, navState) {
+                                    return null
+                                  }
+                                  navigator.pop()
+                              }}>
+                                 <Text style={ styles.leftButton }>
+                                    Back
+                                 </Text>
+                              </TouchableOpacity>
                            )
                          }else {return null}
+
+                       },
+                       RightButton(route, navigator, index, navState) {
+                         return null
                        },
                        Title(route, navigator, index, navState) {
-                          return (
-                             <Text style = { styles.title }>
-                                {route.title}
-                             </Text>
-                          )
+                         if(index > 0){
+                           return (
+                              <Text style = { styles.title }>
+                                 {route.title}
+                              </Text>
+                           )
+                         }else{
+                           return null
+                         }
+
                        }
-                    }} />
+                    }}
+  									 />
   						}
   						/>
 				</Tab>

@@ -139,7 +139,8 @@ export function googleLogin(){
                   getDataActions.pushFeedObjectAction(userObject._id)(dispatch);
                   getGraphData(userObject._id, userObject.myActivity)(dispatch);
                   dispatch(loggedin());
-                  AsyncStorage.setItem("USER_ID", userObject._id);
+                  AsyncStorage.setItem('USER_ID',userObject._id);
+                  AsyncStorage.setItem('USER', JSON.stringify(userObject));
               })
               .catch((err) => {
                 console.log('error: ', err)
@@ -148,7 +149,6 @@ export function googleLogin(){
         .catch((err) => {
           console.log('WRONG SIGNIN', err);
         })
-        .done();
       };
 
 }
@@ -198,7 +198,8 @@ export function login() {
               getDataActions.pushFeedObjectAction(userObject._id)(dispatch);
               getGraphData(userObject._id, userObject.myActivity)(dispatch);
               dispatch(loggedin());
-              AsyncStorage.setItem("USER_ID", userObject._id);
+              AsyncStorage.setItem('USER_ID', userObject._id);
+              AsyncStorage.setItem('USER', JSON.stringify(userObject));
             })
             .catch((err) => {
               console.log('error: ', err)

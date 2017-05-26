@@ -20,14 +20,16 @@ const styles = StyleSheet.create({
 
 class PinVuew extends Component {
   componentDidMount() {
-    this._loadInitialState().done();
+    this._loadInitialState();
     this._setupGoogleSignin();
   }
   _loadInitialState = async () => {
     try {
       var value = await AsyncStorage.getItem("USER_ID");
-      console.log('I am here in loadInitialState: ', value)
-      if (value !== null){
+      var user = await AsyncStorage.getItem("USER");
+
+      if (value !== null && user !== null){
+        this.props.actions.updateUserProfile(JSON.parse(user))
         this.props.actions.getGraphDataForAsyn(value)
       }
     } catch (error) {
