@@ -21,6 +21,8 @@ class MainFeed extends Component{
       isOpen: false,
       productivity: 1
     };
+    console.log('MAIN FEEDDD GET REPORT OBJECT', this.props.profile.userObject._id)
+    this.props.getDataActions.pushReportObjectAction(this.props.profile.userObject._id)
   }
   getDate(date){
     var myDate = new Date(date);

@@ -67,7 +67,7 @@ export function pushReportObjectAction(userID){
       })
     }).then((response) => response.json())
       .then((responseJson) => {
-        console.log('reportObject: ', responseJson)
+          console.log('REPORT RESPONSE JSON',responseJson )
           var reportObject = [...responseJson];
           dispatch(pushReportObject(reportObject));
     }).catch((err) => {
@@ -96,6 +96,7 @@ export function pushFeedObject(feedObject) {
 }
 
 export function pushReportObject(reportObject) {
+  console.log('reportObject inside dispatch ', reportObject)
     return {
         type: 'REPORT_DATA',
         reportObject

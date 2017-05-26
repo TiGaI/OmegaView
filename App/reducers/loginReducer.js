@@ -51,6 +51,7 @@ export function profileReducer(state =
         return Object.assign({}, state, {
             userObject: action.userObject
         });
+        console.log('login reducer IN REDUCER', userObject);
     case 'UPDATE_GOAL':
         return update(state, {
             userObject: {

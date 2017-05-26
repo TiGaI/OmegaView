@@ -9,9 +9,10 @@ export function mainPageDataReducer(state = {
             feedObject: action.feedObject
         });
     case 'REPORT_DATA':
-        return Object.assign(reportObject, state, {
+        return Object.assign({}, state, {
             reportObject: action.reportObject
-        });
+
+        })
     case 'UPDATE_MAINPAGE_DATA':
         return Object.assign(feedObject, state, {
             feedObject: action.newFeed

@@ -48,9 +48,9 @@ class ProfilePage extends Component{
   }
   render() {
     var x = 1;
-    if(this.props.profile.userObject){
+    if(this.props.data.reportObject.length){
       x = 0;
-      console.log('INSIDE IN IF STATEMENT', this.props.profile)
+      console.log('INSIDE IN IF STATEMENT REPORT OBJECT', this.props)
       const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       var dataSource2 = ds.cloneWithRows(this.props.profile.userObject.sortedPing ? this.props.profile.userObject.sortedPing  : [])
 
