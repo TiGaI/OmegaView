@@ -162,9 +162,9 @@ class ApplicationTabs extends Component {
   renderProfileScene(route, nav){
     switch (route.id) {
       case 'ProfilePage':
-        return <ProfilePage navigator={ nav } title={ "ProfilePage" } />
+        return <ProfilePage navigator={ nav } title={ "ProfilePage" } {...route.passProps}/>
       case 'ReportPage':
-        return <ReportPage navigator={ nav } title={ "ReportPage" } />
+        return <ReportPage navigator={ nav } title={ "ReportPage" } {...route.passProps} />
     }
   }
 	render() {

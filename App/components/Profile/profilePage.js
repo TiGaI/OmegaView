@@ -42,8 +42,46 @@ class ProfilePage extends Component{
     this.props.navigator.push({
       id: "ReportPage",
       passProps: {
-      reportData: rowData
-    }
+          reportData: rowData
+      }
+    })
+  }
+  reportsList(){
+    console.log('REPORTS LIST CALLED',this.props.data.reportObject )
+    var totalHours;
+    var totalPins;
+    return this.props.data.reportObject.map((data) => {
+      for (var key in data.dataObject) {
+        var obj = data.dataObject[key];
+         for (var prop in obj) {
+           if(prop === "totalHoursPerDay"){
+             totalHours = obj[prop];
+           }
+           if(prop === "totalPinsPerDay"){
+             totalPins = obj[prop];
+           }
+            console.log("KEYYYSSS", prop);
+         }
+      }
+      return (
+        <TouchableOpacity onPress={this.report.bind(this, data)} style={{flex: 1, backgroundColor: 'white', height: 75, margin: 10, marginBottom: 10}}>
+            <View style={{flex: 1, flexDirection: 'row'}}>
+
+            <View style={{flex: 2, justifyContent: 'center', alignItems: 'center', backgroundColor: '#2671B1'}}>
+              <Text style={{color: '#fff', fontSize: 25, fontWeight: '400'}} numberOfLines={1}>{data.createdAt.substring(5,7) + "/" + data.createdAt.substring(8,10) + "/" + data.createdAt.substring(0,4)} </Text>
+              <Text style={{color: '#fff', fontSize: 15, fontWeight: '400'}}>Report</Text>
+            </View>
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#2671B1'}}>
+              <Text style={{color: '#fff', fontSize: 25, fontWeight: '400'}}>{totalPins}</Text>
+              <Text style={{color: '#fff', fontSize: 15, fontWeight: '400'}}>Pins</Text>
+            </View>
+            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#2671B1'}}>
+              <Text style={{color: '#fff', fontSize: 25, fontWeight: '400'}}>{totalHours}</Text>
+              <Text style={{color: '#fff', fontSize: 15, fontWeight: '400'}}>Hours </Text>
+            </View>
+          </View>
+      </TouchableOpacity>
+      )
     })
   }
   render() {
@@ -60,7 +98,7 @@ class ProfilePage extends Component{
       <View style={{flex: 1, justifyContent: 'center'}}>
         {x === 1 ? <View><Text>loading</Text></View> :
           (<View style={{flex: 1}}>
-            <View style={{flex: 1, backgroundColor: '#21CE99'}}>
+            <View style={{flex: 0.6, backgroundColor: '#21CE99'}}>
               <View style={{flex: 1, flexDirection: 'row'}}>
                 <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-start', marginLeft: 15}}>
                 </View>
@@ -75,42 +113,28 @@ class ProfilePage extends Component{
                     style={{width: 100, height: 100, borderRadius: 50}}
                     source={{uri: this.props.profile.userObject.profileImg}}
                   />
-                <Text style={{color: 'white', fontSize: 20, fontWeight: "400", marginTop: 10}}>{this.props.profile.userObject.firstName + " " + this.props.profile.userObject.lastName}</Text>
+                <Text style={{color: 'white', fontSize: 20, fontWeight: "400", marginTop: 5}}>{this.props.profile.userObject.firstName + " " + this.props.profile.userObject.lastName}</Text>
               </View>
-              <View style={{flex: 1, flexDirection: 'row'}}>
+              <View style={{flex: 1, flexDirection: 'row', marginTop: 20, marginBottom: 20}}>
                 <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                   <Text style={{color: 'white', fontSize: 25, fontWeight: "400"}}>{this.props.profile.userObject.totalHoursLogged}</Text>
-                  <Text style={{color: 'white', fontSize: 12, fontWeight: "400"}}>Total Hours</Text>
+                  <Text style={{color: 'white', fontSize: 12, fontWeight: "600"}}>Total Hours</Text>
                 </View>
                 <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                   <Text style={{color: 'white', fontSize: 25, fontWeight: "400"}}>{this.props.profile.userObject.myActivity.length}</Text>
-                  <Text style={{color: 'white', fontSize: 12, fontWeight: "400"}}>Total Pins</Text>
+                  <Text style={{color: 'white', fontSize: 12, fontWeight: "600"}}>Total Pins</Text>
                 </View>
               </View>
           </View>
           <View style={{flex: 1, backgroundColor: '#F4F2F2'}}>
             <ScrollView>
-              <ListView
-                dataSource={dataSource2}
-                renderRow={(rowData) =>
-                  <TouchableOpacity onPress={this.report.bind(this, rowData)} style={{flex: 1, backgroundColor: 'white', height: 75, margin: 10, marginBottom: 0}}>
-                    {console.log('ROWDATA 2',rowData )}
-                      <View style={{flex: 1, flexDirection: 'row'}}>
-                      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                        <Text style={{color: '#2671B1', fontSize: 25, fontWeight: '700'}}>TEst</Text>
-                        <Text style={{color: '#2671B1', fontSize: 15, fontWeight: '400'}}>Jan</Text>
-                      </View>
-                      <View style={{flex: 3, justifyContent: 'center', alignItems: 'flex-start'}}>
-                        <Text style={{color: 'grey', fontSize: 20, fontWeight: '500'}} numberOfLines={1}>Total Hours  hrs</Text>
-                        <Text style={{color: 'black', fontSize: 12, fontWeight: '400'}}>Total Pins {rowData.createdAt} </Text>
-                      </View>
-                    </View>
-                </TouchableOpacity>}
-              />
+            <View style={{backgroundColor: '#F4F2F2'}} >{this.reportsList()}</View>
           </ScrollView>
-          </View>
+         </View>
+
           </View>
         )}
+
 
       </View>
     )
