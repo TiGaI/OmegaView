@@ -1,4 +1,7 @@
 import * as loginActions from './loginAction';
+import {
+  AsyncStorage
+} from 'react-native'
 var moment = require('moment');
 
 
@@ -46,11 +49,11 @@ export function pushFeedObjectAction(userID){
       })
     }).then((response) => response.json())
       .then((responseJson) => {
-        console.log('I am here!')
           var feedObject = [...responseJson];
           dispatch(pushFeedObject(feedObject));
+          AsyncStorage.setItem('FEED', JSON.stringify(feedObject));
     }).catch((err) => {
-      console.log('Error in createGoal', err)
+      console.log('Error in pushFeedObject', err)
     });
   };
 }

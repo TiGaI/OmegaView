@@ -3,6 +3,7 @@ import { View, ActivityIndicator, AsyncStorage, StyleSheet, Text } from 'react-n
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/loginAction';
+import * as getDataAction from '../actions/getDataAction';
 import Tabs from '../components/tabs';
 import Login from '../components/login'
 import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
@@ -28,10 +29,12 @@ class PinVuew extends Component {
     try {
       var value = await AsyncStorage.getItem("USER_ID");
       var user = await AsyncStorage.getItem("USER");
+      var feed = await AsyncStorage.getItem("FEED")
 
       if (value !== null && user !== null){
         this.props.actions.updateUserProfile(JSON.parse(user))
         this.props.actions.getGraphDataForAsyn(value)
+        this.props.getDataActions.updateFeedObjectAction(JSON.parse(feed))
       }
     } catch (error) {
       console.log(error.message);
@@ -97,7 +100,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: bindActionCreators(actionCreators, dispatch)
+        actions: bindActionCreators(actionCreators, dispatch),
+        getDataActions: bindActionCreators(getDataAction, dispatch)
     };
 }
 

@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import {
   StyleSheet, View, Text, TouchableOpacity, Image, ListView } from 'react-native';
 import PushNotification from 'react-native-push-notification';
+import moment from 'moment';
 
 import Modal from 'react-native-modalbox';
 import Slider from 'react-native-slider'
@@ -13,6 +14,36 @@ import * as getDataActions from '../../actions/getDataAction';
 import * as activityActions from '../../actions/activityAction';
 import { connect } from 'react-redux';
 
+function arrayToListViewDataSourceBlob(list) {
+
+  var blob = {
+    sections: {},
+    rows: {},
+    sectionIds: [],
+    rowIdsBySection: []
+  }
+
+  list.map((entry, i) => {
+
+		var sectionId =  moment(entry.createdAt).format('dddd MMM Do');
+
+		var rowId = entry._id;
+
+    var sectionIndex = blob.sectionIds.indexOf(sectionId);
+      if(sectionIndex === -1) {
+  			sectionIndex = blob.sectionIds.push(sectionId) - 1;
+  			blob.rowIdsBySection[sectionIndex] = [];
+  		}
+
+		blob.rowIdsBySection[sectionIndex].push(rowId);
+
+		blob.rows[rowId] = entry;
+
+	});
+  return blob;
+
+}
+
 class MainFeed extends Component{
   constructor(props){
     super(props);
@@ -21,6 +52,7 @@ class MainFeed extends Component{
       isOpen: false,
       productivity: 1
     };
+
   }
   getDate(date){
     var myDate = new Date(date);
@@ -120,72 +152,92 @@ class MainFeed extends Component{
       productivity: 1
     });
   }
+  renderSectionHeader(sectionData, sectionID) {
+       return (
+           <View style={styles.section}>
+               <Text style={styles.text}>{sectionID}</Text>
+           </View>
+       );
+   }
+  getIcon(category){
+    if(category === 'eating'){
+      return (
+        <View style={{flex: 0.7, justifyContent: 'center', alignItems: 'center', backgroundColor: '#D7601C'}}>
+                <Icon
+                  name='ios-pizza'
+                  type='ionicon'
+                  color='#fff'/>
+        </View>
+              );
+    }else if(category === 'studying'){
+      return (
+        <View style={{flex: 0.7, justifyContent: 'center', alignItems: 'center', backgroundColor: '#009CD4'}}>
+                <Icon
+                  name='book'
+                  type='font-awesome'
+                  color='#fff'/>
+        </View>
+              );
+
+    }else if(category === 'working'){
+      return (
+        <View style={{flex: 0.7, justifyContent: 'center', alignItems: 'center', backgroundColor: '#D21F23'}}>
+                <Icon
+                  name='laptop-chromebook'
+                  color='#fff'/>
+          </View>
+              );
+
+    }else if(category === 'hobby'){
+      return (
+        <View style={{flex: 0.7, justifyContent: 'center', alignItems: 'center', backgroundColor: '#008E48'}}>
+                <Icon
+                  name='ios-game-controller-a'
+                  type='font-awesome'
+                  type='ionicons'
+                  color='#fff'/>
+          </View>
+              );
+    }else if(category === 'sleeping'){
+      return (
+        <View style={{flex: 0.7, justifyContent: 'center', alignItems: 'center', backgroundColor: '#03386E'}}>
+                <Icon
+                  name='laptop-chromebook'
+                  color='#fff'/>
+        </View>
+              );
+
+    }else if(category === 'training'){
+      return (
+        <View style={{flex: 0.7, justifyContent: 'center', alignItems: 'center', backgroundColor: '#01366A'}}>
+                <Icon
+                  name='fitness-center'
+                  color='#fff'/>
+        </View>
+              );
+
+    }
+  }
   render() {
-    console.log(this.props)
     if(this.props.login.skip){
       var checkforlogin = <Spinner color='green'/>
     }
 
-    const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    var dataSource = ds.cloneWithRows(this.props.data.feedObject)
-    if(this.props.data.feedObject.length === 0){
-      console.log('there is nothing in here');
 
-      var mainPageContent =
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <Icon
-               style={{marginTop: -50}}
-               color={'#6D6E70'}
-               size={60}
-               name='location-off'
-              />
+    if(this.props.data.feedObject.length != 0){
+              var blob = arrayToListViewDataSourceBlob(this.props.data.feedObject);
 
-            <Text style={{color: 'black', fontSize: 20, padding: 10, paddingLeft: 50, paddingRight: 50, textAlign: 'center'}}>
-              Nothing logged within these 5 days
-            </Text>
-        </View>
+              var ds = new ListView.DataSource({
+                  	sectionHeaderHasChanged: (h1, h2) => h1 !== h2,
+                  	rowHasChanged: (r1, r2) => r1 !== r2,
+                  	getSectionHeaderData: (blob, sectionId) => blob.sections[sectionId],
+                  	getRowData: (blob, sectionId, rowId) => blob.rows[rowId]
+                  });
 
-    }else{
-      console.log('there is something in here');
-      var mainPageContent =
-        <ListView
-          dataSource={dataSource}
-          renderRow={(rowData) =>
-            <TouchableOpacity style={{flex: 1, backgroundColor: 'white', height: 110, marginLeft: 10, marginRight: 10, marginBottom: 0}}>
-
-                <View style={{flex: 1, flexDirection: 'row'}}>
-                <View style={{flex: 0.35, justifyContent: 'center', alignItems: 'flex-end'}}>
-                  <Text style={{color: '#8AC0FF', fontSize: 22, fontWeight: '700'}}>{this.getDate(rowData.createdAt)}</Text>
-                  <Text style={{color: '#8AC0FF', fontSize: 12, fontWeight: '400'}}>{this.getMonth(rowData.createdAt)}</Text>
-                </View>
-                <View style={{flex: 0.75, justifyContent: 'center', alignItems: 'center', borderRightWidth: 2, borderColor: '#EB3F54'}}>
-                  <Text style={{color: '#5A6C76', fontSize: 18, fontWeight: '700'}}>{this.getTime(rowData.createdAt, rowData.activityDuration)}</Text>
-                  <Text style={{color: '#5A6C76', fontSize: 8, fontWeight: '400'}}>{this.getAMPM(rowData.createdAt, rowData.activityDuration)}</Text>
-                  <Text style={{color: '#5A6C76', fontSize: 22, fontWeight: '400'}}>-</Text>
-                  <Text style={{color: '#5A6C76', fontSize: 18, fontWeight: '700'}}>{this.getTime(rowData.createdAt)}</Text>
-                  <Text style={{color: '#5A6C76', fontSize: 8, fontWeight: '400'}}>{this.getAMPM(rowData.createdAt)}</Text>
-                </View>
-                <View style={{flex: 3, justifyContent: 'center', alignItems: 'flex-start', marginLeft: 10}}>
-                  { rowData.activityImage ? this.renderAsset(this.state.photoData) : null}
-                  <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
-                    <Text style={{color: 'grey', fontSize: 17, fontWeight: '500'}} numberOfLines={1}>{rowData.activityDuration} hr -> {rowData.activityCategory}</Text>
-                    <Text style={{color: 'grey', fontSize: 12, fontWeight: '500'}} numberOfLines={1}>Note: {rowData.activityNote}</Text>
-                  </View>
-                </View>
-                <View style={{flex: 0.5, justifyContent: 'center'}}>
-                { new Date(rowData.createdAt).toLocaleString().split(',')[0]  == new Date().toLocaleString().split(',')[0] ?
-                  (<Icon
-                     name='delete'
-                     onPress={this.deleteActivity.bind(this, rowData._id)}
-                    />) : (null)
-                  }
-                </View>
-              </View>
-          </TouchableOpacity>}
-        />
-
+              var dataSource = ds.cloneWithRowsAndSections(blob, blob.sectionIds, blob.rowIdsBySection)
     }
-    return(
+
+    return (
       <View style={{flex: 1}}>
       <View style={{flex: 0.12, flexDirection: 'row', backgroundColor: '#21CE99', justifyContent: 'center', alignItems: 'center', height: 170}}>
       <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', }}>
@@ -209,9 +261,63 @@ class MainFeed extends Component{
       </View>
       </View>
       { this.props.profile.userObject ?  (
-        <View style={{flex: 1, backgroundColor: '#FFF', marginTop: 10}}>
+        <View style={{flex: 1, backgroundColor: '#FFF'}}>
+                  <View style={styles.container}>
+                        { !dataSource ?  (
+                          <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                              <Icon
+                                 style={{marginTop: -50}}
+                                 color={'#6D6E70'}
+                                 size={60}
+                                 name='location-off'
+                                />
+                              <Text style={{color: 'black', fontSize: 20, padding: 10, paddingLeft: 50, paddingRight: 50, textAlign: 'center'}}>
+                                Nothing logged within these 5 days
+                              </Text>
+                          </View>
+                        ) : (
+                              <ListView
+                                      style={styles.listview}
+                                      dataSource={dataSource}
+                                      renderSectionHeader={this.renderSectionHeader}
+                                      renderRow={(rowData) =>
+                                            <TouchableOpacity style={{flex: 1, backgroundColor: 'white', height: 70, marginRight: 10, marginBottom: 0}}>
+                                                <View style={{flex: 1, flexDirection: 'row'}}>
 
-          {mainPageContent}
+                                                  {this.getIcon(rowData.activityCategory)}
+
+                                                <View style={{flex: 0.5, justifyContent: 'space-around', alignItems: 'flex-start'}}>
+                                                  <View style={{flex: 1, flexDirection: 'row'}}>
+                                                    <Text style={{color: '#5A6C76', fontSize: 15, fontWeight: '700'}}>{this.getTime(rowData.createdAt)}</Text>
+                                                    <Text style={{color: '#5A6C76', fontSize: 10, fontWeight: '400'}}>{this.getAMPM(rowData.createdAt)}</Text>
+                                                  </View>
+                                                  <View style={{flex: 1, flexDirection: 'row', alignItems:'flex-end'}}>
+                                                    <Text style={{color: '#5A6C76', fontSize: 15, fontWeight: '700'}}>{this.getTime(rowData.createdAt, rowData.activityDuration)}</Text>
+                                                    <Text style={{color: '#5A6C76', fontSize: 10, fontWeight: '400'}}>{this.getAMPM(rowData.createdAt, rowData.activityDuration)}</Text>
+                                                  </View>
+                                                </View>
+                                                <View style={{flex: 2, justifyContent: 'center', alignItems: 'flex-start', marginLeft: 10}}>
+                                                  { rowData.activityImage ? this.renderAsset(this.state.photoData) : null}
+                                                  <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
+                                                    <Text style={{color: 'grey', fontSize: 17, fontWeight: '500'}} numberOfLines={1}>{rowData.activityDuration} total hr of {rowData.activityCategory}</Text>
+                                                    { rowData.activityNote ? <Text style={{color: 'grey', fontSize: 12, fontWeight: '500'}} numberOfLines={1}>Note: {rowData.activityNote}</Text>: null}
+                                                  </View>
+                                                </View>
+                                                <View style={{flex: 0.5, justifyContent: 'center'}}>
+                                                { new Date(rowData.createdAt).toLocaleString().split(',')[0]  == new Date().toLocaleString().split(',')[0] ?
+                                                  (<Icon
+                                                     name='delete'
+                                                     onPress={this.deleteActivity.bind(this, rowData._id)}
+                                                    />) : (null)
+                                                  }
+                                                </View>
+                                              </View>
+                                          </TouchableOpacity>
+                                        }
+                                    />
+                        )}
+                  </View>
+
           <Modal isOpen={this.state.isOpen} onClosed={() => this.setState({isOpen: false})} style={[styles.modal, styles.modal4]} position={"top"}>
 
                                   <View style={styles.container}>
@@ -260,8 +366,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    marginLeft: 10,
-    marginRight: 10,
+    borderTopWidth: 6,
+    borderTopColor: '#C5D6E0',
     alignItems: 'stretch',
     justifyContent: 'center'
   },
@@ -277,7 +383,20 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'center',
     marginLeft: 10,
-  }
+  },
+  section: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 6,
+        backgroundColor: '#2196F3'
+    },
+  text: {
+      color: 'white',
+      paddingHorizontal: 8,
+      fontSize: 16,
+      textAlign: 'center'
+  },
 });
 
 var customStyles2 = StyleSheet.create({
