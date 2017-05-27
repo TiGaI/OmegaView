@@ -146,25 +146,15 @@ router.post('/checkStreak', function(req, res){
 });
 
 router.post('/getFeed', function(req, res){
-  // Report.find({$and: [
-  //         {'user': req.body.userID}]}).populate('dataObject').sort('-createdAt')
-  //         .limit(6).exec(function(err, reports){
-  //       if(err){
-  //         console.log(err);
-  //         res.send(err);
-  //         return err
-  //       }
-  //
-  //       if(reports.length > 0){
-  //         res.send(reports)
-  //       }else{
-  //         res.send(null)
-  //       }
-  // });
   Activity.find({$and: [
           {'activityCreator': req.body.userID},
           {'createdAt': {'$gt': new Date(Date.now() - 5*24*60*60*1000)}}]}).sort('-createdAt')
-          .limit(10).exec(function(err, activities){
+          .limit(20).exec(function(err, activities){
+
+        // var x = _.groupBy(activities, function (date) {
+        //   return moment(date.activityStartTime).format("dddd MMM Do");
+        // });
+
         if(err){
           console.log(err);
           res.send(err);

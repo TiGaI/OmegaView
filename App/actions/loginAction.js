@@ -52,7 +52,6 @@ export function getGraphDataForAsyn(userID) {
             })
             .then((response) => response.json())
             .then((responseJson) => {
-              console.log('this is responseJson at getGraphDataForAsyn: ', responseJson)
                 var userObject = Object.assign({}, responseJson);
                 getDataActions.pushFeedObjectAction(userObject._id)(dispatch);
                 dispatch(addUser(userObject));
@@ -79,7 +78,6 @@ export function getGraphData(userID, myActivity) {
             })
             .then((response) => response.json())
             .then((responseJson) => {
-              console.log('this is responseJson at getGraphData: ', responseJson)
                 var userObject = Object.assign({}, responseJson);
                 dispatch(addUser(userObject));
             })
