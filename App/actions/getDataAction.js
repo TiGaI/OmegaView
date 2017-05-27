@@ -59,6 +59,7 @@ export function pushFeedObjectAction(userID){
 }
 
 export function pushReportObjectAction(userID){
+  console.log("INSIDE PUSH REPORT OBJECT")
   return dispatch => {
     fetch('http://localhost:8080/getReport', {
       method: 'POST',
@@ -99,6 +100,7 @@ export function pushFeedObject(feedObject) {
 }
 
 export function pushReportObject(reportObject) {
+  console.log('REPORT DISPATCH', reportObject)
     return {
         type: 'REPORT_DATA',
         reportObject
