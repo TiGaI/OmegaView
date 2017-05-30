@@ -50,7 +50,7 @@ class ProfilePage extends Component{
     console.log('REPORTS LIST CALLED',this.props.data.reportObject )
     var totalHours;
     var totalPins;
-    return this.props.data.reportObject.map((data) => {
+    return this.props.data.reportObject.map((data, index) => {
       for (var key in data.dataObject) {
         var obj = data.dataObject[key];
          for (var prop in obj) {
@@ -64,7 +64,7 @@ class ProfilePage extends Component{
          }
       }
       return (
-        <TouchableOpacity onPress={this.report.bind(this, data)} style={{flex: 1, backgroundColor: 'white', height: 75, margin: 10, marginBottom: 10}}>
+        <TouchableOpacity key={index} onPress={this.report.bind(this, data)} style={{flex: 1, backgroundColor: 'white', height: 75, margin: 10, marginBottom: 10}}>
             <View style={{flex: 1, flexDirection: 'row'}}>
 
             <View style={{flex: 2, justifyContent: 'center', alignItems: 'center', backgroundColor: '#2671B1'}}>
