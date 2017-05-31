@@ -9,10 +9,10 @@ import {
 
 import { bindActionCreators } from 'redux';
 import * as getDataActions from '../../actions/getDataAction';
-import * as activityActions from '../../actions/activityAction';
+import * as loginActions from '../../actions/loginAction';
 
 import { connect } from 'react-redux';
-import Icons from 'react-native-vector-icons/Ionicons';
+  import { Icon } from 'react-native-elements'
 
 import Slider from 'react-native-slider';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
@@ -28,9 +28,7 @@ import ReportPage from './reportPage.js';
 class ProfilePage extends Component{
   constructor(props){
     super(props);
-      console.log('PROFILE PAGE PROPS', this.props)
       this.props.getDataActions.pushReportObjectAction(this.props.profile.userObject._id)
-      console.log("IDDDDDDD", this.props.profile.userObject._id);
       const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       this.state = {
         dataSource: ds.cloneWithRows(days),
@@ -84,30 +82,20 @@ class ProfilePage extends Component{
       )
     })
   }
+
   render() {
     var x = 1;
     if(this.props.data.reportObject){
       x = 0;
       const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       var dataSource2 = ds.cloneWithRows(this.props.data.reportObject ? this.props.data.reportObject  : [])
-
-      console.log('PROFILE PAGE PROPS INSIDE IF STATEMENT', this.props)
     }
 
     return (
       <View style={{flex: 1, justifyContent: 'center'}}>
         {x === 1 ? <View><Text>loading</Text></View> :
           (<View style={{flex: 1}}>
-            <View style={{flex: 0.6, backgroundColor: '#21CE99'}}>
-              <View style={{flex: 1, flexDirection: 'row'}}>
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-start', marginLeft: 15}}>
-                </View>
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-end', marginRight: 15}}>
-                  <TouchableOpacity>
-                    <Icons style={{fontSize: 35, color: 'white', backgroundColor: 'transparent'}} name="md-images"/>
-                  </TouchableOpacity>
-                </View>
-              </View>
+            <View style={{flex: 0.6, backgroundColor: '#21CE99', paddingTop: 60}}>
               <View style={{flex: 2, justifyContent: 'center', alignItems: 'center'}}>
                 <Image
                     style={{width: 100, height: 100, borderRadius: 50}}
@@ -152,7 +140,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 	return {
     getDataActions: bindActionCreators(getDataActions, dispatch),
-    activityActions: bindActionCreators(activityActions, dispatch)
+    loginActions: bindActionCreators(loginActions, dispatch)
 	};
 }
 

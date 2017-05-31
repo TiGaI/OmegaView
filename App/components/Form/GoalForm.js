@@ -246,13 +246,15 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'right',
     marginLeft: 10,
-    fontWeight: '800'
+    fontWeight: '800',
+    color: '#212121'
   },
   valueForBar: {
     flex: 1,
     textAlign: 'right',
     marginLeft: 10,
-    top: -5
+    top: -5,
+    color: '#212121'
   }
 
 });

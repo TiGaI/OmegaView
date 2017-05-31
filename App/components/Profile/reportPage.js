@@ -18,9 +18,7 @@ import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import ModalDropdown from 'react-native-modal-dropdown';
 
 var {height, width} = Dimensions.get('window');
-//
-// var days  = [{day: 'Monday'},{day: 'Tuesday'},{day: 'Wednesday'},{day: 'Thursday'},{day: 'Friday'},{day: 'Saturaday'}, {day: 'Sunday'}]
-//
+
 class ReportPage extends Component{
   constructor(props){
     super(props);
@@ -40,13 +38,14 @@ class ReportPage extends Component{
 
       }
   }
+
   componentWillMount(){
-    console.log('this.props:', this.props)
+    var key = Object.getOwnPropertyNames(this.props.reportData.dataObject)
       var self = this;
          this.props.navigator.props.navigationBar.props.routeMapper.Title =  function Title(route, navigator, index, navState) {
              return (
                   <Text>
-                     Report 123123
+                     Report {key[0]}
                   </Text>
               )
             }
@@ -324,7 +323,7 @@ class ReportPage extends Component{
      }
     }
     return (
-      <View style={{flex: 1, justifyContent: 'center'}}>
+      <View style={{flex: 1, justifyContent: 'center', borderTopWidth: 60, borderColor: '#2671B1'}}>
 
         <View style={{flex: 1, flexDirection: 'row'}}>
           <View style={{flex: 2, justifyContent: 'center', alignItems: 'flex-start', backgroundColor: 'white', padding: 10}}>
