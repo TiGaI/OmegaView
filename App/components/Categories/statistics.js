@@ -31,7 +31,6 @@ class StatsPage extends Component{
       totalPins: 15,
       totalStreak: 3,
       category: 'Studying'
-
     }
   }
   select(idx, value){
@@ -160,22 +159,7 @@ class StatsPage extends Component{
 
       </View>
       <View style={{flex: 2, flexDirection: 'row'}}>
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 5 }}>
-          <TouchableOpacity>
-          <Icons style={{fontSize: 50, color: 'white', backgroundColor: 'transparent'}} name="md-trending-up"/>
-          <Text style={{fontSize: 15, fontWeight: '400', color: 'white', textAlign: 'center', backgroundColor: 'transparent'}}>
-            graphs
-          </Text>
-          </TouchableOpacity>
-        </View>
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 5,}}>
-          <TouchableOpacity>
-          <Icons style={{fontSize: 50, color: 'white', backgroundColor: 'transparent'}} name="md-book"/>
-          <Text style={{fontSize: 15, fontWeight: '400', color: 'white', textAlign: 'center', backgroundColor: 'transparent'}}>
-            map
-          </Text>
-        </TouchableOpacity>
-        </View>
+        
 
       </View>
 

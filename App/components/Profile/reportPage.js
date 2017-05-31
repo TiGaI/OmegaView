@@ -22,7 +22,6 @@ var {height, width} = Dimensions.get('window');
 class ReportPage extends Component{
   constructor(props){
     super(props);
-      console.log('REPORT PAGE PROPS', this.props)
       const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       this.state={
         goalHours: 1000,
@@ -260,7 +259,6 @@ class ReportPage extends Component{
           reportColor = "#6594E5";
           break;
   }
-  console.log("REPORT GRADE", reportGrade, this.props.reportData.dataObject)
   for (var key in this.props.reportData.dataObject) {
      var obj = this.props.reportData.dataObject[key];
      for (var prop in obj) {
@@ -357,8 +355,7 @@ class ReportPage extends Component{
 
 
         <View style={{flex: 4, backgroundColor: '#152D44'}}>
-          <Tabs>
-                  <Tab heading="STATS">
+          
                     <ScrollView>
                     <View style={{flex: 1, backgroundColor: '#2671B1'}}>
                       <View style={{height: 250, backgroundColor: 'white', margin: 15, marginBottom: 0}}>
@@ -641,29 +638,8 @@ class ReportPage extends Component{
 
                     </View>
                     </ScrollView>
-                  </Tab>
-                  <Tab heading="GRAPHS">
-                    <View style={{flex: 2, backgroundColor: '#152D44', justifyContent: 'center', alignItems: 'center'}}>
-                      <ScrollView>
-                        <View style={{flex: 1, backgroundColor: "white", justifyContent: 'center', padding: 10, margin: 5}}>
-                          <Text style={{fontSize: 20, fontWeight: '500', color: 'black', textAlign: 'left', backgroundColor: 'transparent'}}>Daily Insights</Text>
-                          <Text style={{fontSize: 15, fontWeight: '300', color: 'grey', textAlign: 'left', backgroundColor: 'transparent'}}>
-                            See your daily progress by tracking your productivity throughout the day.
-                          </Text>
-                        </View>
-                      <View style={{flex: 4, backgroundColor: '#152D44', justifyContent: 'center', alignItems: 'center'}}>
-                        <Text style={{fontSize: 20, fontWeight: '500', color: 'white', textAlign: 'left', backgroundColor: 'transparent'}}>Goals</Text>
-                        <SmoothLine data={datas} options={options} xKey='x' yKey='y' />
-                        <Text style={{fontSize: 20, fontWeight: '500', color: 'white', textAlign: 'left', backgroundColor: 'transparent'}}>Productivity</Text>
-                        <Bar data={data} options={options} accessorKey='v'/>
-                      </View>
 
-                      </ScrollView>
-                    </View>
 
-                  </Tab>
-
-              </Tabs>
         </View>
 
       </View>

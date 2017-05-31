@@ -44,7 +44,6 @@ var longitude = 0;
 class MapPage extends Component{
   constructor(props){
     super(props);
-    console.log('MAP PAGE PROPS', props);
     // console.log('GET ACTIVITIES', this.props.actions.getActivityForMap(this.props.profile.userObject._id));
     this.state = {
       initialPosition: {
@@ -112,18 +111,15 @@ componentWillMount () {
   for (var key in this.props.profile.userObject.sortedPing) {
      var obj = this.props.profile.userObject.sortedPing[key];
      for (var prop in obj) {
-       console.log('PROPSPSPSPSP', prop)
         if(prop === "eating"){
           coord = [...coord,...obj[prop].activities.map(function(data){
             var coordinatesObj = {};
             latitude = data.activityLatitude;
             longitude = data.activityLongitude;
-            console.log('lat',latitude, "long", longitude );
             coordinatesObj["latitude"] = latitude;
             coordinatesObj["longitude"] = longitude;
             // coordinatesArray.push(coordinatesObj);
             // console.log("INSIDE EATING"
-            console.log('data', coordinatesObj)
             return coordinatesObj
           })]
         }
@@ -132,12 +128,10 @@ componentWillMount () {
             var coordinatesObj = {};
             latitude = data.activityLatitude;
             longitude = data.activityLongitude;
-            console.log('lat',latitude, "long", longitude );
             coordinatesObj["latitude"] = latitude;
             coordinatesObj["longitude"] = longitude;
             // coordinatesArray.push(coordinatesObj);
             // console.log("INSIDE EATING"
-            console.log('data', coordinatesObj)
             return coordinatesObj
           })]
         }
@@ -146,12 +140,10 @@ componentWillMount () {
             var coordinatesObj = {};
             latitude = data.activityLatitude;
             longitude = data.activityLongitude;
-            console.log('lat',latitude, "long", longitude );
             coordinatesObj["latitude"] = latitude;
             coordinatesObj["longitude"] = longitude;
             // coordinatesArray.push(coordinatesObj);
             // console.log("INSIDE EATING"
-            console.log('data', coordinatesObj)
             return coordinatesObj
           })]
         }
@@ -160,12 +152,10 @@ componentWillMount () {
             var coordinatesObj = {};
             latitude = data.activityLatitude;
             longitude = data.activityLongitude;
-            console.log('lat',latitude, "long", longitude );
             coordinatesObj["latitude"] = latitude;
             coordinatesObj["longitude"] = longitude;
             // coordinatesArray.push(coordinatesObj);
             // console.log("INSIDE EATING"
-            console.log('data', coordinatesObj)
             return coordinatesObj
           })]
         }if(prop === "training"){
@@ -173,12 +163,10 @@ componentWillMount () {
             var coordinatesObj = {};
             latitude = data.activityLatitude;
             longitude = data.activityLongitude;
-            console.log('lat',latitude, "long", longitude );
             coordinatesObj["latitude"] = latitude;
             coordinatesObj["longitude"] = longitude;
             // coordinatesArray.push(coordinatesObj);
             // console.log("INSIDE EATING"
-            console.log('data', coordinatesObj)
             return coordinatesObj
           })]
         }
@@ -187,20 +175,16 @@ componentWillMount () {
             var coordinatesObj = {};
             latitude = data.activityLatitude;
             longitude = data.activityLongitude;
-            console.log('lat',latitude, "long", longitude );
             coordinatesObj["latitude"] = latitude;
             coordinatesObj["longitude"] = longitude;
             // coordinatesArray.push(coordinatesObj);
             // console.log("INSIDE EATING"
-            console.log('data', coordinatesObj)
             return coordinatesObj
           })]
         }
 
      }
-     console.log('FINAL ARRAY', coord)
     }
-
 }
 
 componentWillUnmount() {
@@ -221,8 +205,8 @@ componentWillUnmount() {
         longitudeDelta: this.state.currentPosition.longitudeDelta,
       }}
     >
-     {coord.map(marker => (
-       <MapView.Marker
+     {coord.map((marker, index) => (
+       <MapView.Marker key={index}
      coordinate={{latitude: marker.latitude,
      longitude: marker.longitude
      }}

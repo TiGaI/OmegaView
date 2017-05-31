@@ -192,9 +192,8 @@ class MainFeed extends Component{
       return (
         <View style={{flex: 0.7, justifyContent: 'center', alignItems: 'center', backgroundColor: '#008E48'}}>
                 <Icon
-                  name='ios-game-controller-a'
-                  type='font-awesome'
-                  type='ionicons'
+                  name='ios-game-controller-b'
+                  type='ionicon'
                   color='#fff'/>
           </View>
               );

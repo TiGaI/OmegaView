@@ -35,8 +35,7 @@ class ProfilePage extends Component{
 
       };
   }
-  report(rowData) {
-    console.log('ROWWWWW', rowData);
+  report(rowData){
     this.props.navigator.push({
       id: "ReportPage",
       passProps: {
@@ -45,7 +44,6 @@ class ProfilePage extends Component{
     })
   }
   reportsList(){
-    console.log('REPORTS LIST CALLED',this.props.data.reportObject )
     var totalHours;
     var totalPins;
     return this.props.data.reportObject.map((data, index) => {
@@ -94,14 +92,7 @@ class ProfilePage extends Component{
       <View style={{flex: 1, justifyContent: 'center'}}>
         {x === 1 ? <View><Text>loading</Text></View> :
           (<View style={{flex: 1}}>
-            <View style={{flex: 0.6, backgroundColor: '#21CE99'}}>
-              <View style={{flex: 1, flexDirection: 'row'}}>
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-start', marginLeft: 15}}>
-                </View>
-                  <TouchableOpacity style={{flex: 1, justifyContent: 'center', alignItems: 'flex-end', marginRight: 15}}>
-                    <Icons style={{fontSize: 35, color: 'white', backgroundColor: 'transparent'}} name="md-images"/>
-                  </TouchableOpacity>
-              </View>
+            <View style={{flex: 0.6, backgroundColor: '#21CE99', paddingTop: 60}}>
               <View style={{flex: 2, justifyContent: 'center', alignItems: 'center'}}>
                 <Image
                     style={{width: 100, height: 100, borderRadius: 50}}

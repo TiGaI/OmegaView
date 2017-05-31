@@ -120,8 +120,6 @@ export function deleteActivity(feedObject, activityID, activityCreatorId){
               return x._id !== activityID
           })
           var userObject = Object.assign({}, responseJson);
-          console.log('I am HERE at the delete!!!!!!', feedObject)
-
           getDataActions.updateDeletedFeedObjectAction(feedObject)(dispatch);
           loginActions.updateUserProfile(userObject)(dispatch);
     })
