@@ -16,7 +16,7 @@ export function createGoalBackEnd(userID, myDailyGoalObject){
 
     dispatch(updateUserGoal(myDailyGoalObject))
 
-    fetch('http://localhost:8080/createGoal', {
+    fetch('https://docbit.herokuapp.com/createGoal', {
       method: 'POST',
       headers: {
         'Content-Type' : 'application/json'
@@ -41,7 +41,7 @@ export function updateGoalFrontEnd(myDailyGoalObject){
 export function getGraphDataForAsyn(userID) {
     return dispatch => {
         dispatch(loggedin());
-          fetch('http://localhost:8080/getSortandGroupActivityForAsyn', {
+          fetch('https://docbit.herokuapp.com/getSortandGroupActivityForAsyn', {
               method: 'POST',
               headers: {
                 "Content-Type": "application/json"
@@ -66,7 +66,7 @@ export function getGraphData(userID, myActivity) {
     return dispatch => {
         dispatch(attempt());
 
-          fetch('http://localhost:8080/getSortandGroupActivity', {
+          fetch('https://docbit.herokuapp.com/getSortandGroupActivity', {
               method: 'POST',
               headers: {
                 "Content-Type": "application/json"
@@ -121,7 +121,7 @@ export function googleLogin(){
 
       GoogleSignin.signIn().then((user) => {
             var mongooseId = '';
-            fetch('http://localhost:8080/googleAuth', {
+            fetch('https://docbit.herokuapp.com/googleAuth', {
                 method: 'POST',
                 headers: {
                   "Content-Type": "application/json"
@@ -180,7 +180,7 @@ export function login() {
         dispatch(attempt());
 
         facebookLogin().then((result) => {
-          fetch('http://localhost:8080/facebookAuth', {
+          fetch('https://docbit.herokuapp.com/facebookAuth', {
               method: 'POST',
               headers: {
                 "Content-Type": "application/json"
@@ -213,7 +213,7 @@ export function editProfile(userID, userObject) {
     return dispatch => {
         dispatch(attempt());
 
-          fetch('http://localhost:8080/editUser', {
+          fetch('https://docbit.herokuapp.com/editUser', {
               method: 'POST',
               headers: {
                 "Content-Type": "application/json"

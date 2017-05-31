@@ -18,7 +18,7 @@ export function changeProductivityAction(myLastActivity, productivity, userObjec
 
   return dispatch => {
     dispatch(loginActions.addUser(newuserObject));
-    fetch('http://localhost:8080/addProductivity', {
+    fetch('https://docbit.herokuapp.com/addProductivity', {
       method: 'POST',
       headers: {
         'Content-Type' : 'application/json'
@@ -39,7 +39,7 @@ export function changeProductivityAction(myLastActivity, productivity, userObjec
 
 export function pushFeedObjectAction(userID){
   return dispatch => {
-    fetch('http://localhost:8080/getFeed', {
+    fetch('https://docbit.herokuapp.com/getFeed', {
       method: 'POST',
       headers: {
         'Content-Type' : 'application/json'
@@ -60,7 +60,7 @@ export function pushFeedObjectAction(userID){
 
 export function pushReportObjectAction(userID){
   return dispatch => {
-    fetch('http://localhost:8080/getReport', {
+    fetch('https://docbit.herokuapp.com/getReport', {
       method: 'POST',
       headers: {
         'Content-Type' : 'application/json'

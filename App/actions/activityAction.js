@@ -34,7 +34,7 @@ export function createActivity(feedObject, activityObject, photo) {
   copy['createdAt'] = new Date();
 
     return dispatch => {
-        fetch('http://localhost:8080/createActivity', {
+        fetch('https://docbit.herokuapp.com/createActivity', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
@@ -103,7 +103,7 @@ export function createActivity(feedObject, activityObject, photo) {
 
 export function deleteActivity(feedObject, activityID, activityCreatorId){
   return dispatch => {
-    fetch('http://localhost:8080/deleteActivity', {
+    fetch('https://docbit.herokuapp.com/deleteActivity', {
       method: 'POST',
       headers: {
         'Content-Type' : 'application/json'
