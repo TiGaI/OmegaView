@@ -9,10 +9,10 @@ import {
 
 import { bindActionCreators } from 'redux';
 import * as getDataActions from '../../actions/getDataAction';
-import * as activityActions from '../../actions/activityAction';
+import * as loginActions from '../../actions/loginAction';
 
 import { connect } from 'react-redux';
-import Icons from 'react-native-vector-icons/Ionicons';
+  import { Icon } from 'react-native-elements'
 
 import Slider from 'react-native-slider';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
@@ -28,9 +28,7 @@ import ReportPage from './reportPage.js';
 class ProfilePage extends Component{
   constructor(props){
     super(props);
-      console.log('PROFILE PAGE PROPS', this.props)
       this.props.getDataActions.pushReportObjectAction(this.props.profile.userObject._id)
-      console.log("IDDDDDDD", this.props.profile.userObject._id);
       const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       this.state = {
         dataSource: ds.cloneWithRows(days),
@@ -83,14 +81,13 @@ class ProfilePage extends Component{
       )
     })
   }
+
   render() {
     var x = 1;
     if(this.props.data.reportObject){
       x = 0;
       const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       var dataSource2 = ds.cloneWithRows(this.props.data.reportObject ? this.props.data.reportObject  : [])
-
-      console.log('PROFILE PAGE PROPS INSIDE IF STATEMENT', this.props)
     }
 
     return (
@@ -149,7 +146,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
 	return {
     getDataActions: bindActionCreators(getDataActions, dispatch),
-    activityActions: bindActionCreators(activityActions, dispatch)
+    loginActions: bindActionCreators(loginActions, dispatch)
 	};
 }
 

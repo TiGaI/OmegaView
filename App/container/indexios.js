@@ -40,13 +40,6 @@ class PinVuew extends Component {
       console.log(error.message);
     }
   };
-  _removeStorage = async () => {
-     try {
-       await AsyncStorage.removeItem("USER_ID");
-     } catch (error) {
-       console.log(error.message);
-     }
-   };
   async _setupGoogleSignin() {
     try {
       await GoogleSignin.hasPlayServices({ autoResolve: true });

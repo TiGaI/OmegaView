@@ -4,7 +4,7 @@ import {
    StyleSheet,
    Text,
    Navigator,
-   TouchableOpacity, Dimensions, Alert
+   TouchableOpacity, Dimensions, Alert, AsyncStorage
 } from 'react-native'
 
 
@@ -21,6 +21,7 @@ import MapPage from './Map/mapPage.js';
 import MapPageIndex from './Map/mapPageIndex.js';
 
 import * as activityAction from '../actions/activityAction';
+import * as loginAction from '../actions/loginAction';
 
 var { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height;
@@ -167,6 +168,24 @@ class ApplicationTabs extends Component {
         return <ReportPage navigator={ nav } title={ "ReportPage" } {...route.passProps} />
     }
   }
+  _removeStorage = async () => {
+     try {
+       await AsyncStorage.removeItem("USER_ID");
+       await AsyncStorage.removeItem("USER");
+       await AsyncStorage.removeItem("FEED");
+     } catch (error) {
+       console.log(error.message);
+     }
+   }
+  signout(){
+    this._removeStorage();
+    var x = this.props.profile.userObject.profileImg
+    if(x.indexOf('google') >= 0){
+      this.props.loginActions.googlelogout();
+    }else{
+      this.props.loginActions.logout();
+    }
+  }
 	render() {
 		const { selectedTab } = this.state
     var self = this;
@@ -302,10 +321,11 @@ class ApplicationTabs extends Component {
 					onPress={() => this.changeTab('profile')}>
 
             <Navigator
-  						initialRoute={{ id: 'ProfilePage', title: 'Profile', display: false }}
+  						initialRoute={{ id: 'ProfilePage', title: 'Profile'}}
   						renderScene={ this.renderProfileScene }
   						navigationBar = {
   							 <Navigator.NavigationBar
+                    style = {{backgroundColor: 'transparent', height: 75, overflow: 'visible'}}
                     routeMapper = {{
                        LeftButton(route, navigator, index, navState) {
                          if(index > 0){
@@ -321,8 +341,13 @@ class ApplicationTabs extends Component {
                                  </Text>
                               </TouchableOpacity>
                            )
-                         }else {return null}
-
+                         }else{
+                           return (
+                              <TouchableOpacity style={{flex: 1, marginLeft: 20}} onPress={()=>{ self.signout() }}>
+                                <Icon color='#2671B1' size={30} type='ionicon' name="md-power"/>
+                              </TouchableOpacity>
+                            )
+                        }
                        },
                        RightButton(route, navigator, index, navState) {
                          return null
@@ -393,7 +418,8 @@ ApplicationTabs.propTypes = {
 
 function mapDispatchToProps(dispatch) {
 	return {
-		activityActions: bindActionCreators(activityAction, dispatch)
+		activityActions: bindActionCreators(activityAction, dispatch),
+    loginActions: bindActionCreators(loginAction, dispatch)
 	};
 }
 

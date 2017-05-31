@@ -259,6 +259,7 @@ export function logout() {
 }
 
 export function googlelogout() {
+  console.log('I am here');
     return dispatch => {
         dispatch(attempt());
         GoogleSignin.signOut()
