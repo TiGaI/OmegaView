@@ -30,17 +30,22 @@ const ASPECT_RATIO = width / height;
 const LATITUDE = 1;
 const LONGITUDE = 1;
 
-const LATITUDE_DELTA = 0.03;
+const LATITUDE_DELTA = 1;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 
 var x = 0;
+var coordinatesArray = [];
+  var coord = []
+
+var latitude = 0;
+var longitude = 0;
 
 class MapPage extends Component{
   constructor(props){
     super(props);
     console.log('MAP PAGE PROPS', props);
-    console.log('GET ACTIVITIES', this.props.actions.getActivityForMap(this.props.profile.userObject._id));
+    // console.log('GET ACTIVITIES', this.props.actions.getActivityForMap(this.props.profile.userObject._id));
     this.state = {
       initialPosition: {
         latitude: LATITUDE,
@@ -54,7 +59,22 @@ class MapPage extends Component{
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA
       }
-    }
+    ,
+    markers: [{
+      title: 'hello',
+      coordinates: {
+        latitude: 37.788561,
+        longitude: -122.652778
+      },
+    },
+    {
+      title: 'hello',
+      coordinates: {
+        latitude: 37.789771,
+        longitude: -122.655449
+      },
+    }]
+  }
   }
   watchID: ?number = null;
 
@@ -85,13 +105,102 @@ componentDidMount() {
   );
 }
 
-filter () {
 
-  // this.props.navigator.push({
-  //   id: 'MapFilter'
-  // })
 
-  // this.props.data.populatedActivities
+componentWillMount () {
+
+  for (var key in this.props.profile.userObject.sortedPing) {
+     var obj = this.props.profile.userObject.sortedPing[key];
+     for (var prop in obj) {
+       console.log('PROPSPSPSPSP', prop)
+        if(prop === "eating"){
+          coord = [...coord,...obj[prop].activities.map(function(data){
+            var coordinatesObj = {};
+            latitude = data.activityLatitude;
+            longitude = data.activityLongitude;
+            console.log('lat',latitude, "long", longitude );
+            coordinatesObj["latitude"] = latitude;
+            coordinatesObj["longitude"] = longitude;
+            // coordinatesArray.push(coordinatesObj);
+            // console.log("INSIDE EATING"
+            console.log('data', coordinatesObj)
+            return coordinatesObj
+          })]
+        }
+        if(prop === "hobby"){
+          coord = [...coord,...obj[prop].activities.map(function(data){
+            var coordinatesObj = {};
+            latitude = data.activityLatitude;
+            longitude = data.activityLongitude;
+            console.log('lat',latitude, "long", longitude );
+            coordinatesObj["latitude"] = latitude;
+            coordinatesObj["longitude"] = longitude;
+            // coordinatesArray.push(coordinatesObj);
+            // console.log("INSIDE EATING"
+            console.log('data', coordinatesObj)
+            return coordinatesObj
+          })]
+        }
+        if(prop === "sleeping"){
+          coord = [...coord,...obj[prop].activities.map(function(data){
+            var coordinatesObj = {};
+            latitude = data.activityLatitude;
+            longitude = data.activityLongitude;
+            console.log('lat',latitude, "long", longitude );
+            coordinatesObj["latitude"] = latitude;
+            coordinatesObj["longitude"] = longitude;
+            // coordinatesArray.push(coordinatesObj);
+            // console.log("INSIDE EATING"
+            console.log('data', coordinatesObj)
+            return coordinatesObj
+          })]
+        }
+        if(prop === "studying"){
+          coord = [...coord,...obj[prop].activities.map(function(data){
+            var coordinatesObj = {};
+            latitude = data.activityLatitude;
+            longitude = data.activityLongitude;
+            console.log('lat',latitude, "long", longitude );
+            coordinatesObj["latitude"] = latitude;
+            coordinatesObj["longitude"] = longitude;
+            // coordinatesArray.push(coordinatesObj);
+            // console.log("INSIDE EATING"
+            console.log('data', coordinatesObj)
+            return coordinatesObj
+          })]
+        }if(prop === "training"){
+          coord = [...coord,...obj[prop].activities.map(function(data){
+            var coordinatesObj = {};
+            latitude = data.activityLatitude;
+            longitude = data.activityLongitude;
+            console.log('lat',latitude, "long", longitude );
+            coordinatesObj["latitude"] = latitude;
+            coordinatesObj["longitude"] = longitude;
+            // coordinatesArray.push(coordinatesObj);
+            // console.log("INSIDE EATING"
+            console.log('data', coordinatesObj)
+            return coordinatesObj
+          })]
+        }
+        if(prop === "working"){
+          coord = [...coord,...obj[prop].activities.map(function(data){
+            var coordinatesObj = {};
+            latitude = data.activityLatitude;
+            longitude = data.activityLongitude;
+            console.log('lat',latitude, "long", longitude );
+            coordinatesObj["latitude"] = latitude;
+            coordinatesObj["longitude"] = longitude;
+            // coordinatesArray.push(coordinatesObj);
+            // console.log("INSIDE EATING"
+            console.log('data', coordinatesObj)
+            return coordinatesObj
+          })]
+        }
+
+     }
+     console.log('FINAL ARRAY', coord)
+    }
+
 }
 
 componentWillUnmount() {
@@ -99,12 +208,9 @@ componentWillUnmount() {
 }
 
   render() {
-      if(this.props.data.populatedActivities.length > 0){
-        console.log('FILTER', this.props);
-      }
     return (
       <View style={{flex: 1, justifyContent: 'center', backgroundColor: '#152D44'}}>
-      {this.state.currentPosition.latitude !== 1 && this.state.currentPosition.longitude !== 1 && this.props.data.populatedActivities.length !== 0 ? (
+      {this.state.currentPosition.latitude !== 1 && this.state.currentPosition.longitude !== 1 ? (
       <MapView
      resizeMode = "stretch"
       style={{flex: 1, height: null, width: null, justifyContent: 'flex-start', alignItems: 'center'}}
@@ -115,19 +221,14 @@ componentWillUnmount() {
         longitudeDelta: this.state.currentPosition.longitudeDelta,
       }}
     >
-    <View style={{backgroundColor: 'black', padding: 10}}>
-    <TouchableOpacity onPress={this.filter.bind(this)}>
-    <Text style={{color: 'white', fontSize: 20}}>Filter</Text>
-    </TouchableOpacity>
-    </View>
-    {this.state.markers.map(marker => (
+     {coord.map(marker => (
        <MapView.Marker
-         coordinate={{latitude: marker.activityLatitude,
-      longitude: marker.activityLongitude}}
-         title={marker.title}
-         description={marker.description}
-       />
-     ))}
+     coordinate={{latitude: marker.latitude,
+     longitude: marker.longitude
+     }}
+     ></MapView.Marker>
+ ))}
+
 
         </MapView>
   ) : (<View><Text>LOADING...</Text></View>)
