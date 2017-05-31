@@ -60,11 +60,10 @@ class ProfilePage extends Component{
            if(prop === "totalPinsPerDay"){
              totalPins = obj[prop];
            }
-            console.log("KEYYYSSS", prop);
          }
       }
       return (
-        <TouchableOpacity key={index} onPress={this.report.bind(this, data)} style={{flex: 1, backgroundColor: 'white', height: 75, margin: 10, marginBottom: 10}}>
+        <TouchableOpacity key={index} onPress={this.report.bind(this, data)} style={{flex: 1, backgroundColor: 'white', height: 75, marginBottom: 10}}>
             <View style={{flex: 1, flexDirection: 'row'}}>
 
             <View style={{flex: 2, justifyContent: 'center', alignItems: 'center', backgroundColor: '#2671B1'}}>
@@ -102,11 +101,9 @@ class ProfilePage extends Component{
               <View style={{flex: 1, flexDirection: 'row'}}>
                 <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-start', marginLeft: 15}}>
                 </View>
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'flex-end', marginRight: 15}}>
-                  <TouchableOpacity>
+                  <TouchableOpacity style={{flex: 1, justifyContent: 'center', alignItems: 'flex-end', marginRight: 15}}>
                     <Icons style={{fontSize: 35, color: 'white', backgroundColor: 'transparent'}} name="md-images"/>
                   </TouchableOpacity>
-                </View>
               </View>
               <View style={{flex: 2, justifyContent: 'center', alignItems: 'center'}}>
                 <Image
@@ -115,7 +112,7 @@ class ProfilePage extends Component{
                   />
                 <Text style={{color: 'white', fontSize: 20, fontWeight: "400", marginTop: 5}}>{this.props.profile.userObject.firstName + " " + this.props.profile.userObject.lastName}</Text>
               </View>
-              <View style={{flex: 1, flexDirection: 'row', marginTop: 20, marginBottom: 20}}>
+              <View style={{flex: 1, flexDirection: 'row', marginBottom: 10}}>
                 <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                   <Text style={{color: 'white', fontSize: 25, fontWeight: "400"}}>{this.props.profile.userObject.totalHoursLogged}</Text>
                   <Text style={{color: 'white', fontSize: 12, fontWeight: "600"}}>Total Hours</Text>
@@ -128,7 +125,7 @@ class ProfilePage extends Component{
           </View>
           <View style={{flex: 1, backgroundColor: '#F4F2F2'}}>
             <ScrollView>
-            <View style={{backgroundColor: '#F4F2F2'}} >{this.reportsList()}</View>
+            <View style={{backgroundColor: '#F4F2F2', padding: 10}} >{this.reportsList()}</View>
           </ScrollView>
          </View>
 

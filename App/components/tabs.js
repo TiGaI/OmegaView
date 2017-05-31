@@ -230,7 +230,7 @@ class ApplicationTabs extends Component {
 					renderSelectedIcon={() => <Icon color={'#21CE99'} name='map' size={30} />}
 					onPress={() => this.changeTab('mapPage')}>
 
-						<MapPageIndex />
+						<MapPage />
 				</Tab>
 
 				<Tab
