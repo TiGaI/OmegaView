@@ -3,7 +3,7 @@ import {
   AsyncStorage
 } from 'react-native'
 var moment = require('moment');
-
+var Environment = require('../Environment.js')
 
 export function changeProductivityAction(myLastActivity, productivity, userObject){
   var today = moment().startOf('day').format("DD/MM/YYYY");
@@ -18,7 +18,7 @@ export function changeProductivityAction(myLastActivity, productivity, userObjec
 
   return dispatch => {
     dispatch(loginActions.addUser(newuserObject));
-    fetch('https://docbit.herokuapp.com/addProductivity', {
+    fetch(Environment.SERVER + 'addProductivity', {
       method: 'POST',
       headers: {
         'Content-Type' : 'application/json'
@@ -39,7 +39,7 @@ export function changeProductivityAction(myLastActivity, productivity, userObjec
 
 export function pushFeedObjectAction(userID){
   return dispatch => {
-    fetch('https://docbit.herokuapp.com/getFeed', {
+    fetch(Environment.SERVER + 'getFeed', {
       method: 'POST',
       headers: {
         'Content-Type' : 'application/json'
@@ -58,9 +58,33 @@ export function pushFeedObjectAction(userID){
   };
 }
 
+export function pushFeedObjectActionForEndReach(userID, pageNumber){
+  return dispatch => {
+    fetch(Environment.SERVER + 'getFeedOnEnd', {
+      method: 'POST',
+      headers: {
+        'Content-Type' : 'application/json'
+      },
+      body: JSON.stringify({
+        userID: userID,
+        page: pageNumber
+      })
+    }).then((response) => response.json())
+      .then((responseJson) => {
+          if(responseJson){
+            var feedObject = [...responseJson];
+            dispatch(updateFeedObject(feedObject));
+          }
+    }).catch((err) => {
+      console.log('Error in pushFeedObject', err)
+    });
+  };
+}
+
+
 export function pushReportObjectAction(userID){
   return dispatch => {
-    fetch('https://docbit.herokuapp.com/getReport', {
+    fetch(Environment.SERVER+ 'getReport', {
       method: 'POST',
       headers: {
         'Content-Type' : 'application/json'

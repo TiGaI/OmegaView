@@ -48,9 +48,10 @@ class MainFeed extends Component{
   constructor(props){
     super(props);
     this.state = {
-      dataSource: null,
+      check: true,
       isOpen: false,
-      productivity: 1
+      productivity: 1,
+      pageNumber: 0
     };
 
   }
@@ -217,6 +218,22 @@ class MainFeed extends Component{
 
     }
   }
+  _endReached(){
+    if(!this.state.check){
+      this.props.getDataActions.pushFeedObjectActionForEndReach(this.props.profile.userObject._id, this.state.pageNumber)
+      this.setState({
+        pageNumber: this.state.pageNumber + 1
+     })
+     this.setState({
+       check: false
+     })
+    }
+  }
+  onScroll(){
+    if (this.refs.listview.scrollProperties.offset + this.refs.listview.scrollProperties.visibleLength >= this.refs.listview.scrollProperties.contentLength){
+        this._endReached();
+    }
+    }
   render() {
     if(this.props.login.skip){
       var checkforlogin = <Spinner color='green'/>
@@ -276,8 +293,18 @@ class MainFeed extends Component{
                           </View>
                         ) : (
                               <ListView
+                                      ref="listview"
                                       style={styles.listview}
+                                      onScroll={this.onScroll.bind(this)}
                                       dataSource={dataSource}
+                                      onEndReachedThreshold = {2000}
+                                      onEndReached={() => {
+                                           this._endReached();
+                                        }}
+                                        automaticallyAdjustContentInsets={false}
+                                      keyboardDismissMode="on-drag"
+                                      keyboardShouldPersistTaps={"always"}
+                                      showsVerticalScrollIndicator={true}
                                       renderSectionHeader={this.renderSectionHeader}
                                       renderRow={(rowData) =>
                                             <TouchableOpacity style={{flex: 1, backgroundColor: 'white', height: 70, marginRight: 10, marginBottom: 0}}>

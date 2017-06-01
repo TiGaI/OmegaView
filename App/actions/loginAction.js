@@ -2,7 +2,7 @@ import { LoginManager, AccessToken, GraphRequest, GraphRequestManager } from 're
 import {
   AsyncStorage
 } from 'react-native'
-
+var Environment = require('../Environment.js')
 import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
 import * as getDataActions from './getDataAction';
 var moment = require('moment');
@@ -16,7 +16,7 @@ export function createGoalBackEnd(userID, myDailyGoalObject){
 
     dispatch(updateUserGoal(myDailyGoalObject))
 
-    fetch('https://docbit.herokuapp.com/createGoal', {
+    fetch(Environment.SERVER + 'createGoal', {
       method: 'POST',
       headers: {
         'Content-Type' : 'application/json'
@@ -41,7 +41,7 @@ export function updateGoalFrontEnd(myDailyGoalObject){
 export function getGraphDataForAsyn(userID) {
     return dispatch => {
         dispatch(loggedin());
-          fetch('https://docbit.herokuapp.com/getSortandGroupActivityForAsyn', {
+          fetch(Environment.SERVER + 'getSortandGroupActivityForAsyn', {
               method: 'POST',
               headers: {
                 "Content-Type": "application/json"
@@ -65,8 +65,7 @@ export function getGraphDataForAsyn(userID) {
 export function getGraphData(userID, myActivity) {
     return dispatch => {
         dispatch(attempt());
-
-          fetch('https://docbit.herokuapp.com/getSortandGroupActivity', {
+          fetch(Environment.SERVER + 'getSortandGroupActivity', {
               method: 'POST',
               headers: {
                 "Content-Type": "application/json"
@@ -121,7 +120,7 @@ export function googleLogin(){
 
       GoogleSignin.signIn().then((user) => {
             var mongooseId = '';
-            fetch('https://docbit.herokuapp.com/googleAuth', {
+            fetch(Environment.SERVER + 'googleAuth', {
                 method: 'POST',
                 headers: {
                   "Content-Type": "application/json"
@@ -180,7 +179,7 @@ export function login() {
         dispatch(attempt());
 
         facebookLogin().then((result) => {
-          fetch('https://docbit.herokuapp.com/facebookAuth', {
+          fetch(Environment.SERVER + 'facebookAuth', {
               method: 'POST',
               headers: {
                 "Content-Type": "application/json"
@@ -213,7 +212,7 @@ export function editProfile(userID, userObject) {
     return dispatch => {
         dispatch(attempt());
 
-          fetch('https://docbit.herokuapp.com/editUser', {
+          fetch(Environment.SERVER + 'editUser', {
               method: 'POST',
               headers: {
                 "Content-Type": "application/json"
