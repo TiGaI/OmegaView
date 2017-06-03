@@ -202,7 +202,8 @@ class MainFeed extends Component{
       return (
         <View style={{flex: 0.7, justifyContent: 'center', alignItems: 'center', backgroundColor: '#03386E'}}>
                 <Icon
-                  name='laptop-chromebook'
+                  type='font-awesome'
+                  name='bed'
                   color='#fff'/>
         </View>
               );
@@ -235,6 +236,7 @@ class MainFeed extends Component{
     }
     }
   render() {
+    console.log('inside mainFeed: ', this.props.profile.userObject.sortedPing);
     if(this.props.login.skip){
       var checkforlogin = <Spinner color='green'/>
     }
@@ -415,7 +417,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 6,
-        backgroundColor: '#2196F3'
+        backgroundColor: '#2671B1'
     },
   text: {
       color: 'white',

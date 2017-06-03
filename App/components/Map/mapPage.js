@@ -104,94 +104,90 @@ componentDidMount() {
   );
 }
 
-
-
-componentWillMount () {
-
-  for (var key in this.props.profile.userObject.sortedPing) {
-     var obj = this.props.profile.userObject.sortedPing[key];
-     for (var prop in obj) {
-        if(prop === "eating"){
-          coord = [...coord,...obj[prop].activities.map(function(data){
-            var coordinatesObj = {};
-            latitude = data.activityLatitude;
-            longitude = data.activityLongitude;
-            coordinatesObj["latitude"] = latitude;
-            coordinatesObj["longitude"] = longitude;
-            // coordinatesArray.push(coordinatesObj);
-            // console.log("INSIDE EATING"
-            return coordinatesObj
-          })]
-        }
-        if(prop === "hobby"){
-          coord = [...coord,...obj[prop].activities.map(function(data){
-            var coordinatesObj = {};
-            latitude = data.activityLatitude;
-            longitude = data.activityLongitude;
-            coordinatesObj["latitude"] = latitude;
-            coordinatesObj["longitude"] = longitude;
-            // coordinatesArray.push(coordinatesObj);
-            // console.log("INSIDE EATING"
-            return coordinatesObj
-          })]
-        }
-        if(prop === "sleeping"){
-          coord = [...coord,...obj[prop].activities.map(function(data){
-            var coordinatesObj = {};
-            latitude = data.activityLatitude;
-            longitude = data.activityLongitude;
-            coordinatesObj["latitude"] = latitude;
-            coordinatesObj["longitude"] = longitude;
-            // coordinatesArray.push(coordinatesObj);
-            // console.log("INSIDE EATING"
-            return coordinatesObj
-          })]
-        }
-        if(prop === "studying"){
-          coord = [...coord,...obj[prop].activities.map(function(data){
-            var coordinatesObj = {};
-            latitude = data.activityLatitude;
-            longitude = data.activityLongitude;
-            coordinatesObj["latitude"] = latitude;
-            coordinatesObj["longitude"] = longitude;
-            // coordinatesArray.push(coordinatesObj);
-            // console.log("INSIDE EATING"
-            return coordinatesObj
-          })]
-        }if(prop === "training"){
-          coord = [...coord,...obj[prop].activities.map(function(data){
-            var coordinatesObj = {};
-            latitude = data.activityLatitude;
-            longitude = data.activityLongitude;
-            coordinatesObj["latitude"] = latitude;
-            coordinatesObj["longitude"] = longitude;
-            // coordinatesArray.push(coordinatesObj);
-            // console.log("INSIDE EATING"
-            return coordinatesObj
-          })]
-        }
-        if(prop === "working"){
-          coord = [...coord,...obj[prop].activities.map(function(data){
-            var coordinatesObj = {};
-            latitude = data.activityLatitude;
-            longitude = data.activityLongitude;
-            coordinatesObj["latitude"] = latitude;
-            coordinatesObj["longitude"] = longitude;
-            // coordinatesArray.push(coordinatesObj);
-            // console.log("INSIDE EATING"
-            return coordinatesObj
-          })]
-        }
-
-     }
-    }
-}
-
 componentWillUnmount() {
   navigator.geolocation.clearWatch(this.watchID);
 }
 
   render() {
+    console.log('inside map: ', this.props.profile.userObject.sortedPing);
+    for (var key in this.props.profile.userObject.sortedPing) {
+       var obj = this.props.profile.userObject.sortedPing[key];
+       for (var prop in obj) {
+          if(prop === "eating"){
+            coord = [...coord,...obj[prop].activities.map(function(data){
+              var coordinatesObj = {};
+              latitude = data.activityLatitude;
+              longitude = data.activityLongitude;
+              coordinatesObj["latitude"] = latitude;
+              coordinatesObj["longitude"] = longitude;
+              // coordinatesArray.push(coordinatesObj);
+              // console.log("INSIDE EATING"
+              return coordinatesObj
+            })]
+          }
+          if(prop === "hobby"){
+            coord = [...coord,...obj[prop].activities.map(function(data){
+              var coordinatesObj = {};
+              latitude = data.activityLatitude;
+              longitude = data.activityLongitude;
+              coordinatesObj["latitude"] = latitude;
+              coordinatesObj["longitude"] = longitude;
+              // coordinatesArray.push(coordinatesObj);
+              // console.log("INSIDE EATING"
+              return coordinatesObj
+            })]
+          }
+          if(prop === "sleeping"){
+            coord = [...coord,...obj[prop].activities.map(function(data){
+              var coordinatesObj = {};
+              latitude = data.activityLatitude;
+              longitude = data.activityLongitude;
+              coordinatesObj["latitude"] = latitude;
+              coordinatesObj["longitude"] = longitude;
+              // coordinatesArray.push(coordinatesObj);
+              // console.log("INSIDE EATING"
+              return coordinatesObj
+            })]
+          }
+          if(prop === "studying"){
+            coord = [...coord,...obj[prop].activities.map(function(data){
+              var coordinatesObj = {};
+              latitude = data.activityLatitude;
+              longitude = data.activityLongitude;
+              coordinatesObj["latitude"] = latitude;
+              coordinatesObj["longitude"] = longitude;
+              // coordinatesArray.push(coordinatesObj);
+              // console.log("INSIDE EATING"
+              return coordinatesObj
+            })]
+          }if(prop === "training"){
+            coord = [...coord,...obj[prop].activities.map(function(data){
+              var coordinatesObj = {};
+              latitude = data.activityLatitude;
+              longitude = data.activityLongitude;
+              coordinatesObj["latitude"] = latitude;
+              coordinatesObj["longitude"] = longitude;
+              // coordinatesArray.push(coordinatesObj);
+              // console.log("INSIDE EATING"
+              return coordinatesObj
+            })]
+          }
+          if(prop === "working"){
+            coord = [...coord,...obj[prop].activities.map(function(data){
+              var coordinatesObj = {};
+              latitude = data.activityLatitude;
+              longitude = data.activityLongitude;
+              coordinatesObj["latitude"] = latitude;
+              coordinatesObj["longitude"] = longitude;
+              // coordinatesArray.push(coordinatesObj);
+              // console.log("INSIDE EATING"
+              return coordinatesObj
+            })]
+          }
+
+       }
+      }
+
     return (
       <View style={{flex: 1, justifyContent: 'center', backgroundColor: '#152D44'}}>
       {this.state.currentPosition.latitude !== 1 && this.state.currentPosition.longitude !== 1 ? (
