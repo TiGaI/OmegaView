@@ -149,7 +149,7 @@
             <View style={styles.inputContainer}>
                 <TouchableOpacity onPress={() => this.showActionSheet()}>
                 {this.state.photoData === null ? (
-                       <Image style={styles.activityImage} source={{uri: 'https://facebook.github.io/react/img/logo_og.png'}}/>
+                       <Image style={styles.activityImage} source={require('../../../')}/>
                     ) : (
                       this.renderAsset(this.state.photoData)
                   )}
@@ -220,15 +220,7 @@
 
                 <View style={{flex: 1, margin: 20}}>
                   <View style={styles.titleContainer}>
-                  <Icon
-                      size={25}
-                      color={'white'}
-                      name='add-a-photo' />
-                      <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
-
-                          <Text>Public: </Text>
-                          <Switch onTintColor="white" onValueChange={(value) => this.setState({public: value})} value={this.state.public} />
-                      </View>
+                  
                   </View>
                 </View>
               </View>

@@ -264,7 +264,7 @@ class MainFeed extends Component{
             </View>
 
             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', marginLeft: 20}}>
-                  <Text style={{textAlign: 'center', color: 'white', fontSize: 18}}>New Feed</Text>
+                  <Text style={{textAlign: 'center', color: 'white', fontSize: 18}}>News Feed</Text>
             </View>
 
             <View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'flex-end', marginRight: 20}}>
@@ -275,6 +275,7 @@ class MainFeed extends Component{
                      onPress={() => {this.props.navigator.push({
                           id: 'GoalForm'
                      })}}/>
+                   <Text style={{textAlign: 'center', color: 'white', fontSize: 12}}>Goals</Text>
             </View>
       </View>
       </View>
@@ -316,18 +317,19 @@ class MainFeed extends Component{
 
                                                 <View style={{flex: 0.5, justifyContent: 'space-around', alignItems: 'flex-start'}}>
                                                   <View style={{flex: 1, flexDirection: 'row'}}>
-                                                    <Text style={{color: '#5A6C76', fontSize: 15, fontWeight: '700'}}>{this.getTime(rowData.createdAt)}</Text>
-                                                    <Text style={{color: '#5A6C76', fontSize: 10, fontWeight: '400'}}>{this.getAMPM(rowData.createdAt)}</Text>
-                                                  </View>
-                                                  <View style={{flex: 1, flexDirection: 'row', alignItems:'flex-end'}}>
                                                     <Text style={{color: '#5A6C76', fontSize: 15, fontWeight: '700'}}>{this.getTime(rowData.createdAt, rowData.activityDuration)}</Text>
                                                     <Text style={{color: '#5A6C76', fontSize: 10, fontWeight: '400'}}>{this.getAMPM(rowData.createdAt, rowData.activityDuration)}</Text>
                                                   </View>
+                                                  <View style={{flex: 1, flexDirection: 'row', alignItems:'flex-end'}}>
+                                                    <Text style={{color: '#5A6C76', fontSize: 15, fontWeight: '700'}}>{this.getTime(rowData.createdAt)}</Text>
+                                                    <Text style={{color: '#5A6C76', fontSize: 10, fontWeight: '400'}}>{this.getAMPM(rowData.createdAt)}</Text>
+                                                  </View>
+
                                                 </View>
                                                 <View style={{flex: 2, justifyContent: 'center', alignItems: 'flex-start', marginLeft: 10}}>
                                                   { rowData.activityImage ? this.renderAsset(this.state.photoData) : null}
                                                   <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
-                                                    <Text style={{color: 'grey', fontSize: 17, fontWeight: '500'}} numberOfLines={1}>{rowData.activityDuration} total hr of {rowData.activityCategory}</Text>
+                                                    <Text style={{color: 'grey', fontSize: 17, fontWeight: '500'}} numberOfLines={1}>{rowData.activityDuration} total hrs of {rowData.activityCategory}</Text>
                                                     { rowData.activityNote ? <Text style={{color: 'grey', fontSize: 12, fontWeight: '500'}} numberOfLines={1}>Note: {rowData.activityNote}</Text>: null}
                                                   </View>
                                                 </View>

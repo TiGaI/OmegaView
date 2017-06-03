@@ -256,7 +256,7 @@ class ApplicationTabs extends Component {
           titleStyle={{marginTop: -1, marginBottom: 6, color: 'black', opacity: 1}}
 					selectedTitleStyle={{marginTop: -1, marginBottom: 6, color: "#21CE99"}}
 					selected={selectedTab === 'goalsPage'}
-					title={'Add Goals'}
+					title={'Add Tasks'}
           tabStyle={{opacity: 1}}
 					renderIcon={() =>
             <Icon containerStyle={{zIndex: 1, marginTop: -24, borderRadius: 30, borderColor: 'white', borderWidth: 1, backgroundColor: '#2671B1', height: 60, width: 60, opacity: 1}}

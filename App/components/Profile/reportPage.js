@@ -44,7 +44,7 @@ class ReportPage extends Component{
          this.props.navigator.props.navigationBar.props.routeMapper.Title =  function Title(route, navigator, index, navState) {
              return (
                   <Text>
-                     Report {key[0]}
+
                   </Text>
               )
             }
@@ -355,10 +355,10 @@ class ReportPage extends Component{
 
 
         <View style={{flex: 4, backgroundColor: '#152D44'}}>
-          
+
                     <ScrollView>
                     <View style={{flex: 1, backgroundColor: '#2671B1'}}>
-                      <View style={{height: 250, backgroundColor: 'white', margin: 15, marginBottom: 0}}>
+                      <View style={{height: 250, backgroundColor: 'white', margin: 5, marginBottom: 0}}>
                         <View style={{flex: 1/2, flexDirection: 'row', padding: 10}}>
                           <Text style={{fontSize: 20, fontWeight: '500', color: 'black', textAlign: 'center', backgroundColor: 'transparent'}}>
                             GOALS
@@ -532,7 +532,7 @@ class ReportPage extends Component{
                       </View>
 
 
-                    <View style={{height: 250, backgroundColor: 'white', margin: 15, marginBottom: 15}}>
+                    <View style={{height: 250, backgroundColor: 'white', margin: 5, marginBottom: 15}}>
                       <View style={{flex: 1/2, flexDirection: 'row', padding: 10}}>
                         <Text style={{fontSize: 20, fontWeight: '500', color: 'black', textAlign: 'center', backgroundColor: 'transparent'}}>
                           PINS

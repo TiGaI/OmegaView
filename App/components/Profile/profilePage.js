@@ -28,6 +28,7 @@ import ReportPage from './reportPage.js';
 class ProfilePage extends Component{
   constructor(props){
     super(props);
+
       this.props.getDataActions.pushReportObjectAction(this.props.profile.userObject._id)
       const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       this.state = {
@@ -59,7 +60,7 @@ class ProfilePage extends Component{
          }
       }
       return (
-        <TouchableOpacity key={index} onPress={this.report.bind(this, data)} style={{flex: 1, backgroundColor: 'white', height: 75, marginBottom: 10}}>
+        <TouchableOpacity key={index} onPress={this.report.bind(this, data)} style={{flex: 1, backgroundColor: 'white', height: 75, marginBottom: 5}}>
             <View style={{flex: 1, flexDirection: 'row'}}>
 
             <View style={{flex: 2, justifyContent: 'center', alignItems: 'center', backgroundColor: '#2671B1'}}>
@@ -81,6 +82,7 @@ class ProfilePage extends Component{
   }
 
   render() {
+      console.log('PROFILE PROPS', this.props)
     var x = 1;
     if(this.props.data.reportObject){
       x = 0;
@@ -94,26 +96,27 @@ class ProfilePage extends Component{
           (<View style={{flex: 1}}>
             <View style={{flex: 0.6, backgroundColor: '#21CE99', paddingTop: 60}}>
               <View style={{flex: 2, justifyContent: 'center', alignItems: 'center'}}>
+                <Text style={{color: 'white', fontSize: 22, fontWeight: "600", marginBottom: 25}}>{this.props.profile.userObject.firstName + " " + this.props.profile.userObject.lastName}</Text>
                 <Image
                     style={{width: 100, height: 100, borderRadius: 50}}
                     source={{uri: this.props.profile.userObject.profileImg}}
                   />
-                <Text style={{color: 'white', fontSize: 20, fontWeight: "400", marginTop: 5}}>{this.props.profile.userObject.firstName + " " + this.props.profile.userObject.lastName}</Text>
+
               </View>
               <View style={{flex: 1, flexDirection: 'row', marginBottom: 10}}>
                 <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                   <Text style={{color: 'white', fontSize: 25, fontWeight: "400"}}>{this.props.profile.userObject.totalHoursLogged}</Text>
-                  <Text style={{color: 'white', fontSize: 12, fontWeight: "600"}}>Total Hours</Text>
+                  <Text style={{color: 'white', fontSize: 12, fontWeight: "800"}}>Total Hours</Text>
                 </View>
                 <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                   <Text style={{color: 'white', fontSize: 25, fontWeight: "400"}}>{this.props.profile.userObject.myActivity.length}</Text>
-                  <Text style={{color: 'white', fontSize: 12, fontWeight: "600"}}>Total Pins</Text>
+                  <Text style={{color: 'white', fontSize: 12, fontWeight: "800"}}>Total Pins</Text>
                 </View>
               </View>
           </View>
           <View style={{flex: 1, backgroundColor: '#F4F2F2'}}>
             <ScrollView>
-            <View style={{backgroundColor: '#F4F2F2', padding: 10}} >{this.reportsList()}</View>
+            <View style={{backgroundColor: '#F4F2F2', padding: 5}} >{this.reportsList()}</View>
           </ScrollView>
          </View>
 

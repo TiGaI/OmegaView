@@ -9,7 +9,6 @@ class Login extends Component {
   render() {
     return (
       <Image source={require('../assets/iphone/docbitback.png')} style={styles.picture}>
-
         <View style={styles.socialContainer}>
 
           <SocialIcon
