@@ -26,6 +26,7 @@
     "react-native-notifications": "^1.1.10",
     "react-native-push-notification": "^2.2.1",
     "react-native-slider": "^0.9.1",
+    "react-native-tab-view": "0.0.62",
     "react-native-vector-icons": "^4.0.1",
     "react-native-video": "^1.0.0",
     "react-redux": "^5.0.4",

@@ -28,7 +28,6 @@ import ReportPage from './reportPage.js';
 class ProfilePage extends Component{
   constructor(props){
     super(props);
-
       this.props.getDataActions.pushReportObjectAction(this.props.profile.userObject._id)
       const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       this.state = {

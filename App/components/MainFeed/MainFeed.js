@@ -53,7 +53,6 @@ class MainFeed extends Component{
       productivity: 1,
       pageNumber: 0
     };
-
   }
   getDate(date){
     var myDate = new Date(date);

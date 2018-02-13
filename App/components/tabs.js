@@ -248,7 +248,6 @@ class ApplicationTabs extends Component {
 					renderIcon={() => <Icon containerStyle={{justifyContent: 'center', alignItems: 'center', marginTop: 12}} color={'#2671B1'} name='map' size={33} />}
 					renderSelectedIcon={() => <Icon color={'#21CE99'} name='map' size={30} />}
 					onPress={() => this.changeTab('mapPage')}>
-
 						<MapPage />
 				</Tab>
 
@@ -319,7 +318,6 @@ class ApplicationTabs extends Component {
 					renderIcon={() => <Icon containerStyle={{justifyContent: 'center', alignItems: 'center', marginTop: 12}} color={'#2671B1'} name='person-pin' size={33} />}
 					renderSelectedIcon={() => <Icon color={'#21CE99'} name='person-pin' size={30} />}
 					onPress={() => this.changeTab('profile')}>
-
             <Navigator
   						initialRoute={{ id: 'ProfilePage', title: 'Profile'}}
   						renderScene={ this.renderProfileScene }

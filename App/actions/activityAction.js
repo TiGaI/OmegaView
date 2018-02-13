@@ -1,8 +1,11 @@
 import { RNS3 } from 'react-native-aws3';
+
+
 var Environment = require('../Environment.js')
 var _ = require('underscore');
 import * as getDataActions from './getDataAction';
 import * as loginActions from './loginAction';
+
 
 export function putFormObjectIntoProp(formObject){
   return dispatch => {
@@ -127,4 +130,35 @@ export function deleteActivity(feedObject, activityID, activityCreatorId){
       console.log('Error in editActivity', err)
     });
   };
+}
+
+export function getActivityForMap(activityCreatorId){
+  console.log('GET INSIDE ACTION FOR MAPS')
+  return dispatch => {
+    fetch('http://localhost:8080/getActivityForMap', {
+      method: 'POST',
+      headers: {
+        'Content-Type' : 'application/json'
+      },
+      body: JSON.stringify({
+        activityCreatorId: activityCreatorId
+        })
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      console.log('RESPONSE', responseJson)
+      mapActivities(responseJson);
+    })
+    .catch((err) => {
+      console.log('Error in editActivity', err)
+    });
+  };
+}
+
+function mapActivities(activities) {
+  console.log('INSIDE MAP ACTIVITIES', activities)
+  return {
+    type: "MAP_ACTIVITIES",
+    activities: activities
+  }
 }

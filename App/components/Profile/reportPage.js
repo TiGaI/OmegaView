@@ -22,6 +22,7 @@ var {height, width} = Dimensions.get('window');
 class ReportPage extends Component{
   constructor(props){
     super(props);
+
       const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
       this.state={
         goalHours: 1000,
@@ -36,6 +37,7 @@ class ReportPage extends Component{
       ]
 
       }
+
   }
 
   componentWillMount(){
@@ -48,6 +50,7 @@ class ReportPage extends Component{
                   </Text>
               )
             }
+
   }
 
   _handleChangeTab = (index) => {
@@ -209,6 +212,7 @@ class ReportPage extends Component{
       }
     }
   }
+
   var categories = ["eating", "hobby", "sleeping", "studying", "training", "working"];
   var reportGrade;
   var reportColor;
@@ -323,6 +327,7 @@ class ReportPage extends Component{
     return (
       <View style={{flex: 1, justifyContent: 'center', borderTopWidth: 60, borderColor: '#2671B1'}}>
 
+
         <View style={{flex: 1, flexDirection: 'row'}}>
           <View style={{flex: 2, justifyContent: 'center', alignItems: 'flex-start', backgroundColor: 'white', padding: 10}}>
             <Text style={{fontSize: 25, fontWeight: '500', color: 'black', textAlign: 'center', backgroundColor: 'transparent'}}>
@@ -336,6 +341,7 @@ class ReportPage extends Component{
           <AnimatedCircularProgress
             size={75}
             width={15}
+
             fill={100}
             rotation={0}
             tintColor={reportColor}
@@ -355,7 +361,6 @@ class ReportPage extends Component{
 
 
         <View style={{flex: 4, backgroundColor: '#152D44'}}>
-
                     <ScrollView>
                     <View style={{flex: 1, backgroundColor: '#2671B1'}}>
                       <View style={{height: 250, backgroundColor: 'white', margin: 5, marginBottom: 0}}>
@@ -614,6 +619,7 @@ class ReportPage extends Component{
 
                               <Icons style={{fontSize: 35, color: '#21CE99', backgroundColor: 'transparent'}} name="md-pin"/>
                               <Text style={{fontSize: 15, fontWeight: '700', color: 'black', textAlign: 'center', backgroundColor: 'transparent'}}>{trainingPins}</Text>
+
                             </View>
                           </View>
                         </View>
@@ -638,7 +644,6 @@ class ReportPage extends Component{
 
                     </View>
                     </ScrollView>
-
 
         </View>
 

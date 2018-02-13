@@ -30,21 +30,24 @@ const ASPECT_RATIO = width / height;
 const LATITUDE = 1;
 const LONGITUDE = 1;
 
+
 const LATITUDE_DELTA = 1;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 
 var x = 0;
+
 var coordinatesArray = [];
-  var coord = []
+var coord = []
 
 var latitude = 0;
 var longitude = 0;
 
+
 class MapPage extends Component{
   constructor(props){
     super(props);
-    // console.log('GET ACTIVITIES', this.props.actions.getActivityForMap(this.props.profile.userObject._id));
+
     this.state = {
       initialPosition: {
         latitude: LATITUDE,

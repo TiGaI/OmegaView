@@ -146,6 +146,7 @@ router.post('/checkStreak', function(req, res){
 });
 
 router.post('/getFeed', function(req, res){
+  console.log("req.body", req.body)
   Activity.find({$and: [
           {'activityCreator': req.body.userID},
           {'createdAt': {'$gt': new Date(Date.now() - 5*24*60*60*1000)}}]}).sort('-createdAt')
