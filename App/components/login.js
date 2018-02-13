@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import {
-  StyleSheet, Text, View
+  StyleSheet, Text, View, Image
 } from 'react-native';
 import { Button, SocialIcon } from 'react-native-elements'
 
@@ -8,16 +8,7 @@ import { Button, SocialIcon } from 'react-native-elements'
 class Login extends Component {
   render() {
     return (
-      <View style={styles.container}>
-      <View style={styles.container}>
-      <Button
-        large
-        raisesd
-        onPress={this.props.onSkip}
-        borderRadius={32}
-        title='      Skip It      ' />
-      </View>
-
+      <Image source={require('../assets/iphone/docbitback.png')} style={styles.picture}>
         <View style={styles.socialContainer}>
 
           <SocialIcon
@@ -33,23 +24,23 @@ class Login extends Component {
           />
 
         </View>
-      </View>
+      </Image>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  container:{
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#141515'
+  picture:{
+      flex: 1,
+      width: null,
+      height: null,
+      justifyContent: 'center',
+      alignItems: 'center',
   },
   socialContainer:{
     flex: 1,
     flexDirection: 'row',
-
+    marginTop: 360
   }
 })
 

@@ -18,6 +18,7 @@ const customTextInputProps = {
 const customTextProps = {
   style: {
     fontSize: 16,
+    color: 'white',
     fontFamily: Platform.OS === 'ios' ? 'HelveticaNeue' : 'Roboto'
   }
 };

@@ -37,7 +37,7 @@ export function createActivity(feedObject, activityObject, photo) {
   copy['createdAt'] = new Date();
 
     return dispatch => {
-        fetch('http://localhost:8080/createActivity', {
+        fetch(Environment.SERVER + 'createActivity', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json'
@@ -72,7 +72,7 @@ export function createActivity(feedObject, activityObject, photo) {
 
                 getDataActions.updateFeedObjectAction(feedObject)(dispatch);
                 loginActions.updateUserProfile(userObject)(dispatch);
-
+                loginActions.getGraphData(userObject._id, userObject.myActivity)(dispatch);
             })
             .catch((err) => {
               console.log('error in createActivity -> ', err)
@@ -106,7 +106,7 @@ export function createActivity(feedObject, activityObject, photo) {
 
 export function deleteActivity(feedObject, activityID, activityCreatorId){
   return dispatch => {
-    fetch('http://localhost:8080/deleteActivity', {
+    fetch(Environment.SERVER + 'deleteActivity', {
       method: 'POST',
       headers: {
         'Content-Type' : 'application/json'
@@ -123,8 +123,6 @@ export function deleteActivity(feedObject, activityID, activityCreatorId){
               return x._id !== activityID
           })
           var userObject = Object.assign({}, responseJson);
-          console.log('I am HERE at the delete!!!!!!', feedObject)
-
           getDataActions.updateDeletedFeedObjectAction(feedObject)(dispatch);
           loginActions.updateUserProfile(userObject)(dispatch);
     })

@@ -2,7 +2,7 @@ import { LoginManager, AccessToken, GraphRequest, GraphRequestManager } from 're
 import {
   AsyncStorage
 } from 'react-native'
-
+var Environment = require('../Environment.js')
 import {GoogleSignin, GoogleSigninButton} from 'react-native-google-signin';
 import * as getDataActions from './getDataAction';
 var moment = require('moment');
@@ -16,7 +16,7 @@ export function createGoalBackEnd(userID, myDailyGoalObject){
 
     dispatch(updateUserGoal(myDailyGoalObject))
 
-    fetch('http://localhost:8080/createGoal', {
+    fetch(Environment.SERVER + 'createGoal', {
       method: 'POST',
       headers: {
         'Content-Type' : 'application/json'
@@ -38,11 +38,34 @@ export function updateGoalFrontEnd(myDailyGoalObject){
   };
 }
 
+export function getGraphDataForAsyn(userID) {
+    return dispatch => {
+        dispatch(loggedin());
+          fetch(Environment.SERVER + 'getSortandGroupActivityForAsyn', {
+              method: 'POST',
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                userID: userID
+              })
+            })
+            .then((response) => response.json())
+            .then((responseJson) => {
+                var userObject = Object.assign({}, responseJson);
+                getDataActions.pushFeedObjectAction(userObject._id)(dispatch);
+                dispatch(addUser(userObject));
+            })
+            .catch((err) => {
+              console.log('error: ', err)
+            });
+        }
+};
+
 export function getGraphData(userID, myActivity) {
     return dispatch => {
         dispatch(attempt());
-
-          fetch('http://localhost:8080/getSortandGroupActivity', {
+          fetch(Environment.SERVER + 'getSortandGroupActivity', {
               method: 'POST',
               headers: {
                 "Content-Type": "application/json"
@@ -54,7 +77,6 @@ export function getGraphData(userID, myActivity) {
             })
             .then((response) => response.json())
             .then((responseJson) => {
-              console.log('this is responseJson at getGraphData: ', responseJson)
                 var userObject = Object.assign({}, responseJson);
                 dispatch(addUser(userObject));
             })
@@ -98,7 +120,7 @@ export function googleLogin(){
 
       GoogleSignin.signIn().then((user) => {
             var mongooseId = '';
-            fetch('http://localhost:8080/googleAuth', {
+            fetch(Environment.SERVER + 'googleAuth', {
                 method: 'POST',
                 headers: {
                   "Content-Type": "application/json"
@@ -114,6 +136,8 @@ export function googleLogin(){
                   getDataActions.pushFeedObjectAction(userObject._id)(dispatch);
                   getGraphData(userObject._id, userObject.myActivity)(dispatch);
                   dispatch(loggedin());
+                  AsyncStorage.setItem('USER_ID',userObject._id);
+                  AsyncStorage.setItem('USER', JSON.stringify(userObject));
               })
               .catch((err) => {
                 console.log('error: ', err)
@@ -122,7 +146,6 @@ export function googleLogin(){
         .catch((err) => {
           console.log('WRONG SIGNIN', err);
         })
-        .done();
       };
 
 }
@@ -156,7 +179,7 @@ export function login() {
         dispatch(attempt());
 
         facebookLogin().then((result) => {
-          fetch('http://localhost:8080/facebookAuth', {
+          fetch(Environment.SERVER + 'facebookAuth', {
               method: 'POST',
               headers: {
                 "Content-Type": "application/json"
@@ -172,6 +195,8 @@ export function login() {
               getDataActions.pushFeedObjectAction(userObject._id)(dispatch);
               getGraphData(userObject._id, userObject.myActivity)(dispatch);
               dispatch(loggedin());
+              AsyncStorage.setItem('USER_ID', userObject._id);
+              AsyncStorage.setItem('USER', JSON.stringify(userObject));
             })
             .catch((err) => {
               console.log('error: ', err)
@@ -187,7 +212,7 @@ export function editProfile(userID, userObject) {
     return dispatch => {
         dispatch(attempt());
 
-          fetch('http://localhost:8080/editUser', {
+          fetch(Environment.SERVER + 'editUser', {
               method: 'POST',
               headers: {
                 "Content-Type": "application/json"
@@ -233,6 +258,7 @@ export function logout() {
 }
 
 export function googlelogout() {
+  console.log('I am here');
     return dispatch => {
         dispatch(attempt());
         GoogleSignin.signOut()

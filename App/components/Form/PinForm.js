@@ -143,13 +143,13 @@
         const { profile } = this.props;
 
         return(
-        <View style={{flex: 1, padding: 5, marginTop: 50}}>
+        <View style={{flex: 1, padding: 5, marginTop: 50, backgroundColor: '#21CE99'}}>
 
           <View style={{flex: 0.5}}>
             <View style={styles.inputContainer}>
                 <TouchableOpacity onPress={() => this.showActionSheet()}>
                 {this.state.photoData === null ? (
-                       <Image style={styles.activityImage} source={{uri: 'https://facebook.github.io/react/img/logo_og.png'}}/>
+                       <Image style={styles.activityImage} source={require('../../../')}/>
                     ) : (
                       this.renderAsset(this.state.photoData)
                   )}
@@ -159,6 +159,7 @@
                     multiline = {true}
                     numberOfLines = {4}
                     placeholder="Write Something About It..."
+                    placeholderTextColor={'white'}
                     blurOnSubmit= {true}
                     editable = {true}
                     maxLength = {100}
@@ -182,13 +183,13 @@
             return (
               <View style={{margin: 10, marginBottom: 20}} key={i}>
               {this.state.activityCategoryIndex === i ? (
-                     <Button light style={{height: 30, backgroundColor: '#212121', borderWidth: 2, paddingTop: 2, paddingBottom: 2, paddingLeft: 15, paddingRight: 15,  borderColor: '#212121'}}
+                     <Button light style={{height: 30, backgroundColor: '#21CE99', borderWidth: 2, paddingTop: 2, paddingBottom: 2, paddingLeft: 15, paddingRight: 15,  borderColor: '#21CE99'}}
                      onPress={onPressOne.bind(obj, i, obj.activityCategory)}>
                         <Text style={{color: 'white'}}>{obj.label}</Text>
                     </Button>
-                  ) : (<Button light style={{height: 30, borderColor: '#212121', borderWidth: 2, paddingTop: 2, paddingBottom: 2, paddingLeft: 15, paddingRight: 15, backgroundColor: 'white'}}
+                  ) : (<Button light style={{height: 30, borderColor: '#21CE99', borderWidth: 2, paddingTop: 2, paddingBottom: 2, paddingLeft: 15, paddingRight: 15, backgroundColor: 'white'}}
                   onPress={onPressOne.bind(obj, i, obj.activityCategory)}>
-                        <Text>{obj.label}</Text>
+                        <Text style={{color: '#21CE99'}}>{obj.label}</Text>
                       </Button>
 
                   )}
@@ -204,7 +205,7 @@
                   </View>
                       <Slider
                           value={this.state.activityDuration}
-                          minimumTrackTintColor='#212121'
+                          minimumTrackTintColor='white'
                           minimumValue={0.5}
                           maximumValue={10}
                           step={.5}
@@ -219,15 +220,7 @@
 
                 <View style={{flex: 1, margin: 20}}>
                   <View style={styles.titleContainer}>
-                  <Icon
-                      size={25}
-
-                      name='add-a-photo' />
-                      <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-end'}}>
-
-                          <Text>Public: </Text>
-                          <Switch onTintColor="#212121" onValueChange={(value) => this.setState({public: value})} value={this.state.public} />
-                      </View>
+                  
                   </View>
                 </View>
               </View>
@@ -241,23 +234,21 @@
         flex: 1,
         justifyContent: 'center',
         padding: 20,
-        backgroundColor: '#ffffff',
-        borderTopWidth: 0.5,
-        borderBottomWidth: 0.5, borderColor: '#212121'
       },
       inputContainer: {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'center', alignContent: 'center', paddingLeft: 15,
-        paddingRight: 15, borderBottomWidth: 0.5, borderColor: '#212121'
+        alignItems: 'center', alignContent: 'center', marginLeft: 15,
+        marginRight: 15, borderBottomWidth: 0.5, borderColor: 'white'
       },
       multiline: {
         flex: 1,
         fontSize: 13,
         marginTop: 25, marginBottom: 25,
         height: 60,
-        marginLeft: 10
+        marginLeft: 10,
+        color: 'white'
       },
       titleContainer: {
           flexDirection: 'row',
@@ -267,7 +258,6 @@
         },
         caption: {
           //flex: 1,
-          color: '#212121'
         },
         value: {
           flex: 1,
@@ -296,7 +286,7 @@
         width: 10,
         height: 30,
         borderRadius: 5,
-        backgroundColor: '#212121',
+        backgroundColor: 'white',
           top: 25
       }
     });

@@ -132,8 +132,8 @@ var reportsSchema = new mongoose.Schema({
   },
   activitiesForTheDay: [{type: mongoose.Schema.Types.ObjectId, ref: 'Activity'}],
   GradeForTheDay: {
-    type: String,
-    default: 'F',
+    type: Number,
+    default: 0,
     required: true,
   },
   dataObject: {

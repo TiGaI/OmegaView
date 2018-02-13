@@ -25,10 +25,10 @@ class GoalForm extends Component{
   }
   componentWillMount() {
     var self = this;
-       this.props.navigator.props.navigationBar.props.routeMapper.RightButton =  function() {
+       this.props.navigator.props.navigationBar.props.routeMapper.RightButton =  function(route, navigator, index, navState) {
            return (
               <TouchableOpacity onPress={() => self.submitForm() }>
-                 <Text style = { styles.rightButton }>
+                 <Text style={{color: 'white'}}>
                     Finish
                  </Text>
               </TouchableOpacity>
@@ -45,6 +45,9 @@ class GoalForm extends Component{
      working: this.state.workingGoal,
      sleeping: this.state.sleepingGoal
    };
+   this.props.navigator.props.navigationBar.props.routeMapper.RightButton =  function(route, navigator, index, navState) {
+       return (null)
+   }
    this.props.navigator.pop()
    this.props.loginActions.createGoalBackEnd(this.props.profile.userObject._id, form)
   }
@@ -244,13 +247,15 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'right',
     marginLeft: 10,
-    fontWeight: '800'
+    fontWeight: '800',
+    color: '#212121'
   },
   valueForBar: {
     flex: 1,
     textAlign: 'right',
     marginLeft: 10,
-    top: -5
+    top: -5,
+    color: '#212121'
   }
 
 });
